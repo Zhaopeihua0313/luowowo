@@ -19,4 +19,5 @@ public interface IUserInfoCasheService {
      * 删除 用户对象缓存
      */
     void deleteUserInfo(String token);
+
 }

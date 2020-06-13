@@ -5,58 +5,38 @@ import cn.wolfcode.luowowo.member.domain.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 @Setter
 @Getter
 public class Travel extends BaseDomain {
+
     public static final Integer STATE_NORMAL = 0;   //草稿
     public static final Integer STATE_WAITING = 1;  //待发布
     public static final Integer STATE_RELEASE = 2;  //发布
     public static final Integer STATE_REJECT = 3;   //拒绝
 
     private Destination dest;
-
     private UserInfo author;
-
     private String title;
-
     private String coverUrl;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date travelTime;    //出游时间
-
     private Integer perExpends;
-
     private Integer days;
-
     private Integer person = 1;
-
     private Date releaseTime;   //发布时间
-
     private Date createTime;    //创建时间
-
     private Date lastUpdateTime;    //最后更新时间
-
     private Integer overt = 0;
-
     private Integer viewnum = 0;
-
     private Integer replynum = 0;
-
     private Integer sharenum = 0;
-
     private Integer thumbsupnum = 0;
-
     private Integer favornum = 0;
-
     private Integer state = STATE_WAITING;
-
     private String summary;
-
     private TravelContent travelContent;
-
     private TravelCommend travelCommend;
 
     public String getStateName() {
@@ -88,4 +68,5 @@ public class Travel extends BaseDomain {
         }
         return msg;
     }
+
 }

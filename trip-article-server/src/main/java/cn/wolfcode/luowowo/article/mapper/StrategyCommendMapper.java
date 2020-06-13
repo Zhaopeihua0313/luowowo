@@ -4,10 +4,10 @@ import cn.wolfcode.luowowo.article.domain.StrategyCommend;
 import cn.wolfcode.luowowo.article.domain.StrategyDetail;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 public interface StrategyCommendMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(StrategyCommend record);
@@ -37,4 +37,5 @@ public interface StrategyCommendMapper {
      * 修改 某攻略文章的攻略推荐状态
      */
     void updateStateByDetailId(@Param("detailId") Long detailId, @Param("state") Long state);
+
 }

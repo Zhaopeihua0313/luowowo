@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.article.domain.ScenicCatalog;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 public interface IScenicCatalogService {
@@ -33,4 +32,5 @@ public interface IScenicCatalogService {
      * 获取 某景点的所有分类
      */
     List<ScenicCatalog> listByScenicId(Long scenicId);
+
 }

@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.article.domain.StrategyTheme;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 public interface IStrategyThemeService {
@@ -23,4 +22,5 @@ public interface IStrategyThemeService {
      * 编辑或新增 攻略主题
      */
     AjaxResult updateById(StrategyTheme theme);
+
 }

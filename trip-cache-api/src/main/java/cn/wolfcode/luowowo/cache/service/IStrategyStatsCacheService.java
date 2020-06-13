@@ -3,7 +3,6 @@ package cn.wolfcode.luowowo.cache.service;
 import cn.wolfcode.luowowo.cache.key.RedisKey;
 import cn.wolfcode.luowowo.cache.vo.StrategyStats;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
-
 import java.util.List;
 
 /**
@@ -47,7 +46,6 @@ public interface IStrategyStatsCacheService {
      */
     boolean isFavor(Long strategyId, Long userId);
 
-
     /**
      * 操作 用户点赞顶攻略
      */
@@ -86,15 +84,12 @@ public interface IStrategyStatsCacheService {
      */
     void deleteStrategySort(String sortKey);
 
-
     /**
      * 查询所有攻略
      * @param strategyId
      * @return
      */
     StrategyStats getStrategyById(Long strategyId);
-
-
 
     /**
      * 根据攻略文章的id查询如数据
@@ -109,4 +104,5 @@ public interface IStrategyStatsCacheService {
      * @return
      */
     List<Long> listStrategiesByUserId(Long userId);
+
 }

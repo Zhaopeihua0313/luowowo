@@ -2,7 +2,6 @@ package cn.wolfcode.luowowo.article.mapper;
 
 import cn.wolfcode.luowowo.article.domain.OrderDetail;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface OrderDetailMapper {

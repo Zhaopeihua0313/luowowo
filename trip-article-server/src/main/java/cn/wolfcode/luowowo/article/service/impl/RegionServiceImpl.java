@@ -11,7 +11,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service
@@ -19,6 +18,7 @@ public class RegionServiceImpl implements IRegionService {
 
     @Autowired
     private RegionMapper regionMapper;
+
     @Autowired
     private DestinationMapper destinationMapper;
 
@@ -47,13 +47,11 @@ public class RegionServiceImpl implements IRegionService {
                     destinationMapper.updateRegionIdById(region.getId(), destId);
                 }
             }
-
             if (region.getId() == null) {
                 regionMapper.insert(region);
             } else {
                 regionMapper.updateByPrimaryKey(region);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());

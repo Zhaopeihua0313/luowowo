@@ -3,7 +3,6 @@ package cn.wolfcode.luowowo.cache.service;
 import cn.wolfcode.luowowo.article.domain.Question;
 import cn.wolfcode.luowowo.cache.vo.QuestionStats;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
-
 import java.util.List;
 
 /**
@@ -65,4 +64,5 @@ public interface IQuestionStatsCacheService {
      * @return
      */
     List<QuestionStats> listAllQuestionStats();
+
 }

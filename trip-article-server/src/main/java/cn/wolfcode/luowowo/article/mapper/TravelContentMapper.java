@@ -1,7 +1,6 @@
 package cn.wolfcode.luowowo.article.mapper;
 
 import cn.wolfcode.luowowo.article.domain.TravelContent;
-
 import java.util.List;
 
 public interface TravelContentMapper {

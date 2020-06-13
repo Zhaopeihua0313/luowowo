@@ -11,7 +11,6 @@
         <result column="coverUrl" property="coverUrl"/>
         <result column="sequence" property="sequence"/>
         <result column="state" property="state"/>
-
         <!--关联的攻略-->
         <association property="strategyDetail" javaType="cn.wolfcode.luowowo.article.domain.StrategyDetail" columnPrefix="sd_">
             <id property="id" column="id" />

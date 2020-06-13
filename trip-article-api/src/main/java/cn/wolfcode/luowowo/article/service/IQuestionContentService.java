@@ -12,4 +12,5 @@ public interface IQuestionContentService {
      * @return
      */
     QuestionContent get(Long qid);
+
 }

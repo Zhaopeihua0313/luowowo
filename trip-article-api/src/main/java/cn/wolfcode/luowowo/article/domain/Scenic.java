@@ -6,11 +6,12 @@ import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
-
 import java.util.*;
 
-@Getter@Setter
+@Getter
+@Setter
 public class Scenic extends BaseDomain{
+
     //景点名称
     private String name;
     //简介
@@ -53,6 +54,7 @@ public class Scenic extends BaseDomain{
         }
         return null;
     }
+
 //    //复写get方法
 //    public String getPhotos(){
 //        if(photoArr!=null){
@@ -81,7 +83,6 @@ public class Scenic extends BaseDomain{
         map.put("location", location);
         map.put("coverUrl", coverUrl);
         map.put("photosContent", photosContent);
-
         return JSON.toJSONString(map);
     }
 

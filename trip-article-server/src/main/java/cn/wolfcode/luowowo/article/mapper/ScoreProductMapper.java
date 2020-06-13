@@ -2,7 +2,6 @@ package cn.wolfcode.luowowo.article.mapper;
 
 import cn.wolfcode.luowowo.article.domain.ScoreProduct;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 public interface ScoreProductMapper {

@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.member.domain.UserInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.io.Serializable;
 
 /**
@@ -18,6 +17,5 @@ public class ScoreBox implements Serializable {
     private UserInfo user;      //用户信息
 
     private Integer totalScore; //总积分
-
 
 }

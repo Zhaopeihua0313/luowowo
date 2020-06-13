@@ -34,5 +34,4 @@ public interface IScoreHistoryService {
      */
     Integer getTotalScoreByUserId(Long userId);
 
-
 }

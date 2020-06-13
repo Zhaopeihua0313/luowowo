@@ -5,7 +5,6 @@ import cn.wolfcode.luowowo.article.domain.TravelContent;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 public interface ITravelService {
@@ -65,4 +64,5 @@ public interface ITravelService {
     int listTravelTotal(Long userId);
 
     Travel getStrategyContent(Long travelId);
+
 }

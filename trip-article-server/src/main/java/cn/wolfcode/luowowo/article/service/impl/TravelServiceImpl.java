@@ -14,7 +14,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +22,10 @@ public class TravelServiceImpl implements ITravelService {
 
     @Autowired
     private TravelMapper travelMapper;
+
     @Autowired
     private TravelContentMapper travelContentMapper;
+
     @Autowired
     private TravelCommendMapper travelCommendMapper;
 
@@ -62,7 +63,6 @@ public class TravelServiceImpl implements ITravelService {
                 travelCommendMapper.updateStateByTravelId(TravelCommend.STATE_DISABLE, travel.getId());
             }
             travelMapper.updateStateById(travel);
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -76,7 +76,6 @@ public class TravelServiceImpl implements ITravelService {
     public AjaxResult saveOrUpdate(Travel entity) {
         AjaxResult result = new AjaxResult();
         try {
-
             TravelContent content = entity.getTravelContent();          //获取游记内容
             entity.setSummary("AI生成摘要中..");                         //AI生成摘要
             Date date = new Date();
@@ -85,7 +84,6 @@ public class TravelServiceImpl implements ITravelService {
                 entity.setReleaseTime(date);
                 entity.setState(Travel.STATE_RELEASE);                  //状态为待审核状态
                 entity.setCreateTime(date);                             //设置创建时间
-
                 //新增游记
                 travelMapper.insert(entity);
                 content.setId(entity.getId());
@@ -99,7 +97,6 @@ public class TravelServiceImpl implements ITravelService {
                 //维护游记内容表
                 travelContentMapper.updateByPrimaryKey(content);
             }
-
         } catch (Exception e) {
             result.mark("服务器提示：操作失败");
             e.printStackTrace();
@@ -160,4 +157,5 @@ public class TravelServiceImpl implements ITravelService {
     public Travel getStrategyContent(Long travelId) {
         return travelMapper.getStrategyContent(travelId);
     }
+
 }

@@ -3,10 +3,10 @@ package cn.wolfcode.luowowo.article.mapper;
 import cn.wolfcode.luowowo.article.domain.StrategyCatalog;
 import cn.wolfcode.luowowo.article.domain.StrategyDetail;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface StrategyCatalogMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(StrategyCatalog record);

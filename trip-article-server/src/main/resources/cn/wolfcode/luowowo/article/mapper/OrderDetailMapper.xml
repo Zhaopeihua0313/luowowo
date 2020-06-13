@@ -13,7 +13,6 @@
         <result column="pullPrice" property="pullPrice"/>
         <result column="realPrice" property="realPrice"/>
         <result column="lastUpdateTime" property="lastUpdateTime"/>
-
         <!--下单用户-->
         <association property="createUser" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
             <id property="id" column="id"/>
@@ -29,10 +28,7 @@
             <result property="userCard" column="userCard" />
         </association>
         <!--订单产品信息-->
-        <collection property="products" column="id"
-                    select="cn.wolfcode.luowowo.article.mapper.OrderProductMapper.listByOrderId"/>
-
-
+        <collection property="products" column="id" select="cn.wolfcode.luowowo.article.mapper.OrderProductMapper.listByOrderId"/>
     </resultMap>
 
     <!--删除一-->

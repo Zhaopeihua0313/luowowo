@@ -4,13 +4,13 @@ import cn.wolfcode.luowowo.common.domain.BaseDomain;
 import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
 
 @Setter
 @Getter
 public class StrategyCommend extends BaseDomain {
+
     public static final Integer STATE_NORMAL = 0;   //正常
     public static final Integer STATE_DISABLE = 1;  //禁用
 
@@ -20,7 +20,6 @@ public class StrategyCommend extends BaseDomain {
     private String coverUrl;
     private Integer sequence;
     private Integer state = STATE_NORMAL;
-
     private StrategyDetail strategyDetail;
 
     public String getStateName() {
@@ -42,4 +41,5 @@ public class StrategyCommend extends BaseDomain {
         map.put("state", state);
         return JSON.toJSONString(map);
     }
+
 }

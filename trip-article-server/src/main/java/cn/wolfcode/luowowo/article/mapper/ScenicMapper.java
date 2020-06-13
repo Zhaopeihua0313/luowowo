@@ -2,10 +2,10 @@ package cn.wolfcode.luowowo.article.mapper;
 
 import cn.wolfcode.luowowo.article.domain.Scenic;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface ScenicMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(Scenic record);
@@ -34,4 +34,5 @@ public interface ScenicMapper {
     void updateStats(Scenic scenic);
 
     Scenic getScenicContent(Long scenicId);
+
 }

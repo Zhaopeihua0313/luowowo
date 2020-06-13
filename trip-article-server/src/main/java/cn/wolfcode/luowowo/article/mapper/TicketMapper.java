@@ -3,7 +3,6 @@ package cn.wolfcode.luowowo.article.mapper;
 import cn.wolfcode.luowowo.article.domain.Ticket;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 public interface TicketMapper {
@@ -48,4 +47,5 @@ public interface TicketMapper {
      * 获取 某大景点下按某数据排行的最便宜门票
      */
     List<Ticket> listBestForScenic(@Param("scenicId") Long scenicId, @Param("orderByDesc") String orderByDesc);
+
 }

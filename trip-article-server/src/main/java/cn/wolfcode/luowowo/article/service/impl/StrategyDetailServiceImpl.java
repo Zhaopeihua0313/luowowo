@@ -9,7 +9,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Date;
 import java.util.List;
 
@@ -18,15 +17,18 @@ public class StrategyDetailServiceImpl implements IStrategyDetailService {
 
     @Autowired
     private StrategyDetailMapper strategyDetailMapper;
+
     @Autowired
     private StrategyContentMapper strategyContentMapper;
+
     @Autowired
     private StrategyTagMapper strategyTagMapper;
+
     @Autowired
     private StrategyCatalogMapper strategyCatalogMapper;
+
     @Autowired
     private StrategyCommendMapper strategyCommendMapper;
-
 
     /**
      * 高级查询 攻略文章
@@ -52,25 +54,20 @@ public class StrategyDetailServiceImpl implements IStrategyDetailService {
         AjaxResult result = new AjaxResult();
         try {
             strategyDetail.setSummary("AI生成中...");
-
             //填充 dest 属性，通过攻略分类来获取
             StrategyCatalog catalog = strategyCatalogMapper.selectByPrimaryKey(strategyDetail.getCatalog().getId());
             Destination destination = new Destination();
             destination.setId(catalog.getDestId());
             strategyDetail.setDest(destination);
-
             if (strategyDetail.getId() == null) {
                 //新增攻略文章
                 strategyDetail.setCreateTime(new Date());
-
                 strategyDetailMapper.insert(strategyDetail);
-
                 //新增攻略内容
                 StrategyContent content = new StrategyContent();
                 content.setId(strategyDetail.getId());
                 content.setContent(strategyDetail.getStrategyContent().getContent());
                 strategyContentMapper.insert(content);
-
             } else {
                 //编辑攻略文章
                 strategyDetailMapper.updateByPrimaryKey(strategyDetail);
@@ -80,12 +77,10 @@ public class StrategyDetailServiceImpl implements IStrategyDetailService {
                 content.setContent(strategyDetail.getStrategyContent().getContent());
                 strategyContentMapper.updateByPrimaryKey(content);
             }
-
             //处理标签 秒杀,xx
             if (tags != null) {
                 //先删除旧关系,再保存新关系
                 strategyDetailMapper.deleteRelation(strategyDetail.getId());
-
                 //对标签字符串进行分割成数组，然后去比对数据库看有没有，没有才新增
                 String[] ts = tags.split(",");
                 for (String tagName : ts) {
@@ -100,7 +95,6 @@ public class StrategyDetailServiceImpl implements IStrategyDetailService {
                     strategyDetailMapper.insertRelation(strategyDetail.getId(), tag.getId());
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -168,4 +162,5 @@ public class StrategyDetailServiceImpl implements IStrategyDetailService {
     public StrategyDetail getStrategyContent(Long strategyId) {
         return strategyDetailMapper.getStrategyContent(strategyId);
     }
+
 }

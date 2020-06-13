@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.article.domain.StrategyDetail;
 import cn.wolfcode.luowowo.article.domain.TravelCommend;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 public interface TravelCommendMapper {

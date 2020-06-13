@@ -21,6 +21,5 @@ public interface IOrderUserDetailService {
      * 新增或修改 订单使用者信息
      */
     AjaxResult saveOrUpdate(OrderUserDetail orderUserDetail);
-
     
 }

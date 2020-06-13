@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface IQuestionService {
+
     /**
      * 查所有问题及其金牌回答,用在社区首页显示
      * @return
@@ -25,4 +26,5 @@ public interface IQuestionService {
     AjaxResult save(Question question);
 
     void update(Question question);
+
 }

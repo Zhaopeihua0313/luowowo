@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class QuestionContent extends BaseDomain{
 
-    private String content;//问题内容
+    private String content; //问题内容
 
 }

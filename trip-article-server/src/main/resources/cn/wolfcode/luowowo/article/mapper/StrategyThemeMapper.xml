@@ -57,5 +57,4 @@
         FROM strategy_theme
     </select>
 
-
 </mapper>

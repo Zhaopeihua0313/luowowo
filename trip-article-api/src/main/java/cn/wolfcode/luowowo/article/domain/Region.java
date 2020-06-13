@@ -5,13 +5,13 @@ import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
 @Setter
 @Getter
 public class Region extends BaseDomain {
+
     public static final Integer STATE_HOT = 1;      //热门
     public static final Integer STATE_NORMAL = 0;   //普通
 
@@ -19,17 +19,11 @@ public class Region extends BaseDomain {
     public static final Integer STATE_DISABLE = 0;  //禁用
 
     private String name;
-
     private String sn;
-
     private String ref;
-
     private Long[] refIds;
-
     private Integer hot = STATE_NORMAL;
-
     private String info;
-
     private Integer state = STATE_ENABLE;
 
     public String getStateName() {
@@ -87,4 +81,5 @@ public class Region extends BaseDomain {
         map.put("state", state);
         return JSON.toJSONString(map);
     }
+
 }

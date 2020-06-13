@@ -4,6 +4,7 @@ import cn.wolfcode.luowowo.article.domain.FlightCity;
 import java.util.List;
 
 public interface FlightCityMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(FlightCity record);
@@ -27,4 +28,5 @@ public interface FlightCityMapper {
      * @return
      */
     List<FlightCity> selectInitial(Integer num);
+
 }

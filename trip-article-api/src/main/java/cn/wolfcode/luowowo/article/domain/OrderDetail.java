@@ -5,7 +5,6 @@ import cn.wolfcode.luowowo.member.domain.UserInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -19,17 +18,14 @@ import java.util.List;
 public class OrderDetail extends BaseDomain {
 
     //private Long id;                //id
+    private Long createUserId;        //下单用户ID
+    private UserInfo createUser;      //下单用户
+    private Long userUserId;          //订单使用用户信息id
+    private OrderUserDetail userUser; //订单使用用户信息
+    private Date createTime;          //下单时间
+    private Date lastUpdateTime;      //下单时间
 
-    private Long createUserId;      //下单用户ID
-    private UserInfo createUser;    //下单用户
-
-    private Long userUserId;        //订单使用用户信息id
-    private OrderUserDetail userUser;//订单使用用户信息
-
-    private Date createTime;        //下单时间
-    private Date lastUpdateTime;        //下单时间
-
-    private String status;          //订单状态
+    private String status;            //订单状态
     public static final String STATUS_ORDERED = "ordered";          //已下单
     public static final String STATUS_PAIDED = "paided";            //已支付
     public static final String STATUS_CANCELLED = "cancelled";      //已取消
@@ -37,13 +33,10 @@ public class OrderDetail extends BaseDomain {
     public static final String STATUS_REFUNDED = "refunded";        //已退款
     public static final String STATUS_CANCELING = "canceling";      //取消中
 
-    private BigDecimal totalPrice;  //商品总价
-
-    private BigDecimal pullPrice;   //优惠价格
-
-    private BigDecimal realPrice;   //真实价格
-
-    private List<OrderProduct> products; //订单的产品们
+    private BigDecimal totalPrice;    //商品总价
+    private BigDecimal pullPrice;     //优惠价格
+    private BigDecimal realPrice;     //真实价格
+    private List<OrderProduct> products; //订单的所有产品
 
     //status 翻译
     public String getStatusName() {

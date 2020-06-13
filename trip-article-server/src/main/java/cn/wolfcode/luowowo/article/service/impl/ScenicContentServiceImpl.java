@@ -15,4 +15,5 @@ public class ScenicContentServiceImpl implements IScenicContentService {
     public ScenicContent get(Long scenicId) {
         return scenicContentMapper.get(scenicId);
     }
+
 }

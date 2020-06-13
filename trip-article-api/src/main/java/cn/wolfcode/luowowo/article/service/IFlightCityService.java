@@ -1,10 +1,10 @@
 package cn.wolfcode.luowowo.article.service;
 
 import cn.wolfcode.luowowo.article.domain.FlightCity;
-
 import java.util.List;
 
 public interface IFlightCityService {
+
     /**
      * 根据国内热门查询热门城市
      *
@@ -19,4 +19,5 @@ public interface IFlightCityService {
      * @return
      */
     List<FlightCity> listInitial(Integer num);
+
 }

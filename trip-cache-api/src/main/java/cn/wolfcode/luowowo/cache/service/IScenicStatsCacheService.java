@@ -1,7 +1,6 @@
 package cn.wolfcode.luowowo.cache.service;
 
 import cn.wolfcode.luowowo.cache.vo.ScenicStats;
-
 import java.util.List;
 
 /**
@@ -62,4 +61,5 @@ public interface IScenicStatsCacheService {
      * @return
      */
     List<Long> listScenicsByUserId(Long userId);
+
 }

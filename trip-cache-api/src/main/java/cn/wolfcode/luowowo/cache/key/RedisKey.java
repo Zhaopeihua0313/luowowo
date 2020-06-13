@@ -28,7 +28,6 @@ public enum RedisKey {
     SCENIC_STATS_VISIT("scenic_stats_visit", -1L),              //景点去过统计
     SCENIC_STATS_FAVOR("scenic_stats_favor", -1L),              //景点收藏统计
 
-
     ANSWER_STATS_THUMNUP("answer_stats_thumnup",-1L),               //社区回答点赞
     ANSWER_STATS("answer_stats",-1L),                                 //回答统计
     USER_SCORE_STATS("user_score_stats",-1L),                        //用户各种得分统计
@@ -38,7 +37,6 @@ public enum RedisKey {
 
     QUESTION_STATS("question_stats",-1L),                           //问题统计
     QUESTION_STATS_FOCUS("question_stats_focus",-1L);               //问题被关注统计
-
 
     private String prefix;      // key 前缀
     private Long timeout;       // key 超时时间 -1L 永不超时
@@ -54,4 +52,5 @@ public enum RedisKey {
     public String getCacheKey(Object key) {
         return prefix + ":" + key;
     }
+
 }

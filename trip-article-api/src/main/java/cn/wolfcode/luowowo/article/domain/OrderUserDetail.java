@@ -16,14 +16,9 @@ import lombok.Setter;
 public class OrderUserDetail extends BaseDomain {
 
     //private Long id;            //id
-
     private Long orderId;       //订单id
-
     private String name;        //使用者名
-
     private String phone;       //使用者手机
-
     private String userCard;    //使用者身份证
-
 
 }

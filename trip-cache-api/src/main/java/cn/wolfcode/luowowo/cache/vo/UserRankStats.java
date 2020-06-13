@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.member.domain.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +17,9 @@ import java.util.List;
 public class UserRankStats implements Serializable {
 
     private UserInfo user;//用户
-
     private Integer goldenNum = 0;//金牌数
-
     private Integer answersNum = 0;//回答数
-
     private Integer thumbsupnum = 0;//点赞数
-
     private List<String> answers = new ArrayList<>();//该用户的回答集合
 
 }

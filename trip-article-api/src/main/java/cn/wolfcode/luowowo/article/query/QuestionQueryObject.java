@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class QuestionQueryObject extends QueryObject {
+
     private int pageSize = 10;
     private Long qid = -1L;    //问题id
+
 }

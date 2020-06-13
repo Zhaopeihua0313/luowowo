@@ -16,6 +16,7 @@ public class Hotel extends BaseDomain {
     public static final Integer HOTEL_TYPE_CHAIN = 2;  //连锁
     public static final Integer HOTEL_TYPE_APARTMENT = 3; //公寓
     public static final Integer HOTEL_TYPE_HOMESTAY = 4; //民宿
+
     //名称
     private String name;
     //英文名称
@@ -52,6 +53,7 @@ public class Hotel extends BaseDomain {
         }
         return msg;
     }
+
     public String getLevelName(){
         String msg = "平价";
         switch (level){
@@ -61,4 +63,5 @@ public class Hotel extends BaseDomain {
         }
         return msg;
     }
+
 }

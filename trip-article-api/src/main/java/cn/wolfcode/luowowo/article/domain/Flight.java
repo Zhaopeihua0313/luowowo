@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.common.domain.BaseDomain;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 @Getter
@@ -16,18 +15,12 @@ public class Flight extends BaseDomain {
     private Date tkTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date arTime;
-
     private String leavePort;
-
     private String arrivePort;
-
     private String tkName;
-
     private String arName;
-
     private String name;
-
     private Long cityTkId;
-
     private Long cityArId;
+
 }

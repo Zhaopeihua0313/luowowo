@@ -4,6 +4,7 @@ import cn.wolfcode.luowowo.article.domain.ThemeCatalog;
 import java.util.List;
 
 public interface ThemeCatalogMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(ThemeCatalog record);
@@ -13,4 +14,5 @@ public interface ThemeCatalogMapper {
     List<ThemeCatalog> selectAll();
 
     int updateByPrimaryKey(ThemeCatalog record);
+
 }

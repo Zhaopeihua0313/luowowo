@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service
@@ -40,13 +39,11 @@ public class TravelCommendServiceImpl implements ITravelCommendService {
                 int maxSequence = travelCommendMapper.getMaxSequence();
                 travelCommend.setSequence(maxSequence+1);
             }
-
             if (travelCommend.getId() == null) {
                 travelCommendMapper.insert(travelCommend);
             } else {
                 travelCommendMapper.updateByPrimaryKey(travelCommend);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());

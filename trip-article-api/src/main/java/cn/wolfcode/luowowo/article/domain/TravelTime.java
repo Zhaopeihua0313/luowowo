@@ -4,14 +4,14 @@ import cn.wolfcode.luowowo.common.domain.BaseDomain;
 import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
 
-@Setter@Getter
+@Setter
+@Getter
 public class TravelTime extends BaseDomain {
-    private Long id;
 
+    private Long id;
     private String name;
 
     public String getJson() {
@@ -20,4 +20,5 @@ public class TravelTime extends BaseDomain {
         map.put("name", name);
         return JSON.toJSONString(map);
     }
+
 }

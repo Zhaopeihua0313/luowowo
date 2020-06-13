@@ -1,7 +1,6 @@
 package cn.wolfcode.luowowo.article.mapper;
 
 import cn.wolfcode.luowowo.article.domain.ScoreComment;
-
 import java.util.List;
 
 public interface ScoreCommentMapper {

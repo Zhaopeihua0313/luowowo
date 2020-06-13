@@ -19,7 +19,6 @@
         <result column="sharenum" property="sharenum"/>
         <result column="thumbsupnum" property="thumbsupnum"/>
         <result column="state" property="state"/>
-
         <!--目的地-->
         <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
             <id property="id" column="id"/>
@@ -31,19 +30,14 @@
             <result property="name" column="name"/>
         </association>
         <!--攻略分类-->
-        <association property="catalog" javaType="cn.wolfcode.luowowo.article.domain.StrategyCatalog"
-                     columnPrefix="sc_">
+        <association property="catalog" javaType="cn.wolfcode.luowowo.article.domain.StrategyCatalog" columnPrefix="sc_">
             <id property="id" column="id"/>
             <result property="name" column="name"/>
         </association>
         <!--攻略推荐-->
-        <association property="strategyCommend" javaType="cn.wolfcode.luowowo.article.domain.StrategyCommend"
-                     columnPrefix="scd_">
+        <association property="strategyCommend" javaType="cn.wolfcode.luowowo.article.domain.StrategyCommend" columnPrefix="scd_">
             <id property="id" column="id"/>
         </association>
-        
-
-
     </resultMap>
 
     <!--通过主键删除一攻略-->
@@ -60,12 +54,8 @@
 
     <!--新增一攻略-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO strategy_detail (dest_id, theme_id, catalog_id, title, subTitle, summary,
-                                     coverUrl, createTime, viewnum, replynum, favornum, sharenum,
-                                     thumbsupnum, state)
-        VALUES (#{dest.id}, #{theme.id}, #{catalog.id}, #{title}, #{subTitle}, #{summary},
-                            #{coverUrl}, #{createTime}, 0, 0, 0, 0,
-                0, #{state})
+        INSERT INTO strategy_detail (dest_id, theme_id, catalog_id, title, subTitle, summary, coverUrl, createTime, viewnum, replynum, favornum, sharenum, thumbsupnum, state)
+        VALUES (#{dest.id}, #{theme.id}, #{catalog.id}, #{title}, #{subTitle}, #{summary}, #{coverUrl}, #{createTime}, 0, 0, 0, 0, 0, #{state})
     </insert>
 
     <!--新增攻略与标签的关系-->

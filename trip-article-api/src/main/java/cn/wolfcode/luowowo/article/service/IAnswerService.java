@@ -3,7 +3,6 @@ package cn.wolfcode.luowowo.article.service;
 import cn.wolfcode.luowowo.article.domain.Answer;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import cn.wolfcode.luowowo.member.domain.UserInfo;
-
 import java.util.List;
 
 public interface IAnswerService {
@@ -41,4 +40,5 @@ public interface IAnswerService {
     List<Answer> listAll();
 
     Answer get(String answerId);
+
 }

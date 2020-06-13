@@ -24,20 +24,17 @@
         <result column="sharenum" property="sharenum"/>
         <result column="thumbsupnum" property="thumbsupnum"/>
         <result column="state" property="state"/>
-
         <!--目的地-->
         <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
             <id property="id" column="id"/>
             <result property="name" column="name"/>
             <result property="coverUrl" column="coverUrl"/>
         </association>
-
         <!-- 父目的地 -->
         <association property="dest.parent" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="p_">
             <id property="id" column="id"/>
             <result property="name" column="name"/>
         </association>
-
         <!--作者-->
         <association property="author" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
             <id property="id" column="id"/>
@@ -46,11 +43,9 @@
             <result property="level" column="level"/>
         </association>
         <!--推荐游记-->
-        <association property="travelCommend" javaType="cn.wolfcode.luowowo.article.domain.TravelCommend"
-                     columnPrefix="tc_">
+        <association property="travelCommend" javaType="cn.wolfcode.luowowo.article.domain.TravelCommend" columnPrefix="tc_">
             <id property="id" column="id"/>
         </association>
-
     </resultMap>
 
     <!--通过主键删除一游记-->

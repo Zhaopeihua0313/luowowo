@@ -17,10 +17,8 @@ import java.util.Date;
 public class ScoreHistory  extends BaseDomain {
 
     //private Long id;            //id
-
     private Long userId;        //用户id
     private UserInfo user;      //用户
-
     private Long score;         //积分
 
     private String type;        //积分类型
@@ -31,8 +29,6 @@ public class ScoreHistory  extends BaseDomain {
     public static final String TYPE_DAY_CHECK = "day_check";                //每日签到 +100
 
     private String msg;         //积分的使用信息说明
-
     private Date dayTime;       //积分变化时间
-
 
 }

@@ -8,7 +8,6 @@ import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service
@@ -37,11 +36,9 @@ public class ScoreCommentServiceImpl implements IScoreCommentService {
     public AjaxResult saveOrUpdate(ScoreComment scoreComment) {
         AjaxResult result = new AjaxResult();
         try {
-
             if (scoreComment.getId() == null) {
                 scoreCommentMapper.insert(scoreComment);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());

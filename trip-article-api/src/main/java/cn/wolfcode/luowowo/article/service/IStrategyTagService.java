@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.article.domain.StrategyTag;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 public interface IStrategyTagService {
@@ -28,4 +27,5 @@ public interface IStrategyTagService {
      * 获取 某目的地的所有攻略标签
      */
     List<StrategyTag> listByDestId(Long destId);
+
 }

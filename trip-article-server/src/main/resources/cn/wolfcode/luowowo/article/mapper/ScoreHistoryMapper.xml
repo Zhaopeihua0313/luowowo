@@ -10,7 +10,6 @@
         <result column="type" property="type"/>
         <result column="msg" property="msg"/>
         <result column="dayTime" property="dayTime"/>
-
         <!--用户-->
         <association property="user" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
             <id property="id" column="id" />

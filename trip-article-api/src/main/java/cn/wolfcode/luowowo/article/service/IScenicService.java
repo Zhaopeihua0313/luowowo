@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.article.domain.Scenic;
 import cn.wolfcode.luowowo.common.query.ScenicQueryObject;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 public interface IScenicService {
@@ -41,4 +40,5 @@ public interface IScenicService {
      * @return
      */
     Scenic getScenicContent(Long scenicId);
+
 }

@@ -15,4 +15,5 @@ public class QuestionContentServiceImpl implements IQuestionContentService {
     public QuestionContent get(Long qid) {
         return questionContentMapper.selectByPrimaryKey(qid);
     }
+
 }

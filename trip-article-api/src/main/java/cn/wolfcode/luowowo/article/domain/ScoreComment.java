@@ -5,7 +5,6 @@ import cn.wolfcode.luowowo.member.domain.UserInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Date;
 
 /**
@@ -17,13 +16,9 @@ import java.util.Date;
 public class ScoreComment extends BaseDomain {
 
     //private Long id;         //id
-
     private Long userId;     //用户id
     private UserInfo user;      //留言用户
-
     private Date createTime;    //评论日期
-
     private String comment;     //评论内容
-
 
 }

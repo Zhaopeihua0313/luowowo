@@ -2,10 +2,10 @@ package cn.wolfcode.luowowo.article.mapper;
 
 import cn.wolfcode.luowowo.article.domain.Region;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface RegionMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(Region record);
@@ -25,4 +25,5 @@ public interface RegionMapper {
      * 获取 热门的启用的区域
      */
     List<Region> selectListByHot();
+
 }

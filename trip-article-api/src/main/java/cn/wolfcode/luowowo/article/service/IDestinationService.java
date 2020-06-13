@@ -5,7 +5,6 @@ import cn.wolfcode.luowowo.common.query.DestQueryObject;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 public interface IDestinationService {
@@ -88,6 +87,5 @@ public interface IDestinationService {
     PageInfo queryForResult(DestQueryObject qo);
 
     List<Destination> listBrothers(Long destId);
-
 
 }

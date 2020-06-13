@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service
@@ -45,13 +44,11 @@ public class TicketTagServiceImpl implements ITicketTagService {
     public AjaxResult updateById(TicketTag tag) {
         AjaxResult result = new AjaxResult();
         try {
-
             if (tag.getId() == null) {
                 ticketTagMapper.insert(tag);
             } else {
                 ticketTagMapper.updateByPrimaryKey(tag);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());

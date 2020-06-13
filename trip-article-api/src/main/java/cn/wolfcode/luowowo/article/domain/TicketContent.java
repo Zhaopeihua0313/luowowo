@@ -16,8 +16,6 @@ import lombok.Setter;
 public class TicketContent extends BaseDomain {
 
     private Long id;    //对应门票id
-
     private String content; //内容
-
 
 }

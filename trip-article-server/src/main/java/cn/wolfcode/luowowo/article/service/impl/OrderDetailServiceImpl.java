@@ -16,7 +16,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +25,13 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
 
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+
     @Autowired
     private OrderUserDetailMapper orderUserDetailMapper;
+
     @Autowired
     private OrderProductMapper orderProductMapper;
+
     @Autowired
     private ScoreHistoryMapper scoreHistoryMapper;
 
@@ -109,7 +111,6 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     public AjaxResult updateStatus(OrderDetail orderDetail) {
         AjaxResult result = new AjaxResult();
         try {
-
             //如果是改为已支付状态，对应的用户积分要增加
             if (orderDetail.getStatus().equals(OrderDetail.STATUS_PAIDED)) {
                 OrderDetail detail = orderDetailMapper.selectByPrimaryKey(orderDetail.getId());
@@ -135,13 +136,9 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
                 scoreHistory.setMsg("订单No." + detail.getId() + " 支付成功：" + product.getProductName());
                 scoreHistory.setDayTime(new Date());
                 scoreHistoryMapper.insert(scoreHistory);
-
-
             }
-
             orderDetail.setLastUpdateTime(new Date());
             orderDetailMapper.updateStatusByOrderId(orderDetail);
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -155,7 +152,6 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     public AjaxResult buyScoreProduct(OrderBox orderBox) {
         AjaxResult result = new AjaxResult();
         try {
-
             //判断积分够不够
             Integer totalScore = scoreHistoryMapper.getTotalScoreByUserId(orderBox.getOrderCreateUserId());
             if (totalScore.intValue()-orderBox.getProductScore() < 0) {
@@ -204,7 +200,6 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
             scoreHistory.setType(ScoreHistory.TYPE_SCORE_PAID);
             scoreHistory.setUserId(orderBox.getOrderCreateUserId());
             scoreHistoryMapper.insert(scoreHistory);
-
 
         } catch (Exception e) {
             e.printStackTrace();

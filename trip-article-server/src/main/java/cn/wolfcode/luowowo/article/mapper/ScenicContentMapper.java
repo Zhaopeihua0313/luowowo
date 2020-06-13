@@ -4,6 +4,7 @@ import cn.wolfcode.luowowo.article.domain.ScenicContent;
 import java.util.List;
 
 public interface ScenicContentMapper {
+
     int insert(ScenicContent record);
 
     List<ScenicContent> selectAll();

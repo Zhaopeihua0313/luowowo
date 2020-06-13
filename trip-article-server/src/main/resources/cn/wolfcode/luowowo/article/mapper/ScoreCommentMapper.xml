@@ -8,7 +8,6 @@
         <result column="userId" property="userId"/>
         <result column="createTime" property="createTime"/>
         <result column="comment" property="comment"/>
-
         <!--用户-->
         <association property="user" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_" >
             <id property="id" column="id" />
@@ -17,7 +16,6 @@
             <result property="level" column="level" />
             <result property="city" column="city" />
         </association>
-
     </resultMap>
 
     <!--删除一-->

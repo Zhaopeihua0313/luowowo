@@ -15,7 +15,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,10 +24,13 @@ public class QuestionServiceImpl implements IQuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
     @Autowired
     private AnswerMongoRepository repository;
+
     @Autowired
     private QuestionContentMapper questionContentMapper;
+
     @Reference
     private IQuestionStatsCacheService questionStatsCacheService;
 
@@ -57,7 +59,6 @@ public class QuestionServiceImpl implements IQuestionService {
         return questionMapper.selectByPrimaryKey(qid);
     }
 
-
     public AjaxResult save(Question question) {
         AjaxResult ajaxResult = new AjaxResult();
         try{
@@ -78,7 +79,6 @@ public class QuestionServiceImpl implements IQuestionService {
             //把内容存入内容表
             questionContentMapper.insert(content);
             ajaxResult.addData(question.getId());
-
         }catch (Exception e){
             e.printStackTrace();
             ajaxResult.mark(e.getMessage());
@@ -90,4 +90,5 @@ public class QuestionServiceImpl implements IQuestionService {
     public void update(Question question) {
         questionMapper.updateByPrimaryKey(question);
     }
+
 }

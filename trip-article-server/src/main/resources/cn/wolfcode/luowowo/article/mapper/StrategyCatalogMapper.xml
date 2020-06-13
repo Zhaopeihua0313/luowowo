@@ -8,7 +8,6 @@
         <result column="name" property="name"/>
         <result column="dest_id" property="destId"/>
         <result column="state" property="state"/>
-
         <!--目的地-->
         <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_" >
             <id property="id" column="id" />
@@ -23,7 +22,6 @@
         <result column="name" property="name"/>
         <result column="dest_id" property="destId"/>
         <result column="state" property="state"/>
-
         <!--details-->
         <collection property="details" column="id" select="cn.wolfcode.luowowo.article.mapper.StrategyDetailMapper.selectByCatalogId" />
     </resultMap>

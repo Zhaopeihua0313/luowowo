@@ -4,6 +4,7 @@ import cn.wolfcode.luowowo.article.domain.TravelTime;
 import java.util.List;
 
 public interface TravelTimeMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(TravelTime record);
@@ -13,4 +14,5 @@ public interface TravelTimeMapper {
     List<TravelTime> selectAll();
 
     int updateByPrimaryKey(TravelTime record);
+
 }

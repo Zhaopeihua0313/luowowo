@@ -14,7 +14,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +28,6 @@ public class AnswerServiceImpl implements IAnswerService {
     private IAnswerStatsCacheService answerStatsCacheService;
     @Reference
     private IUserRankStatsCacheService userRankStatsCacheService;
-
 
     //找到金牌回答
     public Answer getGoldenOne(Long questionId,String oldGoldenId) {
@@ -150,7 +148,6 @@ public class AnswerServiceImpl implements IAnswerService {
             answer.setThumbupNum(thumbupNum+i);
             repository.save(answer);
         });
-
     }
 
     @Override
@@ -162,4 +159,5 @@ public class AnswerServiceImpl implements IAnswerService {
     public Answer get(String answerId) {
         return repository.findById(answerId).get();
     }
+
 }

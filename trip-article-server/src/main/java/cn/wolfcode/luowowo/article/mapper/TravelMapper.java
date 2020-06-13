@@ -3,10 +3,10 @@ package cn.wolfcode.luowowo.article.mapper;
 import cn.wolfcode.luowowo.article.domain.StrategyDetail;
 import cn.wolfcode.luowowo.article.domain.Travel;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface TravelMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(Travel record);
@@ -34,10 +34,10 @@ public interface TravelMapper {
      */
     void updateStats(Travel travel);
 
-
     List<Travel> selectTravelByUserId(Long userId);
 
     int selectTravelTotal(Long userId);
 
     Travel getStrategyContent(Long travelId);
+
 }

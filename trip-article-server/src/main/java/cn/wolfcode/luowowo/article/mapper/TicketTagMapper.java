@@ -3,7 +3,6 @@ package cn.wolfcode.luowowo.article.mapper;
 import cn.wolfcode.luowowo.article.domain.Ticket;
 import cn.wolfcode.luowowo.article.domain.TicketTag;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface TicketTagMapper {

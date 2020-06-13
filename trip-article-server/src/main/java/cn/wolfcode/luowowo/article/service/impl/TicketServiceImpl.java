@@ -13,7 +13,6 @@ import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-
 import java.util.List;
 
 @Service
@@ -21,8 +20,10 @@ public class TicketServiceImpl implements ITicketService {
 
     @Autowired
     private TicketMapper ticketMapper;
+
     @Autowired
     private TicketContentMapper ticketContentMapper;
+
     @Autowired
     private TicketTagMapper ticketTagMapper;
 
@@ -47,7 +48,6 @@ public class TicketServiceImpl implements ITicketService {
     public AjaxResult saveOrUpdate(Ticket ticket) {
         AjaxResult result = new AjaxResult();
         try {
-
             if (ticket.getId() == null) {
                 ticketMapper.insert(ticket);
                 //门票内容
@@ -60,7 +60,6 @@ public class TicketServiceImpl implements ITicketService {
                         ticketMapper.insertTagRelations(ticket.getId(), Long.valueOf(tagId));
                     }
                 }
-
             } else {
                 ticketMapper.updateByPrimaryKey(ticket);
                 //门票内容
@@ -75,7 +74,6 @@ public class TicketServiceImpl implements ITicketService {
                     }
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -124,6 +122,5 @@ public class TicketServiceImpl implements ITicketService {
     public List<Ticket> listFavorScenic(Long scenicId) {
         return ticketMapper.listBestForScenic(scenicId, "favornum");
     }
-
 
 }

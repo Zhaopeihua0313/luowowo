@@ -3,10 +3,10 @@ package cn.wolfcode.luowowo.article.mapper;
 import cn.wolfcode.luowowo.article.domain.StrategyDetail;
 import cn.wolfcode.luowowo.article.domain.StrategyTag;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface StrategyTagMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(StrategyTag record);
@@ -33,4 +33,5 @@ public interface StrategyTagMapper {
      * 获取 某目的地的所有攻略标签
      */
     List<StrategyTag> selectListByDestId(Long destId);
+
 }

@@ -4,10 +4,10 @@ import cn.wolfcode.luowowo.article.domain.Destination;
 import cn.wolfcode.luowowo.common.query.DestQueryObject;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 public interface DestinationMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(Destination record);

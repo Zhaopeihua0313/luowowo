@@ -4,27 +4,22 @@ import cn.wolfcode.luowowo.common.domain.BaseDomain;
 import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
 
-@Setter@Getter
+@Setter
+@Getter
 public class TravelCommend extends BaseDomain {
+
     public static final Integer STATE_NORMAL = 0;   //启用
     public static final Integer STATE_DISABLE = 1;  //禁用
 
     private Long travelId;
-
     private String title;
-
     private String subTitle;
-
     private String coverUrl;
-
     private Integer state = STATE_NORMAL;
-
     private Integer sequence;
-
     private Travel travel;
 
     public String getStateName() {
@@ -46,4 +41,5 @@ public class TravelCommend extends BaseDomain {
         map.put("sequence", sequence);
         return JSON.toJSONString(map);
     }
+
 }

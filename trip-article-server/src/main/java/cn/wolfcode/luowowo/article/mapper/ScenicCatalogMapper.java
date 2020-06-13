@@ -2,10 +2,10 @@ package cn.wolfcode.luowowo.article.mapper;
 
 import cn.wolfcode.luowowo.article.domain.ScenicCatalog;
 import cn.wolfcode.luowowo.common.query.QueryObject;
-
 import java.util.List;
 
 public interface ScenicCatalogMapper {
+
     int deleteByPrimaryKey(Long id);
 
     int insert(ScenicCatalog record);
@@ -24,4 +24,5 @@ public interface ScenicCatalogMapper {
      * 获取 某景点的所有分类
      */
     List<ScenicCatalog> listByScenicId(Long scenicId);
+
 }

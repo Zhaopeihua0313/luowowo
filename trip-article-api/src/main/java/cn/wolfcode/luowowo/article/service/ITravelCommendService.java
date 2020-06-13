@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.article.domain.TravelCommend;
 import cn.wolfcode.luowowo.common.query.QueryObject;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 public interface ITravelCommendService {
@@ -23,4 +22,5 @@ public interface ITravelCommendService {
      * 获取 序号降序排序的前几个游记推荐
      */
     List<TravelCommend> listTopCount(int count);
+
 }

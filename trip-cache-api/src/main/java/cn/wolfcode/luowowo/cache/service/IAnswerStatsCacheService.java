@@ -11,7 +11,6 @@ public interface IAnswerStatsCacheService {
     int ANSWER_STATS_THUMBUP=1;   //点赞数
     int ANSWER_STATS_SHARENUM=2;  //分享数
 
-
     /**
      * 给回答点赞
      * @param answerId
@@ -34,4 +33,5 @@ public interface IAnswerStatsCacheService {
     void setAnswerStats(AnswerStats vo);
 
     AnswerStats getAnswerStats(String answerId);
+
 }

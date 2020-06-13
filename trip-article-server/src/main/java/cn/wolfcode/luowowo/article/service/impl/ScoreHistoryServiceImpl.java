@@ -10,7 +10,6 @@ import cn.wolfcode.luowowo.member.domain.UserInfo;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Date;
 import java.util.List;
 
@@ -47,9 +46,7 @@ public class ScoreHistoryServiceImpl implements IScoreHistoryService {
     public AjaxResult dayCheck(UserInfo userInfo) {
         AjaxResult result = new AjaxResult();
         try {
-
             Date date = new Date();
-
             //判断用户今天有没有打卡了
             Date starDate = DateUtil.getStarDate(date);
             Date endDate = DateUtil.getEndDate(date);
@@ -60,7 +57,6 @@ public class ScoreHistoryServiceImpl implements IScoreHistoryService {
             if (userScoreHistory.size() > 0) {
                 return result.mark("你今日已经打过卡啦，请明天再来(＾Ｕ＾)ノ");
             }
-
             ScoreHistory history = new ScoreHistory();
             //当前用户信息
             history.setUser(userInfo);
@@ -70,7 +66,6 @@ public class ScoreHistoryServiceImpl implements IScoreHistoryService {
             history.setType(ScoreHistory.TYPE_DAY_CHECK);
             history.setMsg("每日打卡签到送积分");
             scoreHistoryMapper.insert(history);
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -84,7 +79,5 @@ public class ScoreHistoryServiceImpl implements IScoreHistoryService {
     public Integer getTotalScoreByUserId(Long userId) {
         return scoreHistoryMapper.getTotalScoreByUserId(userId);
     }
-
-
 
 }

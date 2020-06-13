@@ -3,7 +3,6 @@ package cn.wolfcode.luowowo.cache.service;
 import cn.wolfcode.luowowo.cache.key.RedisKey;
 import cn.wolfcode.luowowo.cache.vo.TravelStats;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
-
 import java.util.List;
 
 /**
@@ -46,7 +45,6 @@ public interface ITravelStatsCacheService {
      * 判断 是否已收藏
      */
     boolean isFavor(Long travelId, Long userId);
-
 
     /**
      * 操作 用户点赞顶游记
@@ -112,4 +110,5 @@ public interface ITravelStatsCacheService {
      * @return
      */
     List<Long> listTravelsByUserId(Long userId);
+
 }

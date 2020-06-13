@@ -17,5 +17,4 @@ public class TicketTag extends BaseDomain {
 
     private String name;    //标签名
 
-
 }

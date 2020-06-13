@@ -7,13 +7,11 @@
         <id column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="dest_id" property="destId"/>
-
         <!--关联目的地-->
         <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_" >
             <id property="id" column="id" />
             <result property="name" column="name" />
         </association>
-
     </resultMap>
 
     <!--连接scenic的map-->
@@ -26,9 +24,7 @@
             <id property="id" column="id" />
             <result property="name" column="name" />
         </association>
-
-        <collection property="scenics" column="id"
-                    select="cn.wolfcode.luowowo.article.mapper.ScenicMapper.selectByCatalogId"/>
+        <collection property="scenics" column="id" select="cn.wolfcode.luowowo.article.mapper.ScenicMapper.selectByCatalogId"/>
     </resultMap>
 
     <delete id="deleteByPrimaryKey">

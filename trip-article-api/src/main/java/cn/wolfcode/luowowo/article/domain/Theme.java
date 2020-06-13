@@ -4,23 +4,20 @@ import cn.wolfcode.luowowo.common.domain.BaseDomain;
 import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
 
-@Setter@Getter
+@Setter
+@Getter
 public class Theme extends BaseDomain {
+
     public static final Integer STATE_NORMAL = 0;   //正常
     public static final Integer STATE_DISABLE = 1;  //禁用
 
     private Long id;
-
     private String name;
-
     private Integer state;
-
     private ThemeCatalog themecatalog;
-
     private String coverUrl;
 
     public String getJson() {
@@ -40,4 +37,5 @@ public class Theme extends BaseDomain {
         }
         return msg;
     }
+
 }

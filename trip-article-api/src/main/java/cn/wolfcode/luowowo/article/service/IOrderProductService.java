@@ -22,5 +22,4 @@ public interface IOrderProductService {
      */
     AjaxResult saveOrUpdate(OrderProduct orderProduct);
 
-    
 }

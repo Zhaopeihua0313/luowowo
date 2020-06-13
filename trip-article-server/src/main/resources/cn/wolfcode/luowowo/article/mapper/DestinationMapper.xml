@@ -14,7 +14,6 @@
         <result column="deep" property="deep"/>
         <result column="days" property="days"/>
         <result column="enName" property="enName"/>
-
         <!--父级目的地-->
         <association property="parent" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="p_">
             <id column="id" property="id"/>
@@ -60,9 +59,7 @@
         </association>
         <!--找到子目的-->
         <collection property="children" column="id" select="selectByParentId" />
-
     </resultMap>
-
 
     <!--通过父目的地 id 找目的地-->
     <select id="selectByParentId" resultMap="BaseResultMap">

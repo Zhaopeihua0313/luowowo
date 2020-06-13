@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service
@@ -60,6 +59,5 @@ public class StrategyCommendServiceImpl implements IStrategyCommendService {
         }
         return result;
     }
-
 
 }

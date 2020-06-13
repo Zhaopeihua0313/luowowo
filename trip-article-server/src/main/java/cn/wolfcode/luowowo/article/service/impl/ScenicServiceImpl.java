@@ -11,7 +11,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +19,7 @@ public class ScenicServiceImpl implements IScenicService {
 
     @Autowired
     private ScenicMapper scenicMapper;
+
     @Autowired
     private ScenicContentMapper scenicContentMapper;
 
@@ -88,7 +88,6 @@ public class ScenicServiceImpl implements IScenicService {
                 content.setContent(scenic.getContent().getContent());
                 scenicContentMapper.updateById(content);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -139,6 +138,5 @@ public class ScenicServiceImpl implements IScenicService {
 //        }
 //        return list;
 //    }
-
 
 }
