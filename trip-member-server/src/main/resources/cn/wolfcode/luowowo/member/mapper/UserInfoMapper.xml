@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.member.mapper.UserInfoMapper">
+
+    <!--新增一前台用户-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO userinfo (nickname, phone, email, password, level, gender, city,
+                              birthday, headImgUrl, info)
+        VALUES (#{nickname}, #{phone}, #{email}, #{password}, #{level}, #{gender}, #{city},
+                #{birthday}, #{headImgUrl}, #{info})
+    </insert>
+
+    <update id="updateUser">
+        update userinfo set nickname = #{nickname} , gender = #{gender},
+        city = #{city} , birthday = #{birthday} , info = #{info}
+        where id = #{id}
+    </update>
+    <update id="updateHeadImgUrl">
+        update userinfo set headImgUrl = #{headImgUrl} where id = #{userId}
+    </update>
+    <update id="updatePassword">
+        update userinfo set password = #{password} where id = #{id}
+    </update>
+    <update id="updatePhone">
+        update userinfo set phone = #{phone} where id = #{userId}
+    </update>
+
+
+    <!--通过手机查询一前台用户-->
+    <select id="selectByPhone" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo
+        WHERE phone = #{phone}
+    </select>
+
+    <!--通过特定信息寻找一前台用户-->
+    <select id="selectByInfo" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo
+        WHERE phone = #{phone} AND password = #{password}
+    </select>
+
+    <!--通过主键查询一用户-->
+    <select id="selectById" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo
+        WHERE id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="listAll" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo
+    </select>
+
+    <select id="selectCareByUserId" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        select DISTINCT u.nickname , u.headImgUrl
+        from userinfo u
+        left join user_concerned uc on u.id = uc.user_id
+        where u.id != #{userId}
+    </select>
+    <select id="selectByUserId" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        SELECT
+            id,
+            nickname,
+            phone,
+            email,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info
+        FROM userinfo where id = #{userId}
+    </select>
+
+    <select id="selectAllFriendByUserId" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">
+        select  id,
+            nickname,
+            phone,
+            email,
+            level,
+            gender,
+            city,
+            birthday,
+            headImgUrl,
+            info where id != #{userId}
+    </select>
+
+</mapper>

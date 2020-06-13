@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.StrategyTagMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.StrategyTag">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <!--通过主键删除一攻略标签-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM strategy_tag
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一攻略标签-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO strategy_tag (name)
+        VALUES (#{name})
+    </insert>
+
+    <!--通过主键修改一攻略标签-->
+    <update id="updateByPrimaryKey">
+        UPDATE strategy_tag
+        SET name = #{name}
+        WHERE id = #{id}
+    </update>
+
+    <!--通过主键查询一攻略标签-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name
+        FROM strategy_tag
+        WHERE id = #{id}
+    </select>
+
+    <!--查询所有的攻略标签-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name
+        FROM strategy_tag
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name
+        FROM strategy_tag
+    </select>
+
+    <!--获取 某攻略的所有标签，并且以 tag1,tag2,tag3 字符串返回-->
+    <select id="selectStrByStrategyId" resultType="string">
+        select group_concat(tag.name)
+        from strategy_tag tag
+        join detail_tag_relation rel on tag.id = rel.tag_id
+        where rel.detail_id = #{detailid}
+    </select>
+
+    <!--通过名字查询一标签-->
+    <select id="selectByName" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name
+        FROM strategy_tag
+        WHERE name = #{tagName}
+    </select>
+
+    <!--通过目的地 id 获取标签-->
+    <select id="selectListByDestId" resultMap="BaseResultMap">
+        SELECT DISTINCT
+            st.id,
+            st.name
+        FROM strategy_tag st
+        LEFT JOIN detail_tag_relation  dtr ON dtr.tag_id = st.id
+        LEFT JOIN strategy_detail sd ON sd.id = dtr.detail_id
+        WHERE sd.dest_id = #{destId}
+    </select>
+
+
+</mapper>

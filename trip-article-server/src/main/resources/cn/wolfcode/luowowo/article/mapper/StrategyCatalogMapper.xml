@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.StrategyCatalogMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.StrategyCatalog">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dest_id" property="destId"/>
+        <result column="state" property="state"/>
+
+        <!--目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_" >
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="coverUrl" column="coverUrl" />
+        </association>
+    </resultMap>
+
+    <!--带 StrategyDetail 的映射-->
+    <resultMap id="hasDetailsMap" type="cn.wolfcode.luowowo.article.domain.StrategyCatalog">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dest_id" property="destId"/>
+        <result column="state" property="state"/>
+
+        <!--details-->
+        <collection property="details" column="id" select="cn.wolfcode.luowowo.article.mapper.StrategyDetailMapper.selectByCatalogId" />
+    </resultMap>
+
+    <!--通过主键删除攻略分类-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM strategy_catalog
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一攻略分类-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO strategy_catalog (name, dest_id, state)
+        VALUES (#{name}, #{destId}, #{state})
+    </insert>
+
+    <!--通过主键修改一攻略分类-->
+    <update id="updateByPrimaryKey">
+        UPDATE strategy_catalog
+        SET name    = #{name},
+            dest_id = #{destId},
+            state   = #{state}
+        WHERE id = #{id}
+    </update>
+
+    <!--通过主键查询一攻略分类-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name,
+            dest_id,
+            state
+        FROM strategy_catalog
+        WHERE id = #{id}
+    </select>
+
+    <!--查询所有的攻略分类-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name,
+            dest_id,
+            state
+        FROM strategy_catalog
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.name,
+            sc.dest_id,
+            sc.state,
+            d.id d_id,
+            d.name d_name,
+            d.coverUrl d_coverUrl
+        FROM strategy_catalog sc
+        LEFT JOIN destination d ON d.id = sc.dest_id
+    </select>
+
+    <!--获取 某目的地的攻略分类-->
+    <select id="selectByDestId" resultMap="hasDetailsMap">
+        SELECT
+            id,
+            name,
+            dest_id,
+            state
+        FROM strategy_catalog
+        WHERE dest_id = #{id}
+    </select>
+
+</mapper>

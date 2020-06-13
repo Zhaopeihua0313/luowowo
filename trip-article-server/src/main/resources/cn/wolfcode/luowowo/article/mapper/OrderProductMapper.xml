@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.OrderProductMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.OrderProduct">
+        <id column="id" property="id"/>
+        <result column="orderId" property="orderId"/>
+        <result column="productName" property="productName"/>
+        <result column="productId" property="productId"/>
+        <result column="productType" property="productType"/>
+        <result column="productPrice" property="productPrice"/>
+        <result column="productCount" property="productCount"/>
+    </resultMap>
+
+    <!--删除一-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM orderproduct
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO orderproduct (orderId, productName, productId, productType, productPrice,
+                                  productCount)
+        VALUES (#{orderId}, #{productName}, #{productId}, #{productType}, #{productPrice},
+                #{productCount})
+    </insert>
+
+    <!--修改一-->
+    <update id="updateByPrimaryKey">
+        UPDATE orderproduct
+        SET orderId      = #{orderId},
+            productName  = #{productName},
+            productId    = #{productId},
+            productType  = #{productType},
+            productPrice = #{productPrice},
+            productCount = #{productCount}
+        WHERE id = #{id}
+    </update>
+
+    <!--查询一-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            orderId,
+            productName,
+            productId,
+            productType,
+            productPrice,
+            productCount
+        FROM orderproduct
+        WHERE id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            orderId,
+            productName,
+            productId,
+            productType,
+            productPrice,
+            productCount
+        FROM orderproduct
+    </select>
+
+    <!--获取 某订单的所有产品-->
+    <select id="listByOrderId" resultMap="BaseResultMap">
+        SELECT
+            id,
+            orderId,
+            productName,
+            productId,
+            productType,
+            productPrice,
+            productCount
+        FROM orderproduct
+        WHERE orderId = #{orderId}
+    </select>
+
+</mapper>

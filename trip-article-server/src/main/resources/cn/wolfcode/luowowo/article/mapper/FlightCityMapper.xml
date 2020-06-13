@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.FlightCityMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.FlightCity">
+        <id column="id" property="id"/>
+        <result column="cityCode" property="cityCode"/>
+        <result column="hot" property="hot"/>
+        <result column="num" property="num"/>
+        <result column="cityName" property="cityName"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM flight_city
+        WHERE id = #{id}
+    </delete>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO flight_city (cityCode, hot, num, cityName)
+        VALUES (#{cityCode}, #{hot}, #{num}, #{cityName})
+    </insert>
+    <update id="updateByPrimaryKey">
+        UPDATE flight_city
+        SET cityName   = #{cityName},
+            cityCode = #{cityCode},
+            hot      = #{hot},
+            num      = #{num}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            cityName,
+            cityCode,
+            hot,
+            num
+        FROM flight_city
+        WHERE id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            cityName,
+            cityCode,
+            hot,
+            num
+        FROM flight_city
+    </select>
+    <!--查询热门城市-->
+    <select id="selectHotFlights" resultMap="BaseResultMap">
+        SELECT
+            id,
+            cityName,
+            cityCode,
+            hot,
+            num
+        FROM flight_city
+        WHERE hot = #{hot}
+    </select>
+    <!--查询以字母A开头的城市"-->
+    <select id="selectInitial" resultMap="BaseResultMap">
+        SELECT
+            id,
+            cityName,
+            cityCode,
+            hot,
+            num
+        FROM flight_city
+        WHERE num = #{num}
+    </select>
+</mapper>

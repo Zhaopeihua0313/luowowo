@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.StrategyCommendMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.StrategyCommend">
+        <id column="id" property="id"/>
+        <result column="detail_id" property="detailId"/>
+        <result column="title" property="title"/>
+        <result column="subTitle" property="subTitle"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="sequence" property="sequence"/>
+        <result column="state" property="state"/>
+
+        <!--关联的攻略-->
+        <association property="strategyDetail" javaType="cn.wolfcode.luowowo.article.domain.StrategyDetail" columnPrefix="sd_">
+            <id property="id" column="id" />
+            <result property="title" column="title"/>
+            <result property="createTime" column="createTime" />
+        </association>
+    </resultMap>
+
+    <!--通过主键删除一攻略推荐一-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM strategy_commend
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一攻略推荐-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO strategy_commend (detail_id, title, subTitle, coverUrl, sequence, state)
+        VALUES (#{detailId}, #{title}, #{subTitle}, #{coverUrl}, #{sequence}, #{state})
+    </insert>
+
+    <!--修改一攻略推荐-->
+    <update id="updateByPrimaryKey">
+        UPDATE strategy_commend
+        SET
+            title     = #{title},
+            subTitle  = #{subTitle},
+            coverUrl  = #{coverUrl},
+            sequence  = #{sequence},
+            state     = #{state}
+        WHERE id = #{id}
+    </update>
+
+    <!--通过攻略id 修改状态-->
+    <update id="updateStateByDetailId">
+        UPDATE strategy_commend SET state = #{state} WHERE detail_id = #{detailId}
+    </update>
+
+    <!--通过主键查询一攻略推荐-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.detail_id,
+            sc.title,
+            sc.subTitle,
+            sc.coverUrl,
+            sc.sequence,
+            sc.state,
+            sd.id sd_id,
+            sd.title sd_title,
+            sd.createTime sd_createTime
+        FROM strategy_commend sc
+            LEFT JOIN strategy_detail sd ON sd.id = sc.detail_id
+        WHERE sc.id = #{id}
+    </select>
+
+    <!--查询所有攻略推荐-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.detail_id,
+            sc.title,
+            sc.subTitle,
+            sc.coverUrl,
+            sc.sequence,
+            sc.state,
+            sd.id sd_id,
+            sd.title sd_title,
+            sd.createTime sd_createTime
+        FROM strategy_commend sc
+            LEFT JOIN strategy_detail sd ON sd.id = sc.detail_id
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.detail_id,
+            sc.title,
+            sc.subTitle,
+            sc.coverUrl,
+            sc.sequence,
+            sc.state,
+            sd.id sd_id,
+            sd.title sd_title,
+            sd.createTime sd_createTime
+        FROM strategy_commend sc
+            LEFT JOIN strategy_detail sd ON sd.id = sc.detail_id
+    </select>
+
+    <!--获取 排序降序前五的攻略推荐-->
+    <select id="selectListTopCount" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.detail_id,
+            sc.title,
+            sc.subTitle,
+            sc.coverUrl,
+            sc.sequence,
+            sc.state,
+            sd.id sd_id,
+            sd.title sd_title,
+            sd.createTime sd_createTime
+        FROM strategy_commend sc
+        LEFT JOIN strategy_detail sd ON sd.id = sc.detail_id
+        ORDER BY sc.sequence DESC
+        LIMIT #{count}
+    </select>
+
+    <!--获取 最大的排序数-->
+    <select id="getMaxSequence" resultType="java.lang.Integer">
+        SELECT IFNULL(MAX(sequence), 0) FROM strategy_commend
+    </select>
+
+</mapper>

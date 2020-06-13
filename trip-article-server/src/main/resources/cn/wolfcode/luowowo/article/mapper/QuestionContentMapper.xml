@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.QuestionContentMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.QuestionContent">
+    <result column="id" property="id" />
+    <result column="content" property="content" />
+  </resultMap>
+  <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    insert into question_content (id,content)
+    values (#{id},#{content})
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, content
+    from question_content
+  </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+      select id, content
+      from question_content
+      where id = #{qid}
+    </select>
+</mapper>

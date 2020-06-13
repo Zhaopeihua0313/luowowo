@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.FlightMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Flight">
+        <id column="id" property="id"/>
+        <result column="flightNo" property="flightNo"/>
+        <result column="tkTime" property="tkTime"/>
+        <result column="arTime" property="arTime"/>
+        <result column="tkName" property="tkName"/>
+        <result column="arName" property="arName"/>
+        <result column="name" property="name"/>
+        <result column="cityTk_id" property="cityTkId"/>
+        <result column="cityAr_id" property="cityArId"/>
+        <result column="leavePort" property="leavePort"/>
+        <result column="arrivePort" property="arrivePort"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM flight
+        WHERE id = #{id}
+    </delete>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO flight (flightNo, arTime, leavePort, arrivePort, cityTk_id,
+                            cityAr_id, tkName, arName, tkName, name)
+        VALUES (#{flightNo}, #{tkTime}, #{arTime}, #{leavePort}, #{arrivePort}, #{cityTkId},
+                #{cityArId}, #{arName}, #{tkName}, #{name})
+    </insert>
+    <update id="updateByPrimaryKey">
+        UPDATE flight
+        SET flightNo   = #{flightNo},
+            tkTime     = #{tkTime},
+            arTime     = #{arTime},
+            leavePort  = #{leavePort},
+            arrivePort = #{arrivePort},
+            cityTk_id  = #{cityTkId},
+            cityAr_id  = #{cityArId},
+            tkName     = #{tkName},
+            arName     = #{arName},
+            name       = #{name}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            flightNo,
+            tkTime,
+            arTime,
+            leavePort,
+            arrivePort,
+            cityTk_id,
+            cityAr_id,
+            arName,
+            tkName,
+            name
+        FROM flight
+        WHERE id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            f.id,
+            f.flightNo,
+            f.tkTime,
+            f.arTime,
+            f.leavePort,
+            f.arrivePort,
+            f.cityTk_id,
+            f.cityAr_id,
+            f.arName,
+            f.tkName,
+            f.name,
+            cf.id cf_id,
+            c.id  c_id
+        FROM
+            flight f
+            LEFT JOIN flight_city cf ON f.cityTk_id = cf.id
+            LEFT JOIN flight_city c ON f.cityAr_id = c.id
+
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            f.id,
+            f.flightNo,
+            f.tkTime,
+            f.arTime,
+            f.leavePort,
+            f.arrivePort,
+            f.cityTk_id,
+            f.cityAr_id,
+            f.arName,
+            f.tkName,
+            f.name,
+            cf.id cf_id,
+            c.id  c_id
+        FROM
+            flight f
+            LEFT JOIN flight_city cf ON f.cityTk_id = cf.id
+            LEFT JOIN flight_city c ON f.cityAr_id = c.id
+        WHERE f.arName = #{dstCity}
+              AND
+              f.tkName = #{orgCity}
+    </select>
+
+</mapper>

@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.DestinationMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Destination">
+        <id column="id" property="id"/>
+        <!--<result column="parent_id" property="parent_id"/>
+        <result column="region_id" property="region_id"/>-->
+        <result column="name" property="name"/>
+        <result column="hot" property="hot"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="info" property="info"/>
+        <result column="deep" property="deep"/>
+        <result column="days" property="days"/>
+        <result column="enName" property="enName"/>
+
+        <!--父级目的地-->
+        <association property="parent" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="p_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <!--区域-->
+        <association property="region" javaType="cn.wolfcode.luowowo.article.domain.Region" columnPrefix="r_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <!--旅游时间-->
+        <association property="timeName" javaType="cn.wolfcode.luowowo.article.domain.TravelTime" columnPrefix="time_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <!--目的地主题-->
+        <association property="destTheme" javaType="cn.wolfcode.luowowo.article.domain.Theme" columnPrefix="t_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+    <!--带儿子的映射-->
+    <resultMap id="hasChiltMap" type="cn.wolfcode.luowowo.article.domain.Destination">
+        <id column="id" property="id"/>
+        <!--<result column="parent_id" property="parent_id"/>
+        <result column="region_id" property="region_id"/>-->
+        <result column="name" property="name"/>
+        <result column="hot" property="hot"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="info" property="info"/>
+        <result column="deep" property="deep"/>
+
+        <!--父级目的地-->
+        <association property="parent" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="p_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <!--区域-->
+        <association property="region" javaType="cn.wolfcode.luowowo.article.domain.Region" columnPrefix="r_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <!--找到子目的-->
+        <collection property="children" column="id" select="selectByParentId" />
+
+    </resultMap>
+
+
+    <!--通过父目的地 id 找目的地-->
+    <select id="selectByParentId" resultMap="BaseResultMap">
+        SELECT
+            d.id,
+            d.name,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep,
+            p.id   p_id,
+            p.name p_name,
+            r.id   r_id,
+            r.name r_name
+        from destination d
+            left join destination p on d.parent_id=p.id
+            left join region r on d.region_id = r.id
+        WHERE d.parent_id = #{parentId}
+    </select>
+
+    <!--通过主键删除目的地-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM destination
+        WHERE id = #{id}
+    </delete>
+
+    <!--设置某区域的目的地的区域ID为空-->
+    <delete id="deleteRegionIdByRegionId">
+        UPDATE destination
+        SET region_id = NULL
+        WHERE region_id = #{id}
+    </delete>
+
+    <!--增加一目的地-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO destination (parent_id, region_id, name, hot, coverUrl, info, deep
+        )
+        VALUES (#{parent_id}, #{region_id}, #{name}, #{hot}, #{coverUrl}, #{info}, #{deep}
+        )
+    </insert>
+
+    <!--通过主键修改目的地热门状态-->
+    <update id="updateByPrimaryKey">
+        UPDATE destination
+        SET parent_id = #{parent_id},
+            region_id = #{region_id},
+            name      = #{name},
+            hot       = #{hot},
+            coverUrl  = #{coverUrl},
+            info      = #{info},
+            deep      = #{deep}
+        WHERE id = #{id}
+    </update>
+
+    <!--通过主键修改热门状态-->
+    <update id="updateHotById">
+        UPDATE destination
+        SET hot = #{hot}
+        where id = #{id}
+    </update>
+
+    <!--通过主键修改简介-->
+    <update id="updateInfoById">
+        UPDATE destination
+        SET info = #{info}
+        WHERE id = #{id}
+    </update>
+
+    <!--通过主键修改区域id-->
+    <update id="updateRegionIdById">
+        UPDATE destination
+        SET region_id = #{regionId}
+        WHERE id = #{destId}
+    </update>
+
+    <!--通过主键查询一目的地-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            d.id,
+            d.parent_id,
+            d.region_id,
+            d.name,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep,
+            p.id   p_id,
+            p.name p_name
+        FROM destination d LEFT JOIN destination p ON d.parent_id = p.id
+        WHERE d.id = #{id}
+    </select>
+
+    <!--查询所有目的地-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            d.id,
+            d.parent_id,
+            d.region_id,
+            d.name,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep,
+            p.id p_id,
+            p.name p_name,
+            p.parent_id p_parent_id,
+            r.id r_id,
+            r.name r_name,
+            time.id time_id,
+            time.name time_name,
+            t.id t_id,t.name t_name
+        FROM destination d
+            LEFT JOIN destination p ON d.parent_id = p.id
+            LEFT JOIN region r ON r.id = d.region_id
+            LEFT JOIN travel_time time ON time.id = d.time_id
+            LEFT JOIN theme t on t.id = d.theme_id
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultMap="BaseResultMap">
+        SELECT
+        d.id,
+        d.parent_id,
+        d.region_id,
+        d.name,
+        d.hot,
+        d.coverUrl,
+        d.info,
+        d.deep,
+        p.id p_id,
+        p.name p_name,
+        p.parent_id p_parent_id,
+        r.id r_id,
+        r.name r_name
+        FROM destination d
+        LEFT JOIN destination p ON d.parent_id = p.id
+        LEFT JOIN region r ON r.id = d.region_id
+        <where>
+            <choose>
+                <when test="keyword != null and keyword != '' ">
+                    AND (d.name like concat('%', #{keyword}, '%'))
+                </when>
+                <otherwise>
+                    <choose>
+                        <when test="parentId == null or parentId == '-1' ">
+                            and d.parent_id is null
+                        </when>
+                        <otherwise>
+                            and d.parent_id = #{parentId}
+                        </otherwise>
+                    </choose>
+                </otherwise>
+            </choose>
+
+            <if test="hot > -1">
+                AND d.hot = #{hot}
+            </if>
+
+        </where>
+    </select>
+
+    <!--获取 某区域的目的地-->
+    <select id="selectListByRegionId" resultMap="BaseResultMap">
+        SELECT
+            id,
+            parent_id,
+            region_id,
+            name,
+            hot,
+            coverUrl,
+            info,
+            deep,
+            enName
+        FROM destination
+        WHERE region_id = #{rid}
+    </select>
+
+    <!--获取 某区域的 热门 目的地-->
+    <select id="selectListHotByRegionId" resultMap="hasChiltMap">
+        SELECT
+            id,
+            parent_id,
+            region_id,
+            name,
+            hot,
+            coverUrl,
+            info,
+            deep
+        FROM destination
+        <choose>
+            <!--如果是 -1 说明是查国内的，目的地里中国的 id 是 1-->
+            <when test="regionId == -1">
+                WHERE parent_id = 1 AND hot = 1
+            </when>
+            <otherwise>
+                WHERE region_id = #{regionId} AND hot = 1
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <!--通过主键查询某目的地信息-->
+    <select id="selectById" resultType="cn.wolfcode.luowowo.article.domain.Destination">
+        SELECT
+            id,
+            parent_id,
+            region_id,
+            name,
+            hot,
+            coverUrl,
+            info,
+            deep
+        FROM destination
+        WHERE id = #{id}
+    </select>
+
+    <!--获取 某目的地和其子目的地，查询面包屑导航的数据，带目的地的子高点击量的目的地-->
+    <select id="selectByIdAndChilds" resultMap="hasChiltMap">
+        SELECT
+            d.id,
+            d.parent_id,
+            d.region_id,
+            d.name,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep,
+            p.id   p_id,
+            p.name p_name
+        FROM destination d LEFT JOIN destination p ON d.parent_id = p.id
+        WHERE d.id = #{id}
+    </select>
+
+    <select id="selectByScenicId" resultMap="hasChiltMap">
+        SELECT
+        d.id,
+        d.parent_id,
+        d.region_id,
+        d.name,
+        d.hot,
+        d.coverUrl,
+        d.info,
+        d.deep
+        FROM destination d
+        LEFT JOIN scenic s on d.id = s.dest_id
+        WHERE s.id = #{scenicId}
+    </select>
+
+    <select id="selectByTimeId" resultMap="hasChiltMap">
+        SELECT
+            d.id,
+            d.parent_id,
+            d.region_id,
+            d.name,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep,
+            d.time_id,
+            t.id t_id,
+            t.name t_name
+        FROM destination d
+            LEFT JOIN travel_time t ON t.id = d.time_id
+        WHERE d.time_id = #{timeId}
+    </select>
+
+    <select id="listByIdIn" resultType="cn.wolfcode.luowowo.article.domain.Destination">
+        SELECT
+            id,
+            name
+        FROM destination
+        WHERE id IN
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+            d.deep,
+            d.time_id,
+            t.id t_id,
+            t.name t_name
+        FROM destination d
+        LEFT JOIN travel_time t ON t.id = d.time_id
+        WHERE d.time_id = #{timeId}
+    </select>
+
+    <select id="listByIdInJiangQi" resultType="cn.wolfcode.luowowo.article.domain.Destination">
+        SELECT
+        id,
+        name
+        FROM destination
+        WHERE id IN
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="selectDestByRegionId" resultMap="hasChiltMap">
+        SELECT
+            d.id,
+            d.parent_id,
+            d.region_id,
+            d.name,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep,
+            d.time_id,
+            d.enName,
+            r.id r_id,
+            r.name r_name
+        FROM destination d
+            LEFT JOIN region r ON r.id = d.region_id
+        WHERE d.region_id = #{regionId}
+    </select>
+
+    <select id="selectForResult" resultMap="hasChiltMap">
+        SELECT
+            d.id,
+            d.parent_id,
+            d.region_id,
+            d.name,
+            d.hot,
+            d.coverUrl,
+            d.info,
+            d.deep,
+            d.time_id,
+            r.id r_id,
+            r.name r_name,
+            time.id time_id,
+            time.name time_name,
+            th.id th_id,th.name th_name
+        FROM destination d
+            LEFT JOIN region r ON r.id = d.region_id
+            LEFT JOIN travel_time time ON time.id = d.time_id
+            LEFT JOIN theme th on th.id = d.theme_id
+        <where>
+            <if test="themeId > 0">and d.theme_id = #{themeId} </if>
+            <if test="timeId > 0">and d.time_id = #{timeId}</if>
+            <if test="dayType > 0">
+                and d.days >= #{day.min}
+                <if test="day.max != null">
+                    and d.days &lt;= #{day.max}
+                </if>
+            </if>
+        </where>
+    </select>
+
+</mapper>

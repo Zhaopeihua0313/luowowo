@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.TicketMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Ticket">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="catalog" property="catalog"/>
+        <result column="scenicId" property="scenicId"/>
+        <result column="presetTime" property="presetTime"/>
+        <result column="marketPrice" property="marketPrice"/>
+        <result column="salePrice" property="salePrice"/>
+
+        <!--景点-->
+        <association property="scenic" javaType="cn.wolfcode.luowowo.article.domain.Scenic" columnPrefix="s_">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="coverUrl" column="coverUrl" />
+            <result property="visitnum" column="visitnum" />
+            <result property="favornum" column="favornum" />
+        </association>
+        <!--目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="coverUrl" column="coverUrl" />
+        </association>
+
+    </resultMap>
+
+    <!--基本映射带门票标签 还带门票内容-->
+    <resultMap id="BaseResultMapWithTags" type="cn.wolfcode.luowowo.article.domain.Ticket">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="catalog" property="catalog"/>
+        <result column="scenicId" property="scenicId"/>
+        <result column="presetTime" property="presetTime"/>
+        <result column="marketPrice" property="marketPrice"/>
+        <result column="salePrice" property="salePrice"/>
+
+        <!--景点-->
+        <association property="scenic" javaType="cn.wolfcode.luowowo.article.domain.Scenic" columnPrefix="s_">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="coverUrl" column="coverUrl" />
+            <result property="visitnum" column="visitnum" />
+            <result property="favornum" column="favornum" />
+        </association>
+        <!--目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="coverUrl" column="coverUrl" />
+        </association>
+        <!--门票介绍内容-->
+        <association property="content" javaType="cn.wolfcode.luowowo.article.domain.TicketContent" columnPrefix="tc_">
+            <id property="id" column="id" />
+            <result property="content" column="content" />
+        </association>
+        <!--标签-->
+        <collection property="tagss" ofType="cn.wolfcode.luowowo.article.domain.TicketTag" column="id"
+                    select="cn.wolfcode.luowowo.article.mapper.TicketTagMapper.selectByTicketId"/>
+
+
+    </resultMap>
+
+    <!--删除-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM ticket
+        WHERE id = #{id}
+    </delete>
+
+    <!--删除某门票的 门票标签中间表的关系-->
+    <delete id="deleteTagRelationByTicketId">
+        DELETE FROM ticketandtag
+        WHERE ticketId = #{id}
+    </delete>
+
+    <!--新增一-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO ticket (name, catalog, scenicId, presetTime, marketPrice, salePrice
+        )
+        VALUES (#{name}, #{catalog}, #{scenicId}, #{presetTime}, #{marketPrice}, #{salePrice}
+        )
+    </insert>
+
+    <!--新增门票与标签表的关系-->
+    <insert id="insertTagRelations">
+        INSERT INTO ticketandtag(ticketId, tagId) VALUES (#{ticketId}, #{tagId})
+    </insert>
+
+    <!--修改一-->
+    <update id="updateByPrimaryKey">
+        UPDATE ticket
+        SET name        = #{name},
+            catalog     = #{catalog},
+            scenicId    = #{scenicId},
+            presetTime  = #{presetTime},
+            marketPrice = #{marketPrice},
+            salePrice   = #{salePrice}
+        WHERE id = #{id}
+    </update>
+
+    <!--查某id一-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMapWithTags">
+        <include refid="withTicketAll" />
+        WHERE t.id = #{id}
+    </select>
+
+    <!--查所有-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="withTicketAll" />
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultMap="BaseResultMap">
+        <include refid="withTicketAll" />
+    </select>
+
+    <!--获取 某标签的几张不同景点的最低价的门票-->
+    <select id="selectByTagCount" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM (
+                 SELECT DISTINCT
+                     t.id,
+                     t.name,
+                     t.catalog,
+                     t.scenicId,
+                     t.presetTime,
+                     t.marketPrice,
+                     t.salePrice,
+                     s.id s_id,
+                     s.name s_name,
+                     s.coverUrl s_coverUrl,
+                     d.id d_id,
+                     d.name d_name,
+                     d.coverUrl d_coverUrl
+                 FROM ticket t
+                     LEFT JOIN scenic s ON s.id = t.scenicId
+                     LEFT JOIN destination d ON d.id = s.dest_id
+                     LEFT JOIN ticketandtag tat ON tat.ticketId = t.id
+                 WHERE tat.tagId = #{tagId}
+                 ORDER BY t.salePrice
+             ) r
+        GROUP BY r.scenicId
+        LIMIT #{count}
+    </select>
+
+    <!--获取 一定数量的 某景点分类下的 每个景点里售价最低的门票-->
+    <select id="listScenicMixSalePriceCountByScenicCata" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM (
+                 SELECT DISTINCT
+                     t.id,
+                     t.name,
+                     t.catalog,
+                     t.scenicId,
+                     t.presetTime,
+                     t.marketPrice,
+                     t.salePrice,
+                     s.id s_id,
+                     s.name s_name,
+                     s.coverUrl s_coverUrl,
+                     s.visitnum s_visitnum,
+                     s.favornum s_favornum,
+                     d.id d_id,
+                     d.name d_name,
+                     d.coverUrl d_coverUrl
+                 FROM ticket t
+                     LEFT JOIN scenic s ON s.id = t.scenicId
+                     LEFT JOIN destination d ON d.id = s.dest_id
+                     LEFT JOIN ticketandtag tat ON tat.ticketId = t.id
+                     LEFT JOIN scenic_catalog sc ON sc.id = s.catalog_id
+                 <if test="scenicCataId != null" >
+                     WHERE sc.id = #{scenicCataId}
+                 </if>
+                 ORDER BY t.salePrice
+             ) r
+        GROUP BY r.scenicId
+        LIMIT #{count}
+    </select>
+
+    <!--该大景点(广州)的 所有子景点最便宜的门票-->
+    <select id="listScenicMixSalePriceCountByBigScenicId" resultMap="BaseResultMap">
+        SELECT scenticTicket.* FROM
+            (SELECT * FROM scenic WHERE id = #{scenicId}) AS si
+
+            LEFT JOIN
+
+            (
+
+                SELECT
+                    *
+                FROM (
+                         SELECT DISTINCT
+                             t.id,
+                             t.name,
+                             t.catalog,
+                             t.scenicId,
+                             t.presetTime,
+                             t.marketPrice,
+                             t.salePrice,
+                             s.id s_id,
+                             s.name s_name,
+                             s.coverUrl s_coverUrl,
+                             s.visitnum s_visitnum,
+                             s.favornum s_favornum,
+                             d.id d_id,
+                             d.name d_name,
+                             d.coverUrl d_coverUrl
+                         FROM ticket t
+                             LEFT JOIN scenic s ON s.id = t.scenicId
+                             LEFT JOIN destination d ON d.id = s.dest_id
+                             LEFT JOIN ticketandtag tat ON tat.ticketId = t.id
+                             LEFT JOIN scenic_catalog sc ON sc.id = s.catalog_id
+
+                         ORDER BY t.salePrice
+                     ) r
+                GROUP BY r.scenicId
+
+            ) as scenticTicket
+                ON scenticTicket.d_id = si.dest_id
+        LIMIT #{conut}
+    </select>
+
+    <!--获取 某景点(目标景点)下的某类别(儿童等)所有门票 （常用查景点票）-->
+    <select id="listTheScenicByTicketCata" resultMap="BaseResultMapWithTags">
+        SELECT
+            t.id,
+            t.name,
+            t.catalog,
+            t.scenicId,
+            t.presetTime,
+            t.marketPrice,
+            t.salePrice,
+            s.id s_id,
+            s.name s_name,
+            s.coverUrl s_coverUrl,
+            d.id d_id,
+            d.name d_name,
+            d.coverUrl d_coverUrl,
+            tc.id tc_id,
+            tc.content tc_content
+        FROM ticket t
+            LEFT JOIN scenic s ON s.id = t.scenicId
+            LEFT JOIN destination d ON d.id = s.dest_id
+            LEFT JOIN ticketcontent tc ON tc.id = t.id
+        WHERE t.scenicId = #{scenicId}
+        <if test="ticketCatalog != null" >
+            and t.catalog = #{ticketCatalog}
+        </if>
+    </select>
+
+    <!--获取 某大景点下按某数据排行的最便宜门票-->
+    <select id="listBestForScenic" resultMap="BaseResultMap">
+        SELECT scenticTicket.* FROM
+            (SELECT * FROM scenic WHERE id = #{scenicId}) AS si
+
+            LEFT JOIN
+
+            (
+
+                SELECT
+                    *
+                FROM (
+                         SELECT DISTINCT
+                             t.id,
+                             t.name,
+                             t.catalog,
+                             t.scenicId,
+                             t.presetTime,
+                             t.marketPrice,
+                             t.salePrice,
+                             s.id s_id,
+                             s.name s_name,
+                             s.coverUrl s_coverUrl,
+                             s.visitnum s_visitnum,
+                             s.favornum s_favornum,
+                             d.id d_id,
+                             d.name d_name,
+                             d.coverUrl d_coverUrl
+                         FROM ticket t
+                             LEFT JOIN scenic s ON s.id = t.scenicId
+                             LEFT JOIN destination d ON d.id = s.dest_id
+                             LEFT JOIN ticketandtag tat ON tat.ticketId = t.id
+                             LEFT JOIN scenic_catalog sc ON sc.id = s.catalog_id
+
+                         ORDER BY t.salePrice
+                     ) r
+                GROUP BY r.scenicId
+
+
+            ) as scenticTicket
+                ON scenticTicket.d_id = si.dest_id
+        ORDER by scenticTicket.s_${orderByDesc} desc
+    </select>
+
+    <!--关联所有的门票相关的sql片段-->
+    <sql id="withTicketAll" >
+        SELECT
+            t.id,
+            t.name,
+            t.catalog,
+            t.scenicId,
+            t.presetTime,
+            t.marketPrice,
+            t.salePrice,
+            s.id s_id,
+            s.name s_name,
+            s.coverUrl s_coverUrl,
+            d.id d_id,
+            d.name d_name,
+            d.coverUrl d_coverUrl
+        FROM ticket t
+        LEFT JOIN scenic s ON s.id = t.scenicId
+        LEFT JOIN destination d ON d.id = s.dest_id
+    </sql>
+
+</mapper>

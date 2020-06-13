@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.ScoreHistoryMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.ScoreHistory">
+        <id column="id" property="id"/>
+        <result column="userId" property="userId"/>
+        <result column="score" property="score"/>
+        <result column="type" property="type"/>
+        <result column="msg" property="msg"/>
+        <result column="dayTime" property="dayTime"/>
+
+        <!--用户-->
+        <association property="user" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
+            <id property="id" column="id" />
+            <result property="nickname" column="nickname" />
+            <result property="headImgUrl" column="headImgUrl" />
+        </association>
+    </resultMap>
+
+    <!--删除一-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM scorehistory
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO scorehistory (userId, score, type, msg, dayTime)
+        VALUES (#{userId}, #{score}, #{type}, #{msg}, #{dayTime})
+    </insert>
+
+    <!--修改一-->
+    <update id="updateByPrimaryKey">
+        UPDATE scorehistory
+        SET userId  = #{userId},
+            score   = #{score},
+            type    = #{type},
+            msg     = #{msg},
+            dayTime = #{dayTime}
+        WHERE id = #{id}
+    </update>
+
+    <!--查询一-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            userId,
+            score,
+            type,
+            msg,
+            dayTime
+        FROM scorehistory
+        WHERE id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            userId,
+            score,
+            type,
+            msg,
+            dayTime
+        FROM scorehistory
+    </select>
+
+    <!--获取 某个用户在 某个时间段 某种积分类型的 几条积分历史-->
+    <select id="selectBetweenDateByUserIdAndTypeCount" resultMap="BaseResultMap">
+        SELECT
+            sh.id,
+            sh.userId,
+            sh.score,
+            sh.type,
+            sh.msg,
+            sh.dayTime,
+            u.id u_id,
+            u.nickname u_nickname,
+            u.headImgUrl u_headImgUrl
+        FROM scorehistory sh
+        LEFT JOIN userinfo u ON u.id = sh.userId
+        <where>
+            <!--时间段-->
+            <if test="starDate != null and endDate != null" >
+                ( sh.dayTime BETWEEN #{starDate} and #{endDate})
+            </if>
+            <!--某个用户-->
+            and sh.userId = #{userId}
+            <!--积分类型-->
+            <if test="type != null" >
+                and sh.type = #{type}
+            </if>
+            <!--几条积分历史-->
+            <if test="count != null" >
+                limit 0,${count}
+            </if>
+        </where>
+    </select>
+
+    <!--获取 某用户的积分总数-->
+    <select id="getTotalScoreByUserId" resultType="java.lang.Integer">
+        SELECT
+            SUM(sh.score)
+        FROM scorehistory sh
+        WHERE sh.userId = #{userId}
+    </select>
+
+</mapper>

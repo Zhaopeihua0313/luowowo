@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>登录</title>
+    <link href="/styles/base.css" rel="stylesheet" type="text/css">
+    <link href="/styles/login.css" rel="stylesheet" type="text/css">
+
+    <script src="/js/jquery/jquery.js"></script>
+    <script src="/js/system/common.js"></script>
+    <script src="/js/plugins/jquery-form/jquery.form.js"></script>
+
+    <link rel="stylesheet" href="/js/plugins/dialog2/dialog.css">
+    <script src="/js/plugins/dialog2/dialog.min.js"></script>
+    <script src="/js/system/ytr_common.js"></script>
+
+    <!--要在 jQuery 后引入-->
+    <script type="text/javascript" src="/js/plugins/jquery.cookie.js"></script>
+    <!--存储页面浏览历史 By YangTR-->
+    <script>
+        var nowUrl = window.location.href;
+        console.log(nowUrl);
+
+        if ($.cookie("browHistory")) {
+            var browHistory = $.cookie("browHistory");
+            browHistory = $.parseJSON(browHistory);
+            //拟浏览历史处理
+            if (nowUrl != browHistory.now) {
+                browHistory.lllast = browHistory.llast;
+                browHistory.llast = browHistory.last;
+                browHistory.last = browHistory.now;
+                browHistory.now = nowUrl;
+            }
+            //存 cookie
+            browHistory = JSON.stringify(browHistory);
+            $.cookie("browHistory", browHistory);
+
+            console.log($.cookie("browHistory"));
+        } else {
+            var browHistory = '{"now":"' + nowUrl + '", "last":"", "llast":"", "lllast":""}';
+            $.cookie("browHistory", browHistory);
+            console.log("还没有浏览历史 cookie，现在生成");
+        }
+    </script>
+    <script>
+        $(function () {
+            //QQ按钮绑定事件
+            $('.qq').on('click', function () {
+                window.location.href = 'https://graph.qq.com/oauth2.0/show?' +
+                    'which=Login&display=pc&response_type=code&client_id=101397212&' +
+                    'redirect_uri=http://unic.nat300.top/qqcallback&state=state';
+            });
+
+            //微信按钮绑定事件
+            $('.weixin').on('click', function () {
+                //跳转到微信扫码页面
+                window.location.href = '/wxLoginGetCode';
+            });
+
+        });
+    </script>
+</head>
+
+<script>
+    $(function () {
+        var back = $.parseJSON($.cookie("browHistory")).last;
+        $("#_js_loginBtn").click(function () {
+            $("#_j_login_form").ajaxSubmit(function (data) {
+                checkData(data, 700, "登录成功", back, "no");
+            })
+        })
+    })
+</script>
+
+<body>
+<div class="wrapper">
+    <div class="container container-login">
+        <a href="/" title="返回首页" class="logo">骡窝窝</a>
+        <div class="signup-forms flip">
+            <div class="login-box" id="_j_login_box">
+                <div class="inner inner_v2 clearfix">
+                    <div class="inner_v2_left">
+
+                        <form id="_j_login_form" method="post" action="/userLogin">
+                            <div class="form-field">
+                                <input name="phone" type="text" placeholder="您的手机号" autocomplete="off"
+                                       data-verification-name="帐号"
+                                       class="verification[required,maxSize[50],funcCall[checkShowCode]]"
+                                       value="13888888888">
+                                <div class="err-tip"></div>
+                            </div>
+                            <div class="form-field">
+                                <input name="password" type="password" placeholder="您的密码" autocomplete="off"
+                                       data-verification-name="密码"
+                                       class="verification[required,minSize[4],maxSize[50]]" value="123">
+                                <div class="err-tip"></div>
+                            </div>
+                            <div class="form-link"><a href="javascript:;">忘记密码</a></div>
+                            <div class="submit-btn">
+                                <button id="_js_loginBtn" type="button">登 录</button>
+                            </div>
+                        </form>
+                        <!--第三方登录按钮-->
+                        <div class="connect">
+                            <p class="hd">用合作网站账户直接登录</p>
+                            <div class="bd">
+                                <span style="color: orange"> ヾ(✿ﾟ▽ﾟ)ノ &nbsp;</span>
+                                <!--<a href="javascript:;" class="weibo"><i></i>新浪微博</a>-->
+                                <a href="javascript:;" class="qq"><i></i>QQ</a>
+                                <a href="javascript:;" class="weixin"><i></i>微信</a>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="inner_v2_right">
+                        <img src="/images/qrcode.jpg">
+                        <p>扫一扫<br>下载骡窝窝APP</p>
+                    </div>
+                </div>
+                <div class="bottom-link">
+                    还没有帐号?<a href="/regist.html">马上注册</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--/34.jpg-->
+<div class="fullscreen-bg"
+     style="background-image: url(images/d2.jpg);">
+    <img src="/34.jpg" style="width: auto; height: 657px; margin-top: -213px;">
+</div>
+</body>
+</html>

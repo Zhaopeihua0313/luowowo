@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.TravelMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Travel">
+        <id column="id" property="id"/>
+        <!--<result column="dest_id" property="dest_id"/>
+        <result column="author_id" property="author_id"/>-->
+        <result column="title" property="title"/>
+        <result column="summary" property="summary"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="travelTime" property="travelTime"/>
+        <result column="perExpends" property="perExpends"/>
+        <result column="days" property="days"/>
+        <result column="person" property="person"/>
+        <result column="createTime" property="createTime"/>
+        <result column="releaseTime" property="releaseTime"/>
+        <result column="lastUpdateTime" property="lastUpdateTime"/>
+        <result column="overt" property="overt"/>
+        <result column="viewnum" property="viewnum"/>
+        <result column="replynum" property="replynum"/>
+        <result column="favornum" property="favornum"/>
+        <result column="sharenum" property="sharenum"/>
+        <result column="thumbsupnum" property="thumbsupnum"/>
+        <result column="state" property="state"/>
+
+        <!--目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="coverUrl" column="coverUrl"/>
+        </association>
+
+        <!-- 父目的地 -->
+        <association property="dest.parent" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="p_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+
+        <!--作者-->
+        <association property="author" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
+            <id property="id" column="id"/>
+            <result property="nickname" column="nickname"/>
+            <result property="headImgUrl" column="headImgUrl"/>
+            <result property="level" column="level"/>
+        </association>
+        <!--推荐游记-->
+        <association property="travelCommend" javaType="cn.wolfcode.luowowo.article.domain.TravelCommend"
+                     columnPrefix="tc_">
+            <id property="id" column="id"/>
+        </association>
+
+    </resultMap>
+
+    <!--通过主键删除一游记-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM travel
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一游记-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO travel (dest_id, author_id, title, summary, coverUrl, travelTime,
+                            perExpends, days, person, createTime, releaseTime, lastUpdateTime,
+                            overt, viewnum, replynum, favornum, sharenum, thumbsupnum, state
+        )
+        VALUES (#{dest.id}, #{author.id}, #{title}, #{summary}, #{coverUrl}, #{travelTime},
+                            #{perExpends}, #{days}, #{person}, #{createTime}, #{releaseTime}, #{lastUpdateTime},
+                #{overt}, #{viewnum}, #{replynum}, #{favornum}, #{sharenum}, #{thumbsupnum}, #{state}
+        )
+    </insert>
+
+    <!--通过主键修改一游记-->
+    <update id="updateByPrimaryKey">
+        UPDATE travel
+        SET dest_id        = #{dest.id},
+            author_id      = #{author.id},
+            title          = #{title},
+            summary        = #{summary},
+            coverUrl       = #{coverUrl},
+            travelTime     = #{travelTime},
+            perExpends     = #{perExpends},
+            days           = #{days},
+            person         = #{person},
+            createTime     = #{createTime},
+            releaseTime    = #{releaseTime},
+            lastUpdateTime = #{lastUpdateTime},
+            overt          = #{overt},
+            viewnum        = #{viewnum},
+            replynum       = #{replynum},
+            favornum       = #{favornum},
+            sharenum       = #{sharenum},
+            thumbsupnum    = #{thumbsupnum},
+            state          = #{state}
+        WHERE id = #{id}
+    </update>
+
+    <!--修改游记状态-->
+    <update id="updateStateById">
+        UPDATE travel
+        <set>
+            state = #{state},
+            lastUpdateTime = #{lastUpdateTime},
+            <choose>
+                <when test="releaseTime != null">
+                    releaseTime = #{releaseTime},
+                </when>
+                <otherwise>
+                    releaseTime = null,
+                </otherwise>
+            </choose>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--修改 游记统计数据-->
+    <update id="updateStats">
+        UPDATE travel
+        SET viewnum     = #{viewnum}, replynum = #{replynum}, favornum = #{favornum}, sharenum = #{sharenum},
+            thumbsupnum = #{thumbsupnum}
+        WHERE id = #{id}
+    </update>
+
+    <!--通过主键查询一游记-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            t.id,
+            t.dest_id,
+            t.author_id,
+            t.title,
+            t.summary,
+            t.coverUrl,
+            t.travelTime,
+            t.perExpends,
+            t.days,
+            t.person,
+            t.createTime,
+            t.releaseTime,
+            t.lastUpdateTime,
+            t.overt,
+            t.viewnum,
+            t.replynum,
+            t.favornum,
+            t.sharenum,
+            t.thumbsupnum,
+            t.state,
+            d.id d_id,
+            d.name d_name,
+            d.coverUrl d_coverUrl,
+            u.id u_id,
+            u.nickname u_nickname,
+            u.headImgUrl u_headImgUrl,
+            u.level u_level
+        FROM travel t
+            LEFT JOIN destination d ON d.id = t.dest_id
+            LEFT JOIN userinfo u ON u.id = t.author_id
+        WHERE t.id = #{id}
+    </select>
+
+    <!--查询所有的游记-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            t.id,
+            t.dest_id,
+            t.author_id,
+            t.title,
+            t.summary,
+            t.coverUrl,
+            t.travelTime,
+            t.perExpends,
+            t.days,
+            t.person,
+            t.createTime,
+            t.releaseTime,
+            t.lastUpdateTime,
+            t.overt,
+            t.viewnum,
+            t.replynum,
+            t.favornum,
+            t.sharenum,
+            t.thumbsupnum,
+            t.state,
+            d.id d_id,
+            d.name d_name,
+            d.coverUrl d_coverUrl,
+            u.id u_id,
+            u.nickname u_nickname,
+            u.headImgUrl u_headImgUrl,
+            tc.id tc_id
+        FROM travel t
+            LEFT JOIN destination d ON d.id = t.dest_id
+            LEFT JOIN userinfo u ON u.id = t.author_id
+            LEFT JOIN travel_commend tc ON tc.travel_id = t.id
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultMap="BaseResultMap">
+        SELECT
+        t.id,
+        t.dest_id,
+        t.author_id,
+        t.title,
+        t.summary,
+        t.coverUrl,
+        t.travelTime,
+        t.perExpends,
+        t.days,
+        t.person,
+        t.createTime,
+        t.releaseTime,
+        t.lastUpdateTime,
+        t.overt,
+        t.viewnum,
+        t.replynum,
+        t.favornum,
+        t.sharenum,
+        t.thumbsupnum,
+        t.state,
+        d.id d_id,
+        d.name d_name,
+        d.coverUrl d_coverUrl,
+        u.id u_id,
+        u.nickname u_nickname,
+        u.headImgUrl u_headImgUrl,
+        tc.id tc_id
+        FROM travel t
+        LEFT JOIN destination d ON d.id = t.dest_id
+        LEFT JOIN userinfo u ON u.id = t.author_id
+        LEFT JOIN travel_commend tc ON tc.travel_id = t.id
+        <where>
+            <if test="keyword != null and keyword != '' ">
+                and t.title like concat('%', #{keyword},'%')
+            </if>
+            <if test="state > 0">
+                and t.state = #{state}
+            </if>
+            <if test="destId > 0">
+                and t.dest_id = #{destId}
+            </if>
+            <!--这里的操作是需要做翻译-->
+            <if test="travelTimeType > 0">
+                and month(t.travelTime) >= #{travelTime.min} and month(t.travelTime) &lt;= #{travelTime.max}
+            </if>
+            <if test="perExpendType > 0">
+                and t.perExpends >= #{perExpend.min}
+                <if test="perExpend.max != null">
+                    and t.perExpends &lt;= #{perExpend.max}
+                </if>
+            </if>
+            <if test="dayType > 0">
+                and t.days >= #{day.min}
+                <if test="day.max != null">
+                    and t.days &lt;= #{day.max}
+                </if>
+            </if>
+        </where>
+        <if test="orderType > 0">
+            ORDER by ${orderBy}
+        </if>
+    </select>
+
+    <!--获取 点击量前三的游记-->
+    <select id="selectViewnumTop3" resultMap="BaseResultMap">
+        SELECT
+            id,
+            title,
+            coverUrl
+        FROM travel
+        WHERE dest_id = #{destId}
+        ORDER BY viewnum DESC
+        LIMIT 0, 3
+    </select>
+
+    <select id="selectTravelByUserId" resultMap="BaseResultMap">
+        SELECT
+        t.id,
+        t.dest_id,
+        t.author_id,
+        t.title,
+        t.summary,
+        t.coverUrl,
+        t.travelTime,
+        t.perExpends,
+        t.days,
+        t.person,
+        t.createTime,
+        t.releaseTime,
+        t.lastUpdateTime,
+        t.overt,
+        t.viewnum,
+        t.replynum,
+        t.favornum,
+        t.sharenum,
+        t.thumbsupnum,
+        t.state,
+        d.id d_id,
+        d.name d_name,
+        d.coverUrl d_coverUrl,
+        u.id u_id,
+        u.nickname u_nickname,
+        u.headImgUrl u_headImgUrl,
+        tc.id tc_id,
+        p.id p_id,
+        p.name p_name
+        FROM travel t
+        LEFT JOIN destination d ON d.id = t.dest_id
+        left join destination p on d.parent_id = p.id
+        LEFT JOIN userinfo u ON u.id = t.author_id
+        LEFT JOIN travel_commend tc ON tc.travel_id = t.id
+        where t.author_id = #{userId}
+    </select>
+
+    <select id="selectTravelTotal" resultType="java.lang.Integer">
+        select count(id) from travel where author_id = #{userId}
+    </select>
+
+    <select id="getStrategyContent" resultMap="BaseResultMap">
+        SELECT
+        t.id,
+        t.dest_id,
+        t.author_id,
+        t.title,
+        t.summary,
+        t.coverUrl,
+        t.travelTime,
+        t.perExpends,
+        t.days,
+        t.person,
+        t.createTime,
+        t.releaseTime,
+        t.lastUpdateTime,
+        t.overt,
+        t.viewnum,
+        t.replynum,
+        t.favornum,
+        t.sharenum,
+        t.thumbsupnum,
+        t.state,
+        d.id d_id,
+        d.name d_name,
+        d.coverUrl d_coverUrl,
+        u.id u_id,
+        u.nickname u_nickname,
+        u.headImgUrl u_headImgUrl,
+        tc.id tc_id
+        FROM travel t
+        LEFT JOIN destination d ON d.id = t.dest_id
+        LEFT JOIN userinfo u ON u.id = t.author_id
+        LEFT JOIN travel_commend tc ON tc.travel_id = t.id
+        where t.id = #{travelId}
+    </select>
+
+</mapper>

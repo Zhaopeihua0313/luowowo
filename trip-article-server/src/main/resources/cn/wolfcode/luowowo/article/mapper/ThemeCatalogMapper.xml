@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.ThemeCatalogMapper">
+  <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.ThemeCatalog">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <collection property="theme" select="cn.wolfcode.luowowo.article.mapper.ThemeMapper.selectByCatalogId" column="id"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey">
+    delete from theme_catalog
+    where id = #{id}
+  </delete>
+  <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    insert into theme_catalog (catalog)
+    values (#{catalog})
+  </insert>
+  <update id="updateByPrimaryKey">
+    update theme_catalog
+    set name = #{name}
+    where id = #{id}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select id, name
+    from theme_catalog
+    where id = #{id}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name
+    from theme_catalog
+  </select>
+</mapper>

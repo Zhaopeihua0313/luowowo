@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.ScenicCatalogMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.ScenicCatalog">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dest_id" property="destId"/>
+
+        <!--关联目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_" >
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+        </association>
+
+    </resultMap>
+
+    <!--连接scenic的map-->
+    <resultMap id="BaseResultMap2" type="cn.wolfcode.luowowo.article.domain.ScenicCatalog">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dest_id" property="destId"/>
+        <!--关联目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_" >
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+        </association>
+
+        <collection property="scenics" column="id"
+                    select="cn.wolfcode.luowowo.article.mapper.ScenicMapper.selectByCatalogId"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM scenic_catalog
+        WHERE id = #{id}
+    </delete>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO scenic_catalog (name, dest_id)
+        VALUES (#{name}, #{destId})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE scenic_catalog
+        SET name    = #{name},
+            dest_id = #{destId}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.name,
+            sc.dest_id,
+            d.id d_id,
+            d.name d_name
+        FROM scenic_catalog sc
+            LEFT JOIN destination d ON d.id = sc.dest_id
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.name,
+            sc.dest_id,
+            d.id d_id,
+            d.name d_name
+        FROM scenic_catalog sc
+            LEFT JOIN destination d ON d.id = sc.dest_id
+    </select>
+
+    <select id="selectForList" resultMap="BaseResultMap2">
+        SELECT
+            sc.id,
+            sc.name,
+            sc.dest_id,
+            d.id d_id,
+            d.name d_name
+        FROM scenic_catalog sc
+        LEFT JOIN destination d ON d.id = sc.dest_id
+    </select>
+
+    <select id="listByDestId" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.name,
+            sc.dest_id,
+            d.id d_id,
+            d.name d_name
+        FROM scenic_catalog sc
+            LEFT JOIN destination d ON d.id = sc.dest_id
+        WHERE sc.dest_id = #{destId}
+    </select>
+
+    <!--获取 某景点的所有分类-->
+    <select id="listByScenicId" resultMap="BaseResultMap">
+        SELECT
+            sc.id,
+            sc.name
+        FROM scenic s
+            LEFT JOIN scenic_catalog sc ON sc.dest_id = s.dest_id
+        WHERE s.id = #{scenicId}
+    </select>
+
+</mapper>

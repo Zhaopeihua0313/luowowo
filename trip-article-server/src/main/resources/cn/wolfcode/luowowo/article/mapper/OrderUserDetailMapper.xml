@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.OrderUserDetailMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.OrderUserDetail">
+        <id column="id" property="id"/>
+        <result column="orderId" property="orderId"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="userCard" property="userCard"/>
+    </resultMap>
+
+    <!--删除一-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM orderuserdetail
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO orderuserdetail (orderId, name, phone, userCard)
+        VALUES (#{orderId}, #{name}, #{phone}, #{userCard})
+    </insert>
+
+    <!--修改一-->
+    <update id="updateByPrimaryKey">
+        UPDATE orderuserdetail
+        SET orderId  = #{orderId},
+            name     = #{name},
+            phone    = #{phone},
+            userCard = #{userCard}
+        WHERE id = #{id}
+    </update>
+
+    <!--查询一-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            orderId,
+            name,
+            phone,
+            userCard
+        FROM orderuserdetail
+        WHERE id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            orderId,
+            name,
+            phone,
+            userCard
+        FROM orderuserdetail
+    </select>
+
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.HotelMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Hotel">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="engname" property="engname"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="url" property="url"/>
+        <result column="salePrice" property="salePrice"/>
+        <result column="price" property="price"/>
+        <result column="score" property="score"/>
+        <result column="adress" property="adress"/>
+        <result column="intro" property="intro"/>
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="info" property="info"/>
+        </association>
+        <association property="tag" javaType="cn.wolfcode.luowowo.article.domain.HotelTag" columnPrefix="ht_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM hotel
+        WHERE id = #{id}
+    </delete>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO hotel (name, engname, coverUrl, url, dest_id, salePrice, price,
+                           score, adress, intro, tag_id, level, type)
+        VALUES (#{name}, #{engname}, #{coverUrl}, #{url}, #{dest.id}, #{salePrice}, #{price},
+                         #{score}, #{adress}, #{intro}, #{tag.id}, #{level}, #{type})
+    </insert>
+    <update id="updateByPrimaryKey">
+        UPDATE hotel
+        SET name      = #{name},
+            engname   = #{engname},
+            coverUrl  = #{coverUrl},
+            url       = #{url},
+            dest_id   = #{dest.id},
+            salePrice = #{salePrice},
+            price     = #{price},
+            score     = #{score},
+            adress    = #{adress},
+            intro     = #{intro},
+            tag_id    = #{tag.id},
+            level     = #{level},
+            type      = #{type}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        WHERE h.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        <where>
+            <if test="keyword!=null">
+                and (h.name like concat('%',#{keyword},'%') or d.name like concat('%',#{keyword},'%') or h.intro like
+                concat('%',#{keyword},'%'))
+            </if>
+            <if test="destId >0">
+                and d.id = #{destId}
+            </if>
+            <if test="level>0">
+                and h.level = #{level}
+            </if>
+            <if test="type>0">
+                and h.type = #{type}
+            </if>
+            <if test="tagId>0">
+                and h.tag_id = #{tagId}
+            </if>
+        </where>
+    </select>
+    <select id="listByTagId" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        <where>
+            <if test="tagId>0">
+                and h.tag_id = #{tagId}
+            </if>
+        </where>
+        order by h.score desc
+        limit 6
+    </select>
+    <select id="listByDestId" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        <where>
+            <if test="destId>0">
+                and h.dest_id = #{destId}
+            </if>
+        </where>
+        order by h.salePrice
+        limit 8
+    </select>
+    <sql id="basesql">
+        SELECT
+            h.id,
+            h.name,
+            h.engname,
+            h.coverUrl,
+            h.url,
+            h.dest_id,
+            h.salePrice,
+            h.price,
+            h.score,
+            h.adress,
+            h.intro,
+            h.tag_id,
+            h.type,
+            h.level,
+            ht.id   ht_id,
+            ht.name ht_name,
+            d.id    d_id,
+            d.name  d_name,
+            d.info d_info
+        FROM hotel h
+            LEFT JOIN hotel_tag ht ON ht.id = h.tag_id
+            LEFT JOIN destination d ON d.id = h.dest_id
+    </sql>
+</mapper>

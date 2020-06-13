@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.ScenicMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Scenic">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dest_id" property="destId"/>
+        <result column="createtime" property="createTime"/>
+        <result column="visitnum" property="visitnum"/>
+        <result column="favornum" property="favornum"/>
+        <result column="replynum" property="replynum"/>
+        <result column="photos" property="photos"/>
+        <result column="intro" property="intro"/>
+        <result column="location" property="location"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="photosContent" property="photosContent"/>
+        <!--作者-->
+        <association property="author" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
+            <id property="id" column="id"/>
+            <result property="nickname" column="nickname"/>
+        </association>
+        <!--景点分类-->
+        <association property="scenicCatalog" javaType="cn.wolfcode.luowowo.article.domain.ScenicCatalog"
+                     columnPrefix="sc_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <!--父景点-->
+        <association property="parent" javaType="cn.wolfcode.luowowo.article.domain.Scenic" columnPrefix="p_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <!--管理目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <!--带子景点查询的map-->
+    <resultMap id="BaseResultMap2" type="cn.wolfcode.luowowo.article.domain.Scenic">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dest_id" property="destId"/>
+        <result column="createtime" property="createTime"/>
+        <result column="visitnum" property="visitnum"/>
+        <result column="favornum" property="favornum"/>
+        <result column="replynum" property="replynum"/>
+        <result column="photos" property="photos"/>
+        <result column="intro" property="intro"/>
+        <result column="location" property="location"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="photosContent" property="photosContent"/>
+        <!--作者-->
+        <association property="author" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
+            <id property="id" column="id"/>
+            <result property="nickname" column="nickname"/>
+        </association>
+        <!--景点分类-->
+        <association property="scenicCatalog" javaType="cn.wolfcode.luowowo.article.domain.ScenicCatalog"
+                     columnPrefix="sc_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <!--父景点-->
+        <association property="parent" javaType="cn.wolfcode.luowowo.article.domain.Scenic" columnPrefix="p_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <!--找到子景点-->
+        <collection property="children" column="id" select="selectByparenId"/>
+    </resultMap>
+
+    <select id="selectByparenId" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        WHERE s.parent_id = #{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM scenic
+        WHERE id = #{id}
+    </delete>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO scenic (name, dest_id, author_id, createtime, parent_id,
+                            visitnum, favornum, replynum,
+                            catalog_id, photos, intro, location, coverUrl, photosContent)
+        VALUES (#{name}, #{destId}, #{author.id}, #{createTime}, #{parent.id},
+                0, 0, 0,
+                #{scenicCatalog.id}, #{photos},#{intro},#{location},#{coverUrl}, #{photosContent})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        UPDATE scenic
+        <set>
+            name       = #{name},
+            dest_id    = #{destId},
+            author_id  = #{author.id},
+            parent_id  = #{parent.id},
+            catalog_id = #{scenicCatalog.id},
+            photos     = #{photos},
+            intro      = #{intro},
+            location   = #{location},
+            coverUrl   = #{coverUrl},
+            photosContent = #{photosContent}
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="updateStats">
+        UPDATE scenic
+        <set>
+            visitnum =#{visitnum},
+            favornum =#{favornum},
+            replynum =#{replynum}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        WHERE s.id = #{id}
+    </select>
+
+    <select id="selectByCatalogId" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        WHERE s.catalog_id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+    </select>
+
+    <select id="selectForList" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        <where>
+            s.parent_id is not null
+            <if test="catalogId>0">
+               and s.catalog_id =#{catalogId}
+            </if>
+            <if test="destId>0">
+               and s.dest_id =#{destId}
+            </if>
+        </where>
+    </select>
+    <!--查询该景点下点评数前五的子景点-->
+    <select id="listReplyTOP5" resultMap="BaseResultMap2">
+        <include refid="basesql"/>
+        where s.dest_id = #{scenicId}
+        and s.parent_id is not null
+        ORDER by s.replynum DESC
+        limit 5
+    </select>
+    <!--查询该景点下收藏数前十的子景点-->
+    <select id="listFavorTOP10" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        where s.dest_id = #{scenicId}
+        and s.parent_id is not null
+        ORDER by s.favornum DESC
+        limit 8
+    </select>
+    <!-- 根据父景点id查询子景点 -->
+    <select id="listByParentId" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        where s.parent_id = #{scenicId}
+    </select>
+
+    <!--获取 没有父景点的几个景点-->
+    <select id="listNoParentCount" resultType="cn.wolfcode.luowowo.article.domain.Scenic">
+        <include refid="basesql"/>
+        WHERE s.parent_id is null
+        limit #{count}
+    </select>
+
+    <select id="getByDeatId" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        WHERE s.dest_id = #{destId}
+        and s.parent_id is null
+    </select>
+
+    <select id="getScenicContent" resultMap="BaseResultMap">
+        <include refid="basesql"/>
+        where s.id = #{scenicId}
+    </select>
+
+    <!--抽取sql-->
+    <sql id="basesql">
+        SELECT
+            s.id,
+            s.name,
+            s.dest_id,
+            s.author_id,
+            s.createtime,
+            s.parent_id,
+            s.visitnum,
+            s.favornum,
+            s.replynum,
+            s.catalog_id,
+            s.photos,
+            s.intro,
+            s.location,
+            s.coverUrl,
+            s.photosContent,
+            u.id u_id,
+            u.nickname u_nickname,
+            sc.id sc_id,
+            sc.name sc_name,
+            p.id p_id,
+            p.name p_name,
+            d.id d_id,
+            d.name d_name
+        FROM scenic s
+        LEFT JOIN scenic p on s.parent_id = p.id
+        LEFT JOIN userinfo u ON s.author_id = u.id
+        LEFT JOIN scenic_catalog sc ON sc.id = s.catalog_id
+        LEFT JOIN destination d ON d.id = s.dest_id
+    </sql>
+
+</mapper>

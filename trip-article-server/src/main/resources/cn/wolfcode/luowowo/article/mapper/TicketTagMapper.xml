@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.TicketTagMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.TicketTag">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <!--删除-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM tickettag
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO tickettag (name)
+        VALUES (#{name})
+    </insert>
+
+    <!--修改一-->
+    <update id="updateByPrimaryKey">
+        UPDATE tickettag
+        SET name = #{name}
+        WHERE id = #{id}
+    </update>
+
+    <!--查某id一-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name
+        FROM tickettag
+        WHERE id = #{id}
+    </select>
+
+    <!--查所有-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name
+        FROM tickettag
+    </select>
+
+    <!--获取 某门票的所有标签id-->
+    <select id="selectIdsByTicketId" resultType="java.lang.Long">
+        SELECT tat.tagId
+        FROM ticketandtag tat
+        WHERE ticketId = #{id}
+    </select>
+
+    <!--获取 某门票的所有标签-->
+    <select id="selectByTicketId" resultMap="BaseResultMap">
+        SELECT
+            tt.id,
+            tt.name
+        FROM tickettag tt
+            LEFT JOIN ticketandtag tat ON tat.tagId = tt.id
+        WHERE tat.ticketId = #{id}
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultType="cn.wolfcode.luowowo.article.domain.Ticket">
+        SELECT
+            id,
+            name
+        FROM tickettag
+    </select>
+
+</mapper>

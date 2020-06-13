@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.DestThemeMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.DestTheme">
+        <id column="id" property="id"/>
+        <result column="theme" property="theme"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM dest_theme
+        WHERE id = #{id}
+    </delete>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO dest_theme (theme)
+        VALUES (#{theme})
+    </insert>
+    <update id="updateByPrimaryKey">
+        UPDATE dest_theme
+        SET theme = #{theme}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            theme
+        FROM dest_theme
+        WHERE id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            theme
+        FROM dest_theme
+    </select>
+    <select id="selectByDestId" resultMap="BaseResultMap">
+        SELECT
+            id,
+            theme
+        FROM dest_theme dt
+            JOIN dest_theme_relation dtr ON dt.id = dtr.themeId
+        WHERE dtr.destId = #{destId}
+    </select>
+</mapper>

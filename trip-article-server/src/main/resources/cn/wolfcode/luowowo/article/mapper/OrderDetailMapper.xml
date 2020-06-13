@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.OrderDetailMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.OrderDetail">
+        <id column="id" property="id"/>
+        <result column="createUserId" property="createUserId"/>
+        <result column="userUserId" property="userUserId"/>
+        <result column="createTime" property="createTime"/>
+        <result column="status" property="status"/>
+        <result column="totalPrice" property="totalPrice"/>
+        <result column="pullPrice" property="pullPrice"/>
+        <result column="realPrice" property="realPrice"/>
+        <result column="lastUpdateTime" property="lastUpdateTime"/>
+
+        <!--下单用户-->
+        <association property="createUser" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
+            <id property="id" column="id"/>
+            <result property="nickname" column="nickname" />
+            <result property="headImgUrl" column="headImgUrl" />
+            <result property="phone" column="phone" />
+        </association>
+        <!--订单使用者信息-->
+        <association property="userUser" javaType="cn.wolfcode.luowowo.article.domain.OrderUserDetail" columnPrefix="ou_">
+            <id property="id" column="id"/>
+            <result property="name" column="name" />
+            <result property="phone" column="phone" />
+            <result property="userCard" column="userCard" />
+        </association>
+        <!--订单产品信息-->
+        <collection property="products" column="id"
+                    select="cn.wolfcode.luowowo.article.mapper.OrderProductMapper.listByOrderId"/>
+
+
+    </resultMap>
+
+    <!--删除一-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM orderDetail
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO orderDetail (createUserId, userUserId, createTime, status, totalPrice,
+                           pullPrice, realPrice, lastUpdateTime)
+        VALUES (#{createUserId}, #{userUserId}, #{createTime}, #{status}, #{totalPrice},
+                #{pullPrice}, #{realPrice}, #{lastUpdateTime})
+    </insert>
+
+    <!--修改一-->
+    <update id="updateByPrimaryKey">
+        UPDATE orderDetail
+        SET createUserId = #{createUserId},
+            userUserId   = #{userUserId},
+            createTime   = #{createTime},
+            lastUpdateTime   = #{lastUpdateTime},
+            status       = #{status},
+            totalPrice   = #{totalPrice},
+            pullPrice    = #{pullPrice},
+            realPrice    = #{realPrice}
+        WHERE id = #{id}
+    </update>
+
+    <!--修改订单状态-->
+    <update id="updateStatusByOrderId">
+        UPDATE orderDetail
+        SET
+            lastUpdateTime   = #{lastUpdateTime},
+            status       = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <!--查询一-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        <include refid="allSelect"/>
+        WHERE od.id = #{id}
+        ORDER BY od.createTime DESC
+    </select>
+
+    <!--查询所有-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        <include refid="allSelect"/>
+        <!--
+        SELECT
+            id,
+            createUserId,
+            userUserId,
+            createTime,
+            status,
+            totalPrice,
+            pullPrice,
+            realPrice
+        FROM orderDetail
+        -->
+    </select>
+
+    <!--高级查询-->
+    <select id="query" resultMap="BaseResultMap">
+        <include refid="allSelect"/>
+        <where>
+            <if test="status != 'all' ">
+                and od.status = #{status}
+            </if>
+        </where>
+        ORDER BY od.createTime DESC
+    </select>
+
+    <!--查询某用户的所有订单-->
+    <select id="listByUserId" resultMap="BaseResultMap">
+        SELECT
+        od.id,
+        od.createUserId,
+        od.userUserId,
+        od.createTime,
+        od.lastUpdateTime,
+        od.status,
+        od.totalPrice,
+        od.pullPrice,
+        od.realPrice,
+
+        u.id u_id,
+        u.nickname u_nickname,
+        u.headImgUrl u_headImgUrl,
+        u.phone u_phone,
+
+        ou.id ou_id,
+        ou.name ou_name,
+        ou.phone ou_phone,
+        ou.orderId ou_orderId,
+        ou.userCard ou_userCard
+
+        FROM orderDetail od
+        LEFT JOIN userinfo u ON u.id = od.createUserId
+        LEFT JOIN orderuserdetail ou ON ou.orderId = od.id
+        WHERE od.createUserId = #{userId}
+        ORDER BY od.createTime DESC
+    </select>
+
+    <sql id="allSelect" >
+        SELECT
+            od.id,
+            od.createUserId,
+            od.userUserId,
+            od.createTime,
+            od.lastUpdateTime,
+            od.status,
+            od.totalPrice,
+            od.pullPrice,
+            od.realPrice,
+
+            u.id u_id,
+            u.nickname u_nickname,
+            u.headImgUrl u_headImgUrl,
+            u.phone u_phone,
+
+            ou.id ou_id,
+            ou.name ou_name,
+            ou.phone ou_phone,
+            ou.orderId ou_orderId,
+            ou.userCard ou_userCard
+
+            <!--
+            op.id op_id,
+            op.orderId op_orderId,
+            op.productId op_productId,
+            op.productName op_productName,
+            op.productPrice op_productPrice,
+            op.productCount op_productCount,
+            op.productType op_productType
+            -->
+        FROM orderDetail od
+            LEFT JOIN userinfo u ON u.id = od.createUserId
+            LEFT JOIN orderuserdetail ou ON ou.orderId = od.id
+            <!--
+            LEFT JOIN orderproduct op ON op.orderId = od.id
+            -->
+    </sql>
+
+</mapper>

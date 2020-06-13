@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.luowowo.member.mapper.UserInfoElseMapper">
+
+    <!--基础MAP-->
+    <resultMap id="baseMap" type="cn.wolfcode.luowowo.member.domain.UserInfoElse">
+        <result property="userinfoId" column="userinfo_id" />
+        <result property="openid" column="openid"/>
+        <result property="type" column="type" />
+    </resultMap>
+
+    <!--新增一第三方用户关系-->
+    <insert id="insert">
+        INSERT INTO userinfo_else (userinfo_id, openid, type)
+        VALUES (#{userinfoId}, (#{openid}), #{type})
+    </insert>
+
+    <!--通过 userinfo_id 查询一第三方用户关系-->
+    <select id="selectByUID" resultMap="baseMap">
+        SELECT userinfo_id, openid, type
+        FROM userinfo_else
+        WHERE userinfo_id = #{userinfoId}
+    </select>
+
+    <!--通过 openid 和 type 寻找一第三方用户关系-->
+    <select id="selectByOpenId" resultMap="baseMap">
+        SELECT userinfo_id, openid, type
+        FROM userinfo_else
+        WHERE openid = #{openid} AND type = #{type}
+    </select>
+
+
+</mapper>

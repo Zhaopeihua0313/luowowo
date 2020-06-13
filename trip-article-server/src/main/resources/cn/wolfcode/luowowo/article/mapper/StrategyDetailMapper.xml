@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.StrategyDetailMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.StrategyDetail">
+        <id column="id" property="id"/>
+        <!--<result column="dest_id" property="dest_id"/>
+        <result column="theme_id" property="theme_id"/>
+        <result column="catalog_id" property="catalog_id"/>-->
+        <result column="title" property="title"/>
+        <result column="subTitle" property="subTitle"/>
+        <result column="summary" property="summary"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="createTime" property="createTime"/>
+        <result column="viewnum" property="viewnum"/>
+        <result column="replynum" property="replynum"/>
+        <result column="favornum" property="favornum"/>
+        <result column="sharenum" property="sharenum"/>
+        <result column="thumbsupnum" property="thumbsupnum"/>
+        <result column="state" property="state"/>
+
+        <!--目的地-->
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <!--攻略主题-->
+        <association property="theme" javaType="cn.wolfcode.luowowo.article.domain.StrategyTheme" columnPrefix="st_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <!--攻略分类-->
+        <association property="catalog" javaType="cn.wolfcode.luowowo.article.domain.StrategyCatalog"
+                     columnPrefix="sc_">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+        <!--攻略推荐-->
+        <association property="strategyCommend" javaType="cn.wolfcode.luowowo.article.domain.StrategyCommend"
+                     columnPrefix="scd_">
+            <id property="id" column="id"/>
+        </association>
+        
+
+
+    </resultMap>
+
+    <!--通过主键删除一攻略-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM strategy_detail
+        WHERE id = #{id}
+    </delete>
+
+    <!--删除攻略与标签的关系-->
+    <delete id="deleteRelation">
+        DELETE FROM detail_tag_relation
+        WHERE detail_id = #{id}
+    </delete>
+
+    <!--新增一攻略-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO strategy_detail (dest_id, theme_id, catalog_id, title, subTitle, summary,
+                                     coverUrl, createTime, viewnum, replynum, favornum, sharenum,
+                                     thumbsupnum, state)
+        VALUES (#{dest.id}, #{theme.id}, #{catalog.id}, #{title}, #{subTitle}, #{summary},
+                            #{coverUrl}, #{createTime}, 0, 0, 0, 0,
+                0, #{state})
+    </insert>
+
+    <!--新增攻略与标签的关系-->
+    <insert id="insertRelation">
+        INSERT INTO detail_tag_relation (detail_id, tag_id) VALUES (#{detailId}, #{tagId})
+    </insert>
+
+    <!--通过主键修改一攻略-->
+    <update id="updateByPrimaryKey">
+        UPDATE strategy_detail
+        <set>
+            dest_id = #{dest.id},
+            theme_id = #{theme.id},
+            catalog_id = #{catalog.id},
+            title = #{title},
+            subTitle = #{subTitle},
+            summary = #{summary},
+            coverUrl = #{coverUrl},
+            <!--
+            viewnum     = #{viewnum},
+            replynum    = #{replynum},
+            favornum    = #{favornum},
+            sharenum    = #{sharenum},
+            thumbsupnum = #{thumbsupnum},
+            -->
+            state = #{state}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--修改攻略状态-->
+    <update id="updateStateById">
+        UPDATE strategy_detail
+        SET state = #{state}
+        WHERE id = #{id}
+    </update>
+
+    <!--修改 攻略的统计数据-->
+    <update id="updateStats">
+        UPDATE strategy_detail
+        SET viewnum     = #{viewnum}, replynum = #{replynum}, favornum = #{favornum}, sharenum = #{sharenum},
+            thumbsupnum = #{thumbsupnum}
+        WHERE id = #{id}
+    </update>
+
+    <!--通过主键查询一攻略-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            sd.id,
+            sd.dest_id,
+            sd.theme_id,
+            sd.catalog_id,
+            sd.title,
+            sd.subTitle,
+            sd.summary,
+            sd.coverUrl,
+            sd.createTime,
+            sd.viewnum,
+            sd.replynum,
+            sd.favornum,
+            sd.sharenum,
+            sd.thumbsupnum,
+            sd.state,
+            d.id    d_id,
+            d.name  d_name,
+            st.id   st_id,
+            st.name st_name,
+            sc.id   sc_id,
+            sc.name sc_name
+        FROM strategy_detail sd
+            LEFT JOIN destination d ON d.id = sd.dest_id
+            LEFT JOIN strategy_theme st ON st.id = sd.theme_id
+            LEFT JOIN strategy_catalog sc ON sc.id = sd.catalog_id
+        WHERE sd.id = #{id}
+    </select>
+
+    <!--查询所有的攻略-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT DISTINCT
+            sd.id,
+            sd.dest_id,
+            sd.theme_id,
+            sd.catalog_id,
+            sd.title,
+            sd.subTitle,
+            sd.summary,
+            sd.coverUrl,
+            sd.createTime,
+            sd.viewnum,
+            sd.replynum,
+            sd.favornum,
+            sd.sharenum,
+            sd.thumbsupnum,
+            sd.state,
+            d.id    d_id,
+            d.name  d_name,
+            st.id   st_id,
+            st.name st_name,
+            sc.id   sc_id,
+            sc.name sc_name,
+            scd.id  scd_id
+        FROM strategy_detail sd
+            LEFT JOIN destination d ON d.id = sd.dest_id
+            LEFT JOIN strategy_theme st ON st.id = sd.theme_id
+            LEFT JOIN strategy_catalog sc ON sc.id = sd.catalog_id
+            LEFT JOIN detail_tag_relation dtr ON dtr.detail_id = sd.id
+            LEFT JOIN strategy_commend scd ON scd.detail_id = sd.id
+    </select>
+
+    <!--高级查询-->
+    <select id="selectForList" resultMap="BaseResultMap">
+        SELECT DISTINCT
+        sd.id,
+        sd.dest_id,
+        sd.theme_id,
+        sd.catalog_id,
+        sd.title,
+        sd.subTitle,
+        sd.summary,
+        sd.coverUrl,
+        sd.createTime,
+        sd.viewnum,
+        sd.replynum,
+        sd.favornum,
+        sd.sharenum,
+        sd.thumbsupnum,
+        sd.state,
+        d.id d_id,
+        d.name d_name,
+        st.id st_id,
+        st.name st_name,
+        sc.id sc_id,
+        sc.name sc_name,
+        scd.id scd_id
+        FROM strategy_detail sd
+        LEFT JOIN destination d ON d.id = sd.dest_id
+        LEFT JOIN strategy_theme st ON st.id = sd.theme_id
+        LEFT JOIN strategy_catalog sc ON sc.id = sd.catalog_id
+        LEFT JOIN detail_tag_relation dtr ON dtr.detail_id = sd.id
+        LEFT JOIN strategy_commend scd ON scd.detail_id = sd.id
+        <where>
+            <if test="tagId != null and tagId > 0">
+                and dtr.tag_id = #{tagId}
+            </if>
+            <if test="destId != null">
+                and sd.dest_id = #{destId}
+            </if>
+        </where>
+    </select>
+
+    <!--通过 分类id 获取内容-->
+    <select id="selectByCatalogId" resultMap="BaseResultMap">
+        SELECT
+            sd.id,
+            sd.dest_id,
+            sd.theme_id,
+            sd.catalog_id,
+            sd.title,
+            sd.subTitle,
+            sd.summary,
+            sd.coverUrl,
+            sd.createTime,
+            sd.viewnum,
+            sd.replynum,
+            sd.favornum,
+            sd.sharenum,
+            sd.thumbsupnum,
+            sd.state,
+            d.id    d_id,
+            d.name  d_name,
+            st.id   st_id,
+            st.name st_name,
+            sc.id   sc_id,
+            sc.name sc_name
+        FROM strategy_detail sd
+            LEFT JOIN destination d ON d.id = sd.dest_id
+            LEFT JOIN strategy_theme st ON st.id = sd.theme_id
+            LEFT JOIN strategy_catalog sc ON sc.id = sd.catalog_id
+        WHERE sd.catalog_id = #{catalogId}
+    </select>
+
+    <!--查询某目的地点击量前三的文章攻略-->
+    <select id="selectByViewnumTop3AndDestId" resultMap="BaseResultMap">
+        SELECT
+            sd.id,
+            sd.dest_id,
+            sd.theme_id,
+            sd.catalog_id,
+            sd.title,
+            sd.subTitle,
+            sd.summary,
+            sd.coverUrl,
+            sd.createTime,
+            sd.viewnum,
+            sd.replynum,
+            sd.favornum,
+            sd.sharenum,
+            sd.thumbsupnum,
+            sd.state,
+            d.id    d_id,
+            d.name  d_name,
+            st.id   st_id,
+            st.name st_name,
+            sc.id   sc_id,
+            sc.name sc_name
+        FROM strategy_detail sd
+            LEFT JOIN destination d ON d.id = sd.dest_id
+            LEFT JOIN strategy_theme st ON st.id = sd.theme_id
+            LEFT JOIN strategy_catalog sc ON sc.id = sd.catalog_id
+        WHERE sd.dest_id = #{id}
+        ORDER BY sd.viewnum DESC
+        LIMIT 3
+    </select>
+
+    <select id="getStrategyContent" resultMap="BaseResultMap">
+         SELECT DISTINCT
+            sd.id,
+            sd.dest_id,
+            sd.theme_id,
+            sd.catalog_id,
+            sd.title,
+            sd.subTitle,
+            sd.summary,
+            sd.coverUrl,
+            sd.createTime,
+            sd.viewnum,
+            sd.replynum,
+            sd.favornum,
+            sd.sharenum,
+            sd.thumbsupnum,
+            sd.state,
+            d.id    d_id,
+            d.name  d_name,
+            st.id   st_id,
+            st.name st_name,
+            sc.id   sc_id,
+            sc.name sc_name,
+            scd.id  scd_id
+
+        FROM strategy_detail sd
+            LEFT JOIN destination d ON d.id = sd.dest_id
+            LEFT JOIN strategy_theme st ON st.id = sd.theme_id
+            LEFT JOIN strategy_catalog sc ON sc.id = sd.catalog_id
+            LEFT JOIN detail_tag_relation dtr ON dtr.detail_id = sd.id
+            LEFT JOIN strategy_commend scd ON scd.detail_id = sd.id
+            where sd.id = #{strategyId}
+    </select>
+
+</mapper>

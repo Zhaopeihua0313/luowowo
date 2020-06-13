@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.ScoreProductMapper">
+
+    <!--基本映射-->
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.ScoreProduct">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="score" property="score"/>
+        <result column="coverUrl" property="coverUrl"/>
+        <result column="totalNum" property="totalNum"/>
+    </resultMap>
+
+    <!--删除一-->
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM scoreproduct
+        WHERE id = #{id}
+    </delete>
+
+    <!--新增一-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO scoreproduct (name, score, coverUrl, totalNum)
+        VALUES (#{name}, #{score}, #{coverUrl}, #{totalNum})
+    </insert>
+
+    <!--修改一-->
+    <update id="updateByPrimaryKey">
+        UPDATE scoreproduct
+        SET name     = #{name},
+            score    = #{score},
+            coverUrl = #{coverUrl},
+            totalNum = #{totalNum}
+        WHERE id = #{id}
+    </update>
+
+    <!--查询一-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name,
+            score,
+            coverUrl,
+            totalNum
+        FROM scoreproduct
+        WHERE id = #{id}
+    </select>
+
+    <!--查询所有-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            id,
+            name,
+            score,
+            coverUrl,
+            totalNum
+        FROM scoreproduct
+    </select>
+
+    <!--获取 某用户的所有积分商品-->
+    <select id="listByUserId" resultMap="BaseResultMap">
+        SELECT
+            sp.id,
+            sp.name,
+            sp.score,
+            sp.coverUrl,
+            sp.totalNum
+        FROM scoreproduct sp
+            LEFT JOIN orderproduct op ON op.productId = sp.id
+            LEFT JOIN orderdetail od ON od.id = op.orderId
+        WHERE od.createUserId = #{userId}
+              and op.productType = 'score'
+              and od.status = 'paided'
+    </select>
+
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wolfcode.luowowo.article.mapper.QuestionMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.luowowo.article.domain.Question">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="creatTime" property="creatTime"/>
+        <result column="viewNum" property="viewNum"/>
+        <result column="answerNum" property="answerNum"/>
+        <result column="focusMemberNum" property="focusMemberNum"/>
+        <result column="state" property="state"/>
+        <result column="shareNum" property="shareNum"/>
+        <!--问题关联的提问者-->
+        <association property="author" javaType="cn.wolfcode.luowowo.member.domain.UserInfo" columnPrefix="u_">
+            <id column="id" property="id"/>
+            <result column="nickname" property="nickname"/>
+            <result column="city" property="city"/>
+            <result column="headImgUrl" property="headImgUrl"/>
+            <result column="level" property="level"/>
+        </association>
+        <association property="dest" javaType="cn.wolfcode.luowowo.article.domain.Destination" columnPrefix="d_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM question
+        WHERE id = #{id}
+    </delete>
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO question (title, creatTime, author_id, viewNum, answerNum, focusMemberNum,
+                              state, shareNum, dest_id)
+        VALUES (#{title}, #{creatTime}, #{author.id}, #{viewNum}, #{answerNum}, #{focusMemberNum},
+                #{state}, #{shareNum}, #{dest.id})
+    </insert>
+    <update id="updateByPrimaryKey">
+        UPDATE question
+        SET
+            viewNum        = #{viewNum},
+            answerNum      = #{answerNum},
+            focusMemberNum = #{focusMemberNum},
+            shareNum       = #{shareNum}
+        WHERE id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+            q.id,
+            q.title,
+            q.creatTime,
+            q.author_id,
+            q.viewNum,
+            q.answerNum,
+            q.focusMemberNum,
+            q.state,
+            q.shareNum,
+            u.id         u_id,
+            u.nickname   u_nickname,
+            u.headImgUrl u_headImgUrl,
+            u.city       u_city,
+            u.level      u_level,
+            d.id         d_id,
+            d.name       d_name
+        FROM question q
+            JOIN userinfo u ON q.author_id = u.id
+            JOIN destination d ON q.dest_id = d.id
+        WHERE q.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+            q.id,
+            q.title,
+            q.creatTime,
+            q.author_id,
+            q.viewNum,
+            q.answerNum,
+            q.focusMemberNum,
+            q.state,
+            q.shareNum,
+            u.id         u_id,
+            u.nickname   u_nickname,
+            u.headImgUrl u_headImgUrl,
+            u.city       u_city,
+            u.level      u_level,
+            d.id         d_id,
+            d.name       d_name
+        FROM question q
+            JOIN userinfo u ON q.author_id = u.id
+            JOIN destination d ON q.dest_id = d.id
+        ORDER BY q.creatTime DESC
+    </select>
+</mapper>

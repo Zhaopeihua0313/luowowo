@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.wolfcode.luowowo</groupId>
+    <artifactId>trip-parent</artifactId>
+    <version>1.0</version>
+    <modules>
+        <module>../trip-common</module>
+        <module>../trip-member-api</module>
+        <module>../trip-member-server</module>
+        <module>../trip-cache-api</module>
+        <module>../trip-cache-server</module>
+        <module>../trip-website</module>
+        <module>../trip-article-api</module>
+        <module>../trip-article-server</module>
+        <module>../trip-mgrsite</module>
+        <module>../trip-comment-api</module>
+        <module>../trip-comment-server</module>
+        <module>../trip-search-api</module>
+        <module>../trip-search-server</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.3.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <!--管理依赖版本-->
+    <dependencyManagement>
+        <dependencies>
+            <!--SpringBoot 集成 dubbo-->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+
+            <!--dubbo-->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+
+            <!--zookeeper 客户端-->
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>2.12.0</version>
+            </dependency>
+
+            <!--德鲁伊连接池-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>1.1.10</version>
+            </dependency>
+
+            <!--SprringBoot 集成 mybatis-->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>1.3.1</version>
+            </dependency>
+
+            <!--SpringBoot 集成 mybatis分页插件-->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+
+            <!--mybatis分页插件-->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>5.1.2</version>
+            </dependency>
+
+            <!--JSON 与对象之间的互转-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.9.8</version>
+            </dependency>
+
+            <!--序列化-->
+            <dependency>
+                <groupId>de.javakaffee</groupId>
+                <artifactId>kryo-serializers</artifactId>
+                <version>0.42</version>
+            </dependency>
+
+            <!--阿里巴巴 JSON-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.47</version>
+            </dependency>
+
+            <!-- 引入其他服务 -->
+            <dependency>
+                <groupId>cn.wolfcode.luowowo</groupId>
+                <artifactId>trip-common</artifactId>        <!--trip-common-->
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.wolfcode.luowowo</groupId>
+                <artifactId>trip-member-api</artifactId>    <!--trip-member-api-->
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.wolfcode.luowowo</groupId>
+                <artifactId>trip-cache-api</artifactId>     <!--trip-cache-api-->
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.wolfcode.luowowo</groupId>
+                <artifactId>trip-article-api</artifactId>   <!--trip-article-api-->
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.wolfcode.luowowo</groupId>
+                <artifactId>trip-comment-api</artifactId>   <!--trip-comment-api-->
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.wolfcode.luowowo</groupId>
+                <artifactId>trip-search-api</artifactId>    <!--trip-search-api-->
+                <version>1.0</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--依赖-->
+    <dependencies>
+
+        <!-- pinyin4j 汉字转拼音工具类工具类 -->
+        <dependency>
+            <groupId>com.belerweb</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <!--SpringBoot 核心-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!--阿里巴巴 JSON-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>
