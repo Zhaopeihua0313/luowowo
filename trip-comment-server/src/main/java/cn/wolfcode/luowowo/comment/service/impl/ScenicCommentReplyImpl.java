@@ -7,16 +7,18 @@ import cn.wolfcode.luowowo.comment.repository.ScenicCommentReplyMongoRepository;
 import cn.wolfcode.luowowo.comment.service.IScenicCommentReplyService;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class ScenicCommentReplyImpl implements IScenicCommentReplyService {
+
     @Autowired
     private ScenicCommentReplyMongoRepository replyMongoRepository;
+
     @Autowired
     private ScenicCommentMongoRepository repository;
+
     /**
      * 保存 攻略评论
      */

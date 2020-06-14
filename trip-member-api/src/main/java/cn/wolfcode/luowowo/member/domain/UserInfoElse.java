@@ -16,12 +16,8 @@ public class UserInfoElse extends BaseDomain {
     public static final String WECHAT_TYPE = "wechat";
     public static final String QQ_TYPE = "qq";
 
-
     private Long userinfoId; //用户id
-
     private String openid; //第三方互联在该网站上的唯一标识符
-
     private String type; //辨识哪个第三方
-
 
 }

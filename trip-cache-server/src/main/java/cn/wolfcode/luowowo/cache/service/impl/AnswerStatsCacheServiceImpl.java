@@ -12,7 +12,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
-
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +20,7 @@ public class AnswerStatsCacheServiceImpl implements IAnswerStatsCacheService{
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
     @Reference
     private IAnswerService answerService;
 
@@ -44,7 +44,6 @@ public class AnswerStatsCacheServiceImpl implements IAnswerStatsCacheService{
             redisTemplate.opsForValue().set(cacheKey,"1",dateBetween, TimeUnit.MILLISECONDS);
             //MongoDB里面对应的点赞数要增加
             answerService.updateThumbup(answerId,1);
-
         }else{
             ajaxResult.mark("你今天已经点过赞啦");
         }

@@ -46,4 +46,5 @@ public class TravelController {
     public AjaxResult updateState(Travel travel) {
         return travelService.updateState(travel);
     }
+
 }

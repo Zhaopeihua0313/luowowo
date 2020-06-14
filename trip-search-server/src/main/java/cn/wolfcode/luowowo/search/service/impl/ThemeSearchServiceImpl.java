@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,28 +52,20 @@ public class ThemeSearchServiceImpl implements IThemeSearchService {
         String groupType = "groupType";
         String idField = "id";
         String nameField = "name";
-
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         //忽略主体数据，只拿桶聚合的数据
         builder.withPageable(PageRequest.of(0, 1));
-
-//        //根据条件决定桶聚合分组的依据
-//        switch (condition) {
-//            case SearchQueryObject.CONDITION_UNABROAD:
-//                //CONDITION_UNABROAD->排除非中国数据
-//                builder.withQuery(QueryBuilders.termQuery("countryId", StatsResult.CHINA_ID));
-//                break;
-//            case SearchQueryObject.CONDITION_ABROAD:
-//                //CONDITION_ABROAD->排除中国数据
-//                builder.withQuery(
-//                        QueryBuilders.boolQuery()
-//                                .mustNot(
-//                                        QueryBuilders.termQuery("countryId", StatsResult.CHINA_ID)
-//                                )
-//                );
-//                break;
-//        }
-
+/*        //根据条件决定桶聚合分组的依据
+        switch (condition) {
+            case SearchQueryObject.CONDITION_UNABROAD:
+                //CONDITION_UNABROAD->排除非中国数据
+                builder.withQuery(QueryBuilders.termQuery("countryId", StatsResult.CHINA_ID));
+                break;
+            case SearchQueryObject.CONDITION_ABROAD:
+                //CONDITION_ABROAD->排除中国数据
+                builder.withQuery(QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery("countryId", StatsResult.CHINA_ID)));
+                break;
+        }*/
         //多维度桶聚合条件
         List<CompositeValuesSourceBuilder<?>> sources = new ArrayList<>();
         sources.add(new TermsValuesSourceBuilder(idField).field(id));
@@ -84,10 +75,8 @@ public class ThemeSearchServiceImpl implements IThemeSearchService {
         //build 获取分组数据
         builder.addAggregation(group);
         AggregatedPage<ThemeTemplate> page = (AggregatedPage<ThemeTemplate>) repository.search(builder.build());
-
         //通过别名拿到分组结果
         CompositeAggregation aggs = (CompositeAggregation) page.getAggregation(groupType);
-
         //遍历分组数组封装结果返回
         List<StatsResult> list = new ArrayList<>();
         for (CompositeAggregation.Bucket bucket : aggs.getBuckets()) {
@@ -99,4 +88,5 @@ public class ThemeSearchServiceImpl implements IThemeSearchService {
         }
         return list;
     }
+
 }

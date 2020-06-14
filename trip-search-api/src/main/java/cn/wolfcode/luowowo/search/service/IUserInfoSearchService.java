@@ -1,7 +1,6 @@
 package cn.wolfcode.luowowo.search.service;
 
 import cn.wolfcode.luowowo.search.template.UserInfoTemplate;
-
 import java.util.List;
 
 public interface IUserInfoSearchService {

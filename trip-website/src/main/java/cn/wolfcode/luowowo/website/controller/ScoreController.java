@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -31,31 +30,42 @@ public class ScoreController {
 
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private ITicketService ticketService;
+
     @Reference
     private ITicketTagService ticketTagService;
+
     @Reference
     private ITicketContentService ticketContentService;
+
     @Reference
     private IScenicService scenicService;
+
     @Reference
     private IScenicCatalogService scenicCatalogService;
+
     @Reference
     private IScenicStatsCacheService scenicStatsCacheService;
+
     @Reference
     private IScenicContentService scenicContentService;
+
     @Reference
     private IScenicCommentService scenicCommentService;
+
     @Reference
     private IOrderDetailService orderDetailService;
+
     @Reference
     private IScoreHistoryService scoreHistoryService;
+
     @Reference
     private IScoreProductService scoreProductService;
+
     @Reference
     private IScoreCommentService scoreCommentService;
-
 
     /**
      * 处理 门票下单请求
@@ -65,8 +75,6 @@ public class ScoreController {
     public AjaxResult createOrder(Model model, @LoginUser UserInfo userInfo, OrderBox orderBox){
         return orderDetailService.createOrder(orderBox);
     }*/
-
-
 
     /**
      * 处理 用户留言 积分商城首页
@@ -87,58 +95,52 @@ public class ScoreController {
      */
     @RequiredLogin
     @RequestMapping("score/shop")
-    public String shop(Model model, @LoginUser UserInfo userInfo,
-                       ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
-
+    public String shop(Model model, @LoginUser UserInfo userInfo, ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
         //获取当前用户的积分信息
         //获取用户的总积分
         Integer totalScore = scoreHistoryService.getTotalScoreByUserId(userInfo.getId());
         scoreBox.setTotalScore(totalScore);
         scoreBox.setUser(userInfo);
         model.addAttribute("scoreBox", scoreBox);
-
         //获取当前用户的购买了的积分商品
-
         return "scoreShop/list";
     }
+
     /**
      * 显示 积分商品列表 积分商城页面的内嵌页
      * @param scoreBox 容器 可以用作存取查询得到的用户积分的数据等等
      */
     @RequiredLogin
     @RequestMapping("score/productList")
-    public String productList(Model model, @LoginUser UserInfo userInfo,
-                       ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
+    public String productList(Model model, @LoginUser UserInfo userInfo, ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
         //获取积分商品数据
         List<ScoreProduct> products = scoreProductService.listAll();
         //打乱
         Collections.shuffle(products);
         model.addAttribute("products", products);
-
         return "scoreShop/itemTempl";
     }
+
     /**
      * 显示 我的积分商品列表 积分商城页面的内嵌页
      * @param scoreBox 容器 可以用作存取查询得到的用户积分的数据等等
      */
     @RequiredLogin
     @RequestMapping("score/myProps")
-    public String myProps(Model model, @LoginUser UserInfo userInfo,
-                              ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
+    public String myProps(Model model, @LoginUser UserInfo userInfo, ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
         //获取用户自己的积分商品数据
         List<ScoreProduct> products = scoreProductService.listByUserId(userInfo.getId());
         model.addAttribute("products", products);
-
         return "scoreShop/myItemTempl";
     }
+
     /**
      * 显示 积分商城留言列表页 积分商城页面的内嵌页
      * @param scoreBox 容器 可以用作存取查询得到的用户积分的数据等等
      */
     @RequiredLogin
     @RequestMapping("score/cmtList")
-    public String cmtList(Model model, @LoginUser UserInfo userInfo,
-                          ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
+    public String cmtList(Model model, @LoginUser UserInfo userInfo, ScoreBox scoreBox, @ModelAttribute("qo") ScoreHistoryQueryObject qo){
         //获取积分商城留言数据
         List<ScoreComment> cmts = scoreCommentService.listAll();
         Collections.reverse(cmts);
@@ -154,6 +156,5 @@ public class ScoreController {
     public AjaxResult buyScoreProduct(Model model, @LoginUser UserInfo userInfo, OrderBox orderBox){
         return orderDetailService.buyScoreProduct(orderBox);
     }
-
 
 }

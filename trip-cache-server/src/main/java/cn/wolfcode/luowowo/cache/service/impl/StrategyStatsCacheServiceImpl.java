@@ -10,7 +10,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +21,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
 
     /**
      * 判断：判断 redies 缓存中有没有对应的 key
@@ -45,11 +43,9 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
      */
     public void incrbyNum(Long detailId, int num, int strategyType) {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
-
         //根据攻略 id 从缓存中获取vo对象，并且转换成攻略统计数据对象
         String cacheKey = RedisKey.STRATEGY_STATS.getCacheKey(detailId);
         StrategyStats vo = JSON.parseObject(ops.get(cacheKey), StrategyStats.class);
-
         //根据类型, 对统计值进行添加
         switch (strategyType) {
             case STRATEGY_STATS_VIEWNUM: //阅读数
@@ -67,7 +63,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
             case STRATEGY_STATS_SHARENUM: //分享数
                 vo.setSharenum(vo.getSharenum() + num);
         }
-
         //在redies缓存中跟新vo对象
         setStrategyStats(vo);
     }
@@ -78,7 +73,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
     public void setStrategyStats(StrategyStats vo) {
         Long strategyId = vo.getStrategyId();
         String key = RedisKey.STRATEGY_STATS.getCacheKey(strategyId);
-
         //把攻略统计对象转换成 json 字符串，然后 ops 直接 set 就替换原数据
         redisTemplate.opsForValue().set(key, JSON.toJSONString(vo));
     }
@@ -89,7 +83,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
     public boolean favor(Long strategyId, Long userId) {
         boolean flag = false;
         int num = -1;           //用作数据统计的增量，默认为攻略收藏数 -1
-
         //把用户做主题，key 为用户 id，redis 存的是每个用户的收藏，每个用户下又有多个收藏的攻略 id
         String cacheKey = RedisKey.STRATEGY_STATS_FAVOR.getCacheKey(userId);
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
@@ -110,12 +103,10 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
             num = 1;
             flag = true;
         }
-
         //更新 redis 中该功率的收藏者
         ops.set(cacheKey, JSON.toJSONString(strategyIds));
         //收藏数添加
         incrbyNum(strategyId, num, IStrategyStatsCacheService.STRATEGY_STATS_FAVORNUM);
-
         return flag;
     }
 
@@ -137,7 +128,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
     public AjaxResult thumbup(Long strategyId, Long userId) {
         AjaxResult result = new AjaxResult();
         String cacheKey = RedisKey.STRATEGY_STATS_THUMBUP.getCacheKey(strategyId + ":" + userId);
-
         //查询 redis 用户是否有点赞，有则不给点赞，没有就进行点赞
         if (redisTemplate.opsForValue().get(cacheKey) == null) {
             //用户没有点赞，设置 redis 缓存有效期为1天，存取用户点赞
@@ -151,7 +141,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
         } else {
             result.mark("你今天已经给该攻略点过赞啦");
         }
-
         return result;
     }
 
@@ -160,7 +149,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
      */
     public List<StrategyStats> listAllStrategyStats() {
         ArrayList<StrategyStats> vos = new ArrayList<>();
-
         //使用通配符获取所有的
         String cacheKey = RedisKey.STRATEGY_STATS.getCacheKey("*");
         Set<String> keys = redisTemplate.keys(cacheKey);
@@ -169,7 +157,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
             StrategyStats vo = JSON.parseObject(json, StrategyStats.class);
             vos.add(vo);
         }
-
         return vos;
     }
 
@@ -232,7 +219,6 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
         return vo;
     }
 
-
     @Override
     public StrategyStats getStrategyState(Long detailId) {
         String cacheKey = getStrategyStatsCacheKey(detailId);
@@ -254,6 +240,5 @@ public class StrategyStatsCacheServiceImpl implements IStrategyStatsCacheService
     public static String getStrategyStatsCacheKey(Long detailId) {
         return RedisKey.STRATEGY_STATS.getCacheKey(detailId);
     }
-
 
 }

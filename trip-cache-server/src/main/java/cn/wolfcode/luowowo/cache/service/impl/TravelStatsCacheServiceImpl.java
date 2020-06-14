@@ -14,7 +14,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +25,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
 
     @Reference
     private ITravelService travelService;
-
 
     /**
      * 判断：判断 redies 缓存中有没有对应的 key
@@ -49,11 +47,9 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
      */
     public void incrbyNum(Long travelId, int num, int travelType) {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
-
         //根据游记 id 从缓存中获取vo对象，并且转换成游记统计数据对象
         String cacheKey = RedisKey.TRAVEL_STATS.getCacheKey(travelId);
         TravelStats vo = JSON.parseObject(ops.get(cacheKey), TravelStats.class);
-
         //根据类型, 对统计值进行添加
         switch (travelType) {
             case TRAVEL_STATS_VIEWNUM: //阅读数
@@ -70,9 +66,7 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
                 break;
             case TRAVEL_STATS_SHARENUM: //分享数
                 vo.setSharenum(vo.getSharenum() + num);
-
         }
-
         //在redies缓存中跟新vo对象
         setTravelStats(vo);
     }
@@ -83,7 +77,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
     public void setTravelStats(TravelStats vo) {
         Long travelId = vo.getTravelId();
         String key = RedisKey.TRAVEL_STATS.getCacheKey(travelId);
-
         //把游记统计对象转换成 json 字符串，然后 ops 直接 set 就替换原数据
         redisTemplate.opsForValue().set(key, JSON.toJSONString(vo));
     }
@@ -94,7 +87,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
     public boolean favor(Long travelId, Long userId) {
         boolean flag = false;
         int num = -1;           //用作数据统计的增量，默认为游记收藏数 -1
-
         //把用户做主题，key 为用户 id，redis 存的是每个用户的收藏，每个用户下又有多个收藏的游记 id
         String cacheKey = RedisKey.TRAVEL_STATS_FAVOR.getCacheKey(userId);
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
@@ -115,12 +107,10 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
             num = 1;
             flag = true;
         }
-
         //更新 redis 中该功率的收藏者
         ops.set(cacheKey, JSON.toJSONString(travelIds));
         //收藏数添加
         incrbyNum(travelId, num, ITravelStatsCacheService.TRAVEL_STATS_FAVORNUM);
-
         return flag;
     }
 
@@ -142,7 +132,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
     public AjaxResult thumbup(Long travelId, Long userId) {
         AjaxResult result = new AjaxResult();
         String cacheKey = RedisKey.TRAVEL_STATS_THUMBUP.getCacheKey(travelId + ":" + userId);
-
         //查询 redis 用户是否有点赞，有则不给点赞，没有就进行点赞
         if (redisTemplate.opsForValue().get(cacheKey) == null) {
             //用户没有点赞，设置 redis 缓存有效期为1天，存取用户点赞
@@ -156,7 +145,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
         } else {
             result.mark("你今天已经给该游记点过赞啦");
         }
-
         return result;
     }
 
@@ -165,7 +153,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
      */
     public List<TravelStats> listAllTravelStats() {
         ArrayList<TravelStats> vos = new ArrayList<>();
-
         //使用通配符获取所有的
         String cacheKey = RedisKey.TRAVEL_STATS.getCacheKey("*");
         Set<String> keys = redisTemplate.keys(cacheKey);
@@ -174,7 +161,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
             TravelStats vo = JSON.parseObject(json, TravelStats.class);
             vos.add(vo);
         }
-
         return vos;
     }
 
@@ -255,7 +241,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
         return RedisKey.STRATEGY_STATS.getCacheKey(detailId);
     }
 
-
     //今日访问量
     @Override
     public int getTodayNum() {
@@ -270,7 +255,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
         now.set(Calendar.SECOND, 00);
         now.set(Calendar.MILLISECOND, 000);
         Date starTime = now.getTime();
-
         //结束
         Calendar end = Calendar.getInstance();
         end.setTime(date);
@@ -279,7 +263,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
         end.set(Calendar.SECOND, 59);
         end.set(Calendar.MILLISECOND, 999);
         Date endDate = end.getTime();
-
         //访问量
         int todayNum = 0;
         for (String range : ranges) {
@@ -289,7 +272,6 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
             }
         }
         return todayNum;
-
     }
 
     @Override
@@ -313,6 +295,5 @@ public class TravelStatsCacheServiceImpl implements ITravelStatsCacheService {
         }
         return ids;
     }
-
 
 }

@@ -15,16 +15,18 @@
         city = #{city} , birthday = #{birthday} , info = #{info}
         where id = #{id}
     </update>
+
     <update id="updateHeadImgUrl">
         update userinfo set headImgUrl = #{headImgUrl} where id = #{userId}
     </update>
+
     <update id="updatePassword">
         update userinfo set password = #{password} where id = #{id}
     </update>
+
     <update id="updatePhone">
         update userinfo set phone = #{phone} where id = #{userId}
     </update>
-
 
     <!--通过手机查询一前台用户-->
     <select id="selectByPhone" resultType="cn.wolfcode.luowowo.member.domain.UserInfo">

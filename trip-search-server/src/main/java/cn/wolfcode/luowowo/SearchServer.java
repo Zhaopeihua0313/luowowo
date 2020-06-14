@@ -12,4 +12,5 @@ public class SearchServer {
         //System.setProperty("es.set.netty.runtime.available.processors", "false");
         SpringApplication.run(SearchServer.class, args);
     }
+
 }

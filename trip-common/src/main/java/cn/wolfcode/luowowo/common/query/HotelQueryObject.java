@@ -6,11 +6,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HotelQueryObject extends QueryObject {
+
     private Long destId = -1L;
     private Integer tagId = -1;
     private Integer type = -1;
     private Integer level = -1;
     private int ordertype = -1;
+
     public String getOrderBy() {
         if (ordertype == 1) {
             return "h.salePrice";
@@ -20,4 +22,5 @@ public class HotelQueryObject extends QueryObject {
         }
         return null;
     }
+
 }

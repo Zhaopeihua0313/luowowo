@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
-
 import javax.print.attribute.standard.Destination;
 import java.util.List;
 
@@ -20,4 +19,5 @@ public interface DestinationTemplateRepository extends ElasticsearchRepository<D
     Page<DestinationTemplate> findByTimeId(Long typeValue, Pageable pageable);
 
     Page<DestinationTemplate> findByDestThemeId(Long typeValue, Pageable pageable);
+
 }

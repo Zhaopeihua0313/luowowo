@@ -7,7 +7,6 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,6 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class StrategyTemplate implements Serializable {
+
     public static final String INDEX_TYPE_NAME = "luowowo_strategy";
 
     @Id

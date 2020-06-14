@@ -22,7 +22,6 @@ public class DestinationController {
      */
     @RequestMapping("/list")
     public String list(@ModelAttribute("qo")DestinationQueryObject qo, Model model) {
-
         //列表数据
         model.addAttribute("pageInfo", destinationService.query(qo));
         //吐司
@@ -47,4 +46,5 @@ public class DestinationController {
     public AjaxResult setInfo(Long id, String info) {
         return destinationService.setInfo(id, info);
     }
+
 }

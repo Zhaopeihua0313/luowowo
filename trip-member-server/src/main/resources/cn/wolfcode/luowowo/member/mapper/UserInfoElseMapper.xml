@@ -29,5 +29,4 @@
         WHERE openid = #{openid} AND type = #{type}
     </select>
 
-
 </mapper>

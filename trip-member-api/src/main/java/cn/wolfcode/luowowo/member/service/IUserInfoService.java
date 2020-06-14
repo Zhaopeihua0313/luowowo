@@ -3,7 +3,6 @@ package cn.wolfcode.luowowo.member.service;
 import cn.wolfcode.luowowo.common.util.AjaxResult;
 import cn.wolfcode.luowowo.member.domain.UserInfo;
 import com.alibaba.fastjson.JSONObject;
-
 import java.util.List;
 
 public interface IUserInfoService {

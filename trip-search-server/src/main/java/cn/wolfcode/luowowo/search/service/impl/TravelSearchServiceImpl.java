@@ -5,7 +5,6 @@ import cn.wolfcode.luowowo.search.service.ITravelSearchService;
 import cn.wolfcode.luowowo.search.template.TravelTemplate;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service

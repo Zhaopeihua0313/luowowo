@@ -16,7 +16,6 @@ import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.List;
 
 /**
@@ -25,24 +24,34 @@ import java.util.List;
 @Controller
 @RequestMapping("/elasticsearch")
 public class ElasticsearchController {
+
     @Reference
     private IStrategyDetailService strategyDetailService;
+
     @Reference
     private IUserInfoService userInfoService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private ITravelService travelService;
+
     @Reference
     private IThemeService themeService;
+
     @Reference
     private IStrategySearchService strategyTemplateService;
+
     @Reference
     private ITravelSearchService travelTemplateService;
+
     @Reference
     private IUserInfoSearchService userInfoTemplateService;
+
     @Reference
     private IDestinationSearchService destinationTemplateService;
+
     @Reference
     private IThemeSearchService themeTemplateService;
 
@@ -52,14 +61,11 @@ public class ElasticsearchController {
     @RequestMapping("/init")
     @ResponseBody
     public String init() {
-
         //攻略 数据，攻略目的地--目的地、攻略主题--攻略主题、
         List<StrategyDetail> details = strategyDetailService.selectAll();
         for (StrategyDetail detail : details) {
             Long destId = detail.getDest().getId();             //目的地ID
-
             StrategyTemplate template = new StrategyTemplate();
-
             template.setId(detail.getId());
             template.setTitle(detail.getTitle());
             template.setSubTitle(detail.getSubTitle());
@@ -74,24 +80,19 @@ public class ElasticsearchController {
             template.setReplynum(detail.getReplynum());
             template.setThumbsupnum(detail.getThumbsupnum());
             template.setCoverUrl(detail.getCoverUrl());
-
             //国家
             Destination dest = destinationService.getCountry(destId);
             template.setCountryId(dest.getId());
             template.setCountryName(dest.getName());
-
             //省份
             dest = destinationService.getProvince(destId);
             if (dest != null) {
                 template.setProvinceId(dest.getId());
                 template.setProvinceName(dest.getName());
             }
-
             strategyTemplateService.save(template);
         }
-
         //=========================================
-
         //游记数据，游记作者--用户、游记目的地--目的地、
         List<Travel> travels = travelService.list();
         for (Travel travel : travels) {
@@ -107,12 +108,9 @@ public class ElasticsearchController {
             template.setSummary(travel.getSummary());
             template.setReplynum(travel.getReplynum());
             template.setViewnum(travel.getViewnum());
-
             travelTemplateService.save(template);
         }
-
         //=========================================
-
         //用户数据
         List<UserInfo> users = userInfoService.list();
         for (UserInfo user : users) {
@@ -123,12 +121,9 @@ public class ElasticsearchController {
             template.setInfo(user.getInfo());
             template.setHeadUrl(user.getHeadImgUrl());
             template.setLevel(user.getLevel());
-
             userInfoTemplateService.save(template);
         }
-
         //=========================================
-
         //主题数据
         List<Theme> themes = themeService.list();
         for (Theme theme : themes) {
@@ -140,10 +135,7 @@ public class ElasticsearchController {
             template.setCatalog(theme.getThemecatalog().getName());
             themeTemplateService.save(template);
         }
-
-
         //=========================================
-
         //目的地数据
         List<Destination> dests = destinationService.list();
         for (Destination dest : dests) {
@@ -158,8 +150,7 @@ public class ElasticsearchController {
             }
             destinationTemplateService.save(template);
         }
-
-
         return "~~~~~ ES 数据初始化完成 ~~~~~~";
     }
+
 }

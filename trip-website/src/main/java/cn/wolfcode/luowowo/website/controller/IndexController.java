@@ -21,7 +21,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
@@ -29,22 +28,31 @@ import java.util.List;
 public class IndexController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Reference
     private IUserInfoService userInfoService;
+
     @Reference
     private IStrategyCommendService strategyCommendService;
+
     @Reference
     private ITravelCommendService travelCommendService;
+
     @Reference
     private ITravelService travelService;
+
     @Reference
     private IDestinationSearchService destinationSearchService;
+
     @Reference
     private ISearchService searchService;
+
     @Reference
     private IStrategySearchService strategySearchService;
+
     @Reference
     private ITravelSearchService travelSearchService;
+
     @Reference
     private IUserInfoSearchService userInfoSearchService;
 
@@ -121,8 +129,7 @@ public class IndexController {
     public void searchStrategy(Model model, SearchQueryObject qo) {
         if (StringUtils.hasText(qo.getKeyword())) {
             //搜索攻略时，模糊查询关键字，包括文字标题, 副标题, 摘要都要，并且高亮显示
-            Page<StrategyTemplate> page = searchService.hightLightSearch(StrategyTemplate.INDEX_TYPE_NAME,
-                    StrategyTemplate.class, qo, "title", "subtitle", "summary");
+            Page<StrategyTemplate> page = searchService.hightLightSearch(StrategyTemplate.INDEX_TYPE_NAME, StrategyTemplate.class, qo, "title", "subtitle", "summary");
             model.addAttribute("page",page);
         }
     }
@@ -133,8 +140,7 @@ public class IndexController {
     private void searchTravel(Model model, SearchQueryObject qo) {
         if (StringUtils.hasText(qo.getKeyword())) {
             //搜索游记时，模糊查询关键字，包括文字标题, 摘要都要，并且高亮显示
-            Page<TravelTemplate> page = searchService.hightLightSearch(TravelTemplate.INDEX_TYPE_NAME,
-                    TravelTemplate.class, qo, "title", "summary");
+            Page<TravelTemplate> page = searchService.hightLightSearch(TravelTemplate.INDEX_TYPE_NAME, TravelTemplate.class, qo, "title", "summary");
             model.addAttribute("page", page);
         }
     }
@@ -145,8 +151,7 @@ public class IndexController {
     private void searchUser(Model model, SearchQueryObject qo) {
         if (StringUtils.hasText(qo.getKeyword())) {
             //搜索用户时，模糊查询关键字，包括用户昵称, 所在城市都要，并且高亮显示
-            Page<UserInfoTemplate> page = searchService.hightLightSearch(UserInfoTemplate.INDEX_TYPE_NAME,
-                    UserInfoTemplate.class, qo, "nickname",  "destName");
+            Page<UserInfoTemplate> page = searchService.hightLightSearch(UserInfoTemplate.INDEX_TYPE_NAME, UserInfoTemplate.class, qo, "nickname",  "destName");
             model.addAttribute("page", page);
         }
     }
@@ -158,15 +163,10 @@ public class IndexController {
         if (StringUtils.hasText(qo.getKeyword())) {
             SearchResult result = new SearchResult();
             //搜索所有时，要搜索攻略、游记、用户、目的地
-            Page<StrategyTemplate> strategy = searchService.hightLightSearch(StrategyTemplate.INDEX_TYPE_NAME,
-                    StrategyTemplate.class, qo, "title", "subtitle", "summary");
-            Page<TravelTemplate> travel = searchService.hightLightSearch(TravelTemplate.INDEX_TYPE_NAME,
-                    TravelTemplate.class, qo, "title", "summary");
-            Page<UserInfoTemplate> user = searchService.hightLightSearch(UserInfoTemplate.INDEX_TYPE_NAME,
-                    UserInfoTemplate.class, qo, "nickname",  "destName");
-            Page<DestinationTemplate> dest = searchService.hightLightSearch(DestinationTemplate.INDEX_TYPE_NAME,
-                    DestinationTemplate.class, qo, "name",  "info");
-
+            Page<StrategyTemplate> strategy = searchService.hightLightSearch(StrategyTemplate.INDEX_TYPE_NAME, StrategyTemplate.class, qo, "title", "subtitle", "summary");
+            Page<TravelTemplate> travel = searchService.hightLightSearch(TravelTemplate.INDEX_TYPE_NAME, TravelTemplate.class, qo, "title", "summary");
+            Page<UserInfoTemplate> user = searchService.hightLightSearch(UserInfoTemplate.INDEX_TYPE_NAME, UserInfoTemplate.class, qo, "nickname",  "destName");
+            Page<DestinationTemplate> dest = searchService.hightLightSearch(DestinationTemplate.INDEX_TYPE_NAME, DestinationTemplate.class, qo, "name",  "info");
             //封装结果回显
             result.setUsers(user.getContent());
             result.setTravels(travel.getContent());
@@ -175,7 +175,6 @@ public class IndexController {
             int total = 0;
             total += user.getTotalElements() + travel.getTotalElements() + strategy.getTotalElements() + dest.getTotalElements();
             result.setTotal(total);
-
             model.addAttribute("data", result);
         }
     }

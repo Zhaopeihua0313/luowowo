@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.search.query.SearchQueryObject;
 import cn.wolfcode.luowowo.search.template.StrategyTemplate;
 import cn.wolfcode.luowowo.search.vo.StatsResult;
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 import java.util.Map;
 
@@ -35,4 +34,5 @@ public interface IStrategySearchService {
      * 获取 某些目的地的攻略
      */
     List<StrategyTemplate> findByDestName(String destName);
+
 }

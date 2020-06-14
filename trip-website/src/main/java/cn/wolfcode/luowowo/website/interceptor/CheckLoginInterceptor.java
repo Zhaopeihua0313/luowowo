@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,15 +41,11 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter{
             HttpSession session = request.getSession();
             Object userInfo = session.getAttribute(Consts.USER_INFO);
             if (openPrint) System.out.println("  - 登录拦截开始 ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ 当前登陆者 session 的值：" + userInfo);
-            if (openPrint) System.out.println("  - 当前拦截方法："
-                    + ((HandlerMethod) handler).getShortLogMessage()
-                    + "\033[34;4m " + ((HandlerMethod) handler).getMethod().getName() + "\033[0m"
-                    + " 【 " + new Date()+ "】 " );
+            if (openPrint) System.out.println("  - 当前拦截方法：" + ((HandlerMethod) handler).getShortLogMessage() + "\033[34;4m " + ((HandlerMethod) handler).getMethod().getName() + "\033[0m" + " 【 " + new Date()+ "】 " );
             if (userInfo != null) {
                 if (openPrint) System.out.println("  -↑ 用户 session 存在，放行");
                 return true;
             }
-
             //本地 sesison 没有，查远程 redis
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
@@ -60,7 +55,6 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter{
                         if (openPrint) System.out.println("  - 当前登陆者 本地 cookie（userInfoToken） 的值：" + token);
                         String json = userInfoCasheService.getUserInfo(token);
                         if (openPrint) System.out.println("  - 当前登陆者 redis 中的值：" + json);
-
                         //如果通过 cookie 能取到 redis，就给设置 session，并且放行
                         if (json != null) {
                             //转 json 格式
@@ -74,16 +68,13 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter{
                     }
                 }
             }
-
             //当前操作的动态方法
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-
             //通过自定义的登录注解来判断该资源是否需要登录访问
             if ( !handlerMethod.hasMethodAnnotation(RequiredLogin.class) ) {
                 if (openPrint) System.out.println("  -↑ 该方法不需要登录验证，放行");
                 return true;
             }
-
             //判断是否异步请求
             if (handlerMethod.hasMethodAnnotation(ResponseBody.class)) {    //异步请求
                 if (openPrint) System.out.println("  - 异步请求来啦");
@@ -98,15 +89,11 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter{
                 //到这里表示访问的资源需要登录
                 response.sendRedirect("/login.html");
             }
-
             return false;
         }
-
         //静态资源给放行
         return true;
     }
-
-
 
 }
 

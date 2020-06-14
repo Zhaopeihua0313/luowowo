@@ -2,18 +2,17 @@ package cn.wolfcode.luowowo.common.util;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 
 /**
  * ajax 返回结果 容器工具类
  */
-@Getter@Setter
+@Getter
+@Setter
 public class AjaxResult implements Serializable {
 
     //没登录 CODE 常量
     public static final int NO_LOGIN_CODE = 102;
-
     private Integer code;
     private boolean success = true;
     private String msg;
@@ -29,4 +28,5 @@ public class AjaxResult implements Serializable {
         this.data = data;
         return this;
     }
+
 }

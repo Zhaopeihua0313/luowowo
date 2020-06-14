@@ -8,4 +8,5 @@ import lombok.Setter;
 public class StrategyThemeQueryObject extends QueryObject {
 
     private int pageSize = 10;
+
 }

@@ -27,7 +27,6 @@ public class OrderController {
     //引入图片保存地址
     @Value("${file.dir}")
     private String dir;
-
     @Reference
     private IScenicService scenicService;
     @Reference
@@ -43,7 +42,6 @@ public class OrderController {
     public AjaxResult updateState(OrderDetail orderDetail) {
         return orderDetailService.updateStatus(orderDetail);
     }
-
 
     /**
      * 处理 图片文件上传

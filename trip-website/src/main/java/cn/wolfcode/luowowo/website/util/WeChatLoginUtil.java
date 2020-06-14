@@ -47,6 +47,4 @@ public class WeChatLoginUtil {
         return url;
     }
 
-
-
 }

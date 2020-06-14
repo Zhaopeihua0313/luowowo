@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @RequestMapping("/scenic")
@@ -31,10 +30,13 @@ public class ScenicController {
 
     @Reference
     private IScenicService scenicService;
+
     @Reference
     private IScenicCatalogService scenicCatalogService;
+
     @Reference
     private IScenicContentService scenicContentService;
+
     @Reference
     private IDestinationService destinationService;
 
@@ -63,16 +65,12 @@ public class ScenicController {
      */
     @RequestMapping("/input")
     public String input(Long id, Model model) {
-
-
-
         model.addAttribute("dests", destinationService.list());
         //景点分类
         List<ScenicCatalog> catalogs = scenicCatalogService.listAll();
         model.addAttribute("catalogs", catalogs);
         //父景点
         model.addAttribute("scenics", scenicService.listAll());
-
         if (id != null) {
             //景点详情
             Scenic scenic = scenicService.get(id);

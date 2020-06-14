@@ -7,7 +7,6 @@ import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
 /**
@@ -18,8 +17,10 @@ public class StatsDataPersistenceJob {
 
     @Reference
     private IStrategyStatsCacheService strategyStatsCacheService;
+
     @Reference
     private IStrategyDetailService strategyDetailService;
+
     @Autowired
     private DataController dataController;
 
@@ -29,10 +30,10 @@ public class StatsDataPersistenceJob {
     //从0秒开始，每1秒执行1次
     @Scheduled(cron = "0/1 * * * * ?") //缓存数据落地 （只要redis无异常，平时可以不开）
     public void persistence(){
-
         //dataController.strategyStatsDataDown();     //攻略统计数据
         //dataController.travelStatsDataDown();       //游记统计数据
         dataController.questionStatsDataDown();     //问题统计对象
         System.out.println("--数据落地--> 自动 数据落地" + "【" + new Date() + "】");
     }
+
 }

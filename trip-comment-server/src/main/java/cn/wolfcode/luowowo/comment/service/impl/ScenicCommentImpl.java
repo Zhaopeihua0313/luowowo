@@ -11,7 +11,6 @@ import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +21,10 @@ public class ScenicCommentImpl implements IScenicCommentService {
     //相当于 mysql 的 mapper
     @Autowired
     private ScenicCommentMongoRepository repository;
+
     @Autowired
     private MongoTemplate template;
+
     /**
      * 操作 点赞评论
      * @param commentId 评论id
@@ -68,6 +69,7 @@ public class ScenicCommentImpl implements IScenicCommentService {
         list = list.subList(fromIndex,toIndex);
         return list;
     }
+
     /**
      * 分页查询 攻略评论
      */
@@ -146,6 +148,7 @@ public class ScenicCommentImpl implements IScenicCommentService {
         List<ScenicComment> list = template.find(query, ScenicComment.class, "scenic_comment");
         return list;
     }
+
     /**
      * 查询综合分数区间集合
      * @param scenicId
@@ -161,6 +164,7 @@ public class ScenicCommentImpl implements IScenicCommentService {
         List<ScenicComment> list = template.find(query, ScenicComment.class, "scenic_comment");
         return list;
     }
+
     /**
      * 查询目标关键字集合
      * @param scenicId
@@ -173,6 +177,7 @@ public class ScenicCommentImpl implements IScenicCommentService {
         List<ScenicComment> list = template.find(query, ScenicComment.class, "scenic_comment");
         return list;
     }
+
     /**
      * 查询点赞数超过50的集合---金牌点评
      * @param scenicId
@@ -194,4 +199,5 @@ public class ScenicCommentImpl implements IScenicCommentService {
         scenicComment.setCreateTime(new Date());
         repository.save(scenicComment);
     }
+
 }

@@ -19,25 +19,33 @@ public class OrderController {
 
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private ITicketService ticketService;
+
     @Reference
     private ITicketTagService ticketTagService;
+
     @Reference
     private ITicketContentService ticketContentService;
+
     @Reference
     private IScenicService scenicService;
+
     @Reference
     private IScenicCatalogService scenicCatalogService;
+
     @Reference
     private IScenicStatsCacheService scenicStatsCacheService;
+
     @Reference
     private IScenicContentService scenicContentService;
+
     @Reference
     private IScenicCommentService scenicCommentService;
+
     @Reference
     private IOrderDetailService orderDetailService;
-
 
     /**
      * 处理 门票下单请求
@@ -53,14 +61,10 @@ public class OrderController {
      * @FlightQueryObject 容器 可以用作存取查询得到的航班的数据等等
      */
     @RequestMapping("order/flight")
-    public String flight(Model model, @LoginUser UserInfo userInfo,
-                         OrderBox orderBox, FlightQueryObject flightQueryObject){
-
+    public String flight(Model model, @LoginUser UserInfo userInfo, OrderBox orderBox, FlightQueryObject flightQueryObject){
         //渲染查询得到的航班数据
         model.addAttribute("flightInfo", flightQueryObject);
-
         return "flight/addOrder";
     }
-
 
 }

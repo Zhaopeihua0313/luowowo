@@ -9,4 +9,5 @@ public class StrategyDetailQueryObject extends QueryObject {
 
     private Long tagId;
     private Long destId;
+
 }

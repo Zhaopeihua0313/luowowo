@@ -27,7 +27,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.List;
 
 @Controller
@@ -36,16 +35,22 @@ public class StrategyController {
 
     @Reference
     private IStrategyTagService tagService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private IStrategyDetailService detailService;
+
     @Reference
     private IStrategyCommentService commentService;
+
     @Reference
     private IStrategyStatsCacheService statsCacheService;
+
     @Reference
     private IStrategyCommendService strategyCommendService;
+
     @Reference
     private IStrategySearchService strategySearchService;
 
@@ -57,9 +62,7 @@ public class StrategyController {
     public AjaxResult share(Long strategyId, @LoginUser UserInfo user) {
         AjaxResult result = new AjaxResult();
         try {
-
             statsCacheService.incrbyNum(strategyId, 1, IStrategyStatsCacheService.STRATEGY_STATS_SHARENUM);
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -91,7 +94,6 @@ public class StrategyController {
         //hotCds 热门排行榜前10个
         List<StrategyStats> hotCds = statsCacheService.listRankTopCount(RedisKey.STRATEGY_STATS_HOT_SORT, 10);
         model.addAttribute("hotCds", hotCds);
-
         //高级查询条件-----
         //abroads 海外攻略 查询海外的时候排除中国的数据
         List<StatsResult> abroads = strategySearchService.listCondition(SearchQueryObject.CONDITION_ABROAD);
@@ -100,10 +102,8 @@ public class StrategyController {
         model.addAttribute("unabroads", strategySearchService.listCondition(SearchQueryObject.CONDITION_UNABROAD));
         //themes 主题攻略
         model.addAttribute("themes", strategySearchService.listCondition(SearchQueryObject.CONDITION_THEME));
-
         // themeCds主题推荐
         model.addAttribute("themeCds", strategySearchService.listThemeCommendTopCount(10));
-
         return "strategy/index";
     }
 
@@ -133,23 +133,19 @@ public class StrategyController {
         StrategyDetail detail = detailService.get(id);
         detail.setStrategyContent(detailService.getContent(id));
         model.addAttribute("detail", detail);
-
         //每次访问,访问次数加1
         statsCacheService.incrbyNum(id, 1, IStrategyStatsCacheService.STRATEGY_STATS_VIEWNUM);
         //回显，从 redies 中获取攻略统计数据
         StrategyStats vo = statsCacheService.getStatsById(id);
         model.addAttribute("vo", vo);
-
         //访问后飙升榜数值要变化 +1
         statsCacheService.addInRand(RedisKey.STRATEGY_STATS_UP_SORT, 1, id);
-
         //登录用户的，给返回是否已收藏
         if (userInfo != null) {
             boolean flag = statsCacheService.isFavor(id, userInfo.getId());
             System.out.println("detail 攻略详情页，用户登录了，收藏了该攻略：" + flag);
             model.addAttribute("isFavor", flag);
         }
-
         return "strategy/detail";
     }
 
@@ -170,7 +166,6 @@ public class StrategyController {
     @ResponseBody
     public AjaxResult commentAdd(StrategyComment comment, @LoginUser UserInfo userInfo) {
         AjaxResult result = new AjaxResult();
-
         //设置用户信息
         comment.setUserId(userInfo.getId());
         comment.setUsername(userInfo.getNickname());
@@ -182,10 +177,8 @@ public class StrategyController {
         statsCacheService.incrbyNum(comment.getDetailId(), 1, IStrategyStatsCacheService.STRATEGY_STATS_REPLYNUM);
         //回显的数据
         result.setData(statsCacheService.getStatsById(comment.getDetailId()).getReplynum());
-
         //评论后飙升榜数值要变化 +1
         statsCacheService.addInRand(RedisKey.STRATEGY_STATS_UP_SORT, 1, comment.getDetailId());
-
         return result;
     }
 
@@ -198,7 +191,6 @@ public class StrategyController {
     public AjaxResult commentThumbUp(String commentId, Long userId) {
         AjaxResult result = new AjaxResult();
         commentService.commentThumbUp(commentId, userId);
-
         return result;
     }
 
@@ -210,19 +202,16 @@ public class StrategyController {
     @ResponseBody
     public AjaxResult favor(Long strategyId, @LoginUser UserInfo userInfo) {
         AjaxResult result = new AjaxResult();
-
         //进行收藏操作，用户没收藏就在攻略收藏者里添加该用户，并且收藏数+1，反之就是取消收藏操作，剔除并且收藏数-1，返回值 true为收藏 false为取消收藏
         boolean flag = statsCacheService.favor(strategyId, userInfo.getId());
         //用作前端判断是收藏操作还是取消收藏
         result.setSuccess(flag);
-
         //收藏后热门榜数值要变化
         if (flag) {
             statsCacheService.addInRand(RedisKey.STRATEGY_STATS_HOT_SORT, 1, strategyId);
         } else {
             statsCacheService.addInRand(RedisKey.STRATEGY_STATS_HOT_SORT, -1, strategyId);
         }
-
         //从 redies 中获取该攻略的统计数据
         StrategyStats vo = statsCacheService.getStatsById(strategyId);
         return result.addData(vo.getFavornum());
@@ -236,17 +225,14 @@ public class StrategyController {
     @ResponseBody
     public AjaxResult strategyThumbup(Long strategyId, @LoginUser UserInfo userInfo) {
         AjaxResult result = new AjaxResult();
-
         //进行顶(点赞)操作，用户没点赞就在攻略点赞者里添加该用户，并且点赞数+1，redis 缓存设有效期1天，有效期内无法再点赞
         result = statsCacheService.thumbup(strategyId, userInfo.getId());
-
         if (result.isSuccess()) {
             //点赞后热门榜数值要变化 +1
             statsCacheService.addInRand(RedisKey.STRATEGY_STATS_HOT_SORT, 1, strategyId);
         }
         return result;
     }
-
 
 }
 

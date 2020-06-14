@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -120,7 +119,6 @@ public class QuestionStatsCacheServiceImpl implements IQuestionStatsCacheService
     @Override
     public List<QuestionStats> listAllQuestionStats() {
         ArrayList<QuestionStats> vos = new ArrayList<>();
-
         //使用通配符获取所有的
         String cacheKey = RedisKey.QUESTION_STATS.getCacheKey("*");
         Set<String> keys = redisTemplate.keys(cacheKey);
@@ -129,7 +127,6 @@ public class QuestionStatsCacheServiceImpl implements IQuestionStatsCacheService
             QuestionStats vo = JSON.parseObject(json, QuestionStats.class);
             vos.add(vo);
         }
-
         return vos;
     }
 

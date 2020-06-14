@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.List;
 
 @Controller
@@ -21,6 +20,7 @@ public class StrategyCatalogController {
 
     @Reference
     private IStrategyCatalogService strategyCatalogService;
+
     @Reference
     private IDestinationService destinationService;
 

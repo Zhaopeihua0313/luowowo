@@ -8,7 +8,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,10 +26,8 @@ public class StrategyCommentImpl implements IStrategyCommentService {
      */
     @Override
     public void commentThumbUp(String commentId, Long userId) {
-
         //根据id查找评论
         Optional<StrategyComment> strategyComment = repository.findById(commentId);
-
         //判断用户是否点赞过
         strategyComment.ifPresent(comment -> {
             List<Long> useList = comment.getThumbuplist();
@@ -51,9 +48,7 @@ public class StrategyCommentImpl implements IStrategyCommentService {
      */
     @Override
     public Page<StrategyComment> query(StrategyCommentQueryObject qo) {
-
        return repository.findByDetailId(qo.getDetailId(),PageRequest.of(qo.getCurrentPage()-1,qo.getPageSize()));
-
     }
 
     /**
@@ -67,4 +62,5 @@ public class StrategyCommentImpl implements IStrategyCommentService {
         //保存
         repository.save(strategyComment);
     }
+
 }

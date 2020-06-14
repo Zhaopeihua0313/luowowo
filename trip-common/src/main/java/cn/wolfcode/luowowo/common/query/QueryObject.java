@@ -3,16 +3,15 @@ package cn.wolfcode.luowowo.common.query;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.StringUtils;
-
 import java.io.Serializable;
 
-@Setter@Getter
+@Setter
+@Getter
 public class QueryObject implements Serializable {
+
     private int currentPage = 1;
     private int pageSize = 6;
-
     private String keyword;
-
     private String orderBy;
 
     protected String empty2Null(String s) {

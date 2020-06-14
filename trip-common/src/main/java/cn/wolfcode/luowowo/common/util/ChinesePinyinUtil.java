@@ -13,6 +13,7 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
  * @date 2018-05-21 14:52
  */
 public class ChinesePinyinUtil {
+
     /**
      * 得到 字符串的拼音字母 例：测试-->返回ceshi
      * @param src 中文字符串
@@ -41,6 +42,7 @@ public class ChinesePinyinUtil {
         }
         return sb.toString();
     }
+
     /**
      * 得到中文首字母,例如"专科"得到zk返回
      * @param str 中文字符串
@@ -59,6 +61,7 @@ public class ChinesePinyinUtil {
         }
         return sb.toString();
     }
+
     /**
      * 将字符串转移为ASCII码
      * @param cnStr  中文字符串
@@ -72,10 +75,12 @@ public class ChinesePinyinUtil {
         }
         return sb.toString();
     }
+
 //    public static void main(String[] args) {
 //        String cnStr = "重庆,重视昭君发展(专科)环-境喵邈";
 //        System.out.println(getPingYin(cnStr));    //返回 zhongqing,zhongshizhaojunfazhan(zhuanke)huan-jingmiaomiao
 //        System.out.println(getPinYinHeadChar(cnStr));   //返回 zq,zszjfz(zk)h-jmm
 //        System.out.println(getCnASCII("专科"));   //返回 e4b893e7a791
 //    }
+
 }

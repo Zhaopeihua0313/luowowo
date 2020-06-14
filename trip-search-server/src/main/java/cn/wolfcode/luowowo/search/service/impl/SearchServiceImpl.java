@@ -19,12 +19,12 @@ import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SearchServiceImpl implements ISearchService {
+
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
@@ -39,11 +39,9 @@ public class SearchServiceImpl implements ISearchService {
     public <T> Page<T> hightLightSearch(String indexAndType, Class<T> clz, SearchQueryObject qo, String... fields) {
         String preTag = "<span style='color:red;font-weight:bold;'>";
         String postTag = "</span>";
-
         //本地查询器
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         builder.withIndices(indexAndType).withTypes(indexAndType);
-
         //把需要高亮显示的字段封装到高亮条件里
         HighlightBuilder.Field[] fs = new HighlightBuilder.Field[fields.length];
         for (int i = 0; i < fields.length; i++) {
@@ -56,24 +54,20 @@ public class SearchServiceImpl implements ISearchService {
         builder.withHighlightFields(fs);
         //不需要排序
         builder.withPageable(qo.getPageableWithouSort());
-
         //返回结果，里面替换高亮字段
         return elasticsearchTemplate.queryForPage(builder.build(), clz, new SearchResultMapper() {
             public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
                 List<T> content = new ArrayList<>();
-
                 try {
                     for (SearchHit hit : response.getHits().getHits()) {
                         //转化成 JSON 对象
                         T obj = JSON.parseObject(hit.getSourceAsString(), clazz);
-
                         //替换高亮显示字段
                         for (HighlightField field : hit.getHighlightFields().values()) {
                             String name = field.getName();
                             Text text = field.getFragments()[0];
                             BeanUtils.setProperty(obj, name, text);
                         }
-
                         content.add(obj);
                     }
                 } catch (Exception e) {
@@ -84,4 +78,5 @@ public class SearchServiceImpl implements ISearchService {
             }
         });
     }
+
 }

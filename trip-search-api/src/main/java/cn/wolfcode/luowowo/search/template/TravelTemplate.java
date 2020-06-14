@@ -7,7 +7,6 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,6 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class TravelTemplate implements Serializable {
+
     public static final String INDEX_TYPE_NAME = "luowowo_travel";
 
     @Id
@@ -46,5 +46,7 @@ public class TravelTemplate implements Serializable {
     private String coverUrl; //封面
 
     private int viewnum;  //游记查看数
+
     private int replynum;  //回复数
+
 }

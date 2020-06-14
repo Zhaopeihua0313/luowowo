@@ -23,7 +23,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
@@ -39,7 +38,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-
 public class HttpClientUtils {
 
 	public static final int connTimeout = 10000;
@@ -54,23 +52,19 @@ public class HttpClientUtils {
 		client = HttpClients.custom().setConnectionManager(cm).build();
 	}
 
-	public static String postParameters(String url, String parameterStr)
-			throws ConnectTimeoutException, SocketTimeoutException, Exception {
+	public static String postParameters(String url, String parameterStr) throws ConnectTimeoutException, SocketTimeoutException, Exception {
 		return post(url, parameterStr, "application/x-www-form-urlencoded", charset, connTimeout, readTimeout);
 	}
 
-	public static String postParameters(String url, String parameterStr, String charset, Integer connTimeout,
-			Integer readTimeout) throws ConnectTimeoutException, SocketTimeoutException, Exception {
+	public static String postParameters(String url, String parameterStr, String charset, Integer connTimeout, Integer readTimeout) throws ConnectTimeoutException, SocketTimeoutException, Exception {
 		return post(url, parameterStr, "application/x-www-form-urlencoded", charset, connTimeout, readTimeout);
 	}
 
-	public static String postParameters(String url, Map<String, String> params)
-			throws ConnectTimeoutException, SocketTimeoutException, Exception {
+	public static String postParameters(String url, Map<String, String> params) throws ConnectTimeoutException, SocketTimeoutException, Exception {
 		return postForm(url, params, null, connTimeout, readTimeout);
 	}
 
-	public static String postParameters(String url, Map<String, String> params, Integer connTimeout,
-			Integer readTimeout) throws ConnectTimeoutException, SocketTimeoutException, Exception {
+	public static String postParameters(String url, Map<String, String> params, Integer connTimeout, Integer readTimeout) throws ConnectTimeoutException, SocketTimeoutException, Exception {
 		return postForm(url, params, null, connTimeout, readTimeout);
 	}
 
@@ -116,7 +110,6 @@ public class HttpClientUtils {
 				customReqConf.setSocketTimeout(readTimeout);
 			}
 			post.setConfig(customReqConf.build());
-
 			HttpResponse res;
 			if (url.startsWith("https")) {
 				// 执行 Https 请求.
@@ -149,10 +142,7 @@ public class HttpClientUtils {
 	 * @throws SocketTimeoutException
 	 * @throws Exception
 	 */
-	public static String postForm(String url, Map<String, String> params, Map<String, String> headers,
-			Integer connTimeout, Integer readTimeout)
-			throws ConnectTimeoutException, SocketTimeoutException, Exception {
-
+	public static String postForm(String url, Map<String, String> params, Map<String, String> headers, Integer connTimeout, Integer readTimeout) throws ConnectTimeoutException, SocketTimeoutException, Exception {
 		HttpClient client = null;
 		HttpPost post = new HttpPost(url);
 		try {
@@ -165,7 +155,6 @@ public class HttpClientUtils {
 				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, Consts.UTF_8);
 				post.setEntity(entity);
 			}
-
 			if (headers != null && !headers.isEmpty()) {
 				for (Entry<String, String> entry : headers.entrySet()) {
 					post.addHeader(entry.getKey(), entry.getValue());
@@ -211,9 +200,7 @@ public class HttpClientUtils {
 	 * @throws SocketTimeoutException  响应超时
 	 * @throws Exception
 	 */
-	public static String get(String url, String charset, Integer connTimeout, Integer readTimeout)
-			throws ConnectTimeoutException, SocketTimeoutException, Exception {
-
+	public static String get(String url, String charset, Integer connTimeout, Integer readTimeout) throws ConnectTimeoutException, SocketTimeoutException, Exception {
 		HttpClient client = null;
 		HttpGet get = new HttpGet(url);
 		String result = "";
@@ -227,9 +214,7 @@ public class HttpClientUtils {
 				customReqConf.setSocketTimeout(readTimeout);
 			}
 			get.setConfig(customReqConf.build());
-
 			HttpResponse res = null;
-
 			if (url.startsWith("https")) {
 				// 执行 Https 请求.
 				client = createSSLInsecureClient();
@@ -239,7 +224,6 @@ public class HttpClientUtils {
 				client = HttpClientUtils.client;
 				res = client.execute(get);
 			}
-
 			result = IOUtils.toString(res.getEntity().getContent(), charset);
 		} finally {
 			get.releaseConnection();
@@ -282,30 +266,22 @@ public class HttpClientUtils {
 					return true;
 				}
 			}).build();
-
 			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new X509HostnameVerifier() {
-
 				@Override
 				public boolean verify(String arg0, SSLSession arg1) {
 					return true;
 				}
-
 				@Override
 				public void verify(String host, SSLSocket ssl) throws IOException {
 				}
-
 				@Override
 				public void verify(String host, X509Certificate cert) throws SSLException {
 				}
-
 				@Override
 				public void verify(String host, String[] cns, String[] subjectAlts) throws SSLException {
 				}
-
 			});
-
 			return HttpClients.custom().setSSLSocketFactory(sslsf).build();
-
 		} catch (GeneralSecurityException e) {
 			throw e;
 		}

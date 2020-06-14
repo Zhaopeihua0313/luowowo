@@ -8,4 +8,5 @@ import lombok.Setter;
 public class TravelContentQueryObject extends QueryObject {
 
     private int pageSize = 8;
+
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/flight")
 @Controller
 public class FlightController {
+
     @Reference
     private IFlightCityService flightCityService;
 
@@ -46,9 +47,7 @@ public class FlightController {
      */
     @RequestMapping("/search_api")
     @ResponseBody
-    public AjaxResult apiSearch(Model model, String orgCity, String dstCity, String depTime,
-                         String source) {
-
+    public AjaxResult apiSearch(Model model, String orgCity, String dstCity, String depTime, String source) {
         //接口的数据源
         AjaxResult ajaxResult = new AjaxResult();
         String result = FlightUtil.getFlightInfo(dstCity, orgCity, depTime);
@@ -56,7 +55,6 @@ public class FlightController {
             ajaxResult.setData(result);
         }
         return ajaxResult;
-
     }
 
     /**
@@ -67,9 +65,7 @@ public class FlightController {
      * @param depTime 航班时间
      */
     @RequestMapping("/search_my")
-    public String mySearch(Model model, String orgCity, String dstCity, String depTime,
-                         String source) {
-
+    public String mySearch(Model model, String orgCity, String dstCity, String depTime, String source) {
         //自己的数据源
         model.addAttribute("flightAll", flightServi.list(orgCity, dstCity));
         return"flight/searchTpl";

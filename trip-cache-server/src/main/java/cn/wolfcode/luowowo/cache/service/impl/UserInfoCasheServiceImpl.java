@@ -5,7 +5,6 @@ import cn.wolfcode.luowowo.cache.service.IUserInfoCasheService;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -47,6 +46,5 @@ public class UserInfoCasheServiceImpl implements IUserInfoCasheService {
     public void deleteUserInfo(String token) {
         redisTemplate.delete(RedisKey.USER_INFO.getCacheKey(token));
     }
-
 
 }

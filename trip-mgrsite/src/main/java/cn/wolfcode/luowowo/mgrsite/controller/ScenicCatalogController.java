@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.List;
 
 /**
@@ -24,6 +23,7 @@ public class ScenicCatalogController {
 
     @Reference
     private IScenicCatalogService scenicCatalogService;
+
     @Reference
     private IDestinationService destinationService;
 
@@ -55,4 +55,5 @@ public class ScenicCatalogController {
     public AjaxResult saveOrUpdate(Model model, ScenicCatalog catalog) {
         return scenicCatalogService.saveOrUpdate(catalog);
     }
+
 }

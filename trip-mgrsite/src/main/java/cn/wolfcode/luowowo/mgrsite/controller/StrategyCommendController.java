@@ -21,6 +21,7 @@ public class StrategyCommendController {
 
     @Value("${file.dir}")
     private String parth;
+
     @Reference
     private IStrategyCommendService strategyCommendService;
 
@@ -50,10 +51,8 @@ public class StrategyCommendController {
     @RequestMapping("/saveOrUpdate")
     @ResponseBody
     public AjaxResult saveOrUpdate(MultipartFile pic, StrategyCommend strategyCommend){
-
         AjaxResult ajaxResult = strategyCommendService.saveOrUpdate(strategyCommend);
         return ajaxResult;
     }
-
 
 }

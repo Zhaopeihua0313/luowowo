@@ -8,7 +8,6 @@ import lombok.Setter;
 public class OrderDetailQueryObject extends QueryObject {
 
     private int pageSize = 10;
-
     public String status = "all";          //订单状态
     public static final String STATUS_ORDERED = "ordered";          //已下单
     public static final String STATUS_PAIDED = "paided";            //已支付

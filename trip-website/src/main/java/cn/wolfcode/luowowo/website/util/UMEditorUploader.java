@@ -9,7 +9,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
@@ -18,26 +17,35 @@ import java.util.*;
  * UEditor文件上传辅助类
  */
 public class UMEditorUploader {
+
 	// 输出文件地址
 	private String url = "";
+
 	// 上传文件名
 	private String fileName = "";
+
 	// 状态
 	private String state = "";
+
 	// 文件类型
 	private String type = "";
+
 	// 原始文件名
 	private String originalName = "";
+
 	// 文件大小
 	private long size = 0;
 
 	private HttpServletRequest request = null;
+
 	private String title = "";
 
 	// 保存路径
 	private String savePath = "upload";
+
 	// 文件允许格式
 	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf",".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
+
 	// 文件大小限制，单位KB
 	private int maxSize = 10000;
 	
@@ -56,6 +64,7 @@ public class UMEditorUploader {
 		tmp.put("DIR", "目录创建失败");
 		tmp.put("UNKNOWN", "未知错误");
 	}
+
 	/**
 	 * 重写upload方法，解决访问controller中的上传方法时获取不到上传文件的问题
 	 * @param upfile
@@ -78,7 +87,6 @@ public class UMEditorUploader {
 			this.state=this.errorInfo.get("SUCCESS");
 			this.size = new File(path + "/" + up).length();
 			this.url ="/" + up;
-
 		} catch (Exception e) {
 			this.state = this.errorInfo.get("UNKNOWN");
 		}
@@ -130,8 +138,7 @@ public class UMEditorUploader {
                         result.append((char)reader.read());  
                     }
                     this.title = new String(result.toString().getBytes(),"utf-8");
-                    reader.close();  
-                    
+                    reader.close();
 				}
 			}
 		} catch (SizeLimitExceededException e) {
@@ -153,7 +160,6 @@ public class UMEditorUploader {
 		String base64Data = this.request.getParameter(fieldName);
 		this.fileName = this.getName("test.png");
 		this.url = this.savePath + "/" + this.fileName;
-
 		try {
 			File outFile = new File(this.getPhysicalPath(this.url));
 			OutputStream ro = new FileOutputStream(outFile);
@@ -254,4 +260,5 @@ public class UMEditorUploader {
 	public String getOriginalName() {
 		return this.originalName;
 	}
+
 }

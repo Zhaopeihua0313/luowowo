@@ -1,7 +1,6 @@
 package cn.wolfcode.luowowo.comment.service;
 
 import cn.wolfcode.luowowo.comment.domain.TravelComment;
-
 import java.util.List;
 
 public interface ITravelCommentService {
@@ -29,6 +28,5 @@ public interface ITravelCommentService {
      * @return
      */
     List<TravelComment> findByUserId(Long userId);
-
 
 }

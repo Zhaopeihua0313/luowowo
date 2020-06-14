@@ -8,7 +8,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +17,6 @@ public class ScenicStatsCacheServiceImpl implements IScenicStatsCacheService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
 
     /**
      * 判断：判断 redies 缓存中有没有对应的 key
@@ -66,7 +64,6 @@ public class ScenicStatsCacheServiceImpl implements IScenicStatsCacheService {
     public void setScenicStats(ScenicStats vo) {
         Long scenicId = vo.getScenicId();
         String key = RedisKey.SCENIC_STATS.getCacheKey(scenicId);
-
         //把景点统计对象转换成 json 字符串，然后 ops 直接 set 就替换原数据
         redisTemplate.opsForValue().set(key, JSON.toJSONString(vo));
     }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -40,8 +39,7 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
      * 方法形参解析的过程
      * @return 最终解析的结果
      */
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         //从本地 session 中获取登录对象
         HttpServletRequest req = webRequest.getNativeRequest(HttpServletRequest.class);
         HttpSession session = req.getSession();
@@ -65,8 +63,8 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
                 }
             }
         }
-
         //没有登录对象，返回null
         return null;
     }
+
 }

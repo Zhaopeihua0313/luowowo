@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
 import java.io.Serializable;
 
 /**
@@ -16,6 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class ThemeTemplate implements Serializable {
+
     public static final String INDEX_TYPE_NAME = "luowowo_theme";
 
     @Id

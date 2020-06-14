@@ -8,12 +8,9 @@ import lombok.Setter;
 public class TravelQueryObject extends QueryObject {
 
     private int pageSize = 8;
-
     //游记状态
     private Integer state = -1;
-
     private Long destId = -1L;
-
     private Integer orderType = -1;
     private Integer travelTimeType = -1;
     private Integer perExpendType = -1;
@@ -23,17 +20,17 @@ public class TravelQueryObject extends QueryObject {
     public String getOrderBy() {
         return orderType == 1 ? "t.releaseTime desc" : "t.viewnum desc";
     }
+
     public TravelCondition getTravelTime() {
         return TravelCondition.TRAVEL_TIME.get(travelTimeType);
     }
+
     public TravelCondition getPerExpend() {
         return TravelCondition.TRAVEL_PER_EXPEND.get(perExpendType);
     }
+
     public TravelCondition getDay() {
         return TravelCondition.TRAVEL_DAYS.get(dayType);
     }
-
-
-    
 
 }

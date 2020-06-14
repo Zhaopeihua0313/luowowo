@@ -10,5 +10,4 @@ import lombok.Setter;
 @Getter
 public class ScoreHistoryQueryObject extends QueryObject {
 
-
 }

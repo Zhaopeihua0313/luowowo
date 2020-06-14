@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,26 +26,19 @@ public class TestController {
      * 测试回调页面
      */
     @RequestMapping("callback")
-    public String callback(HttpServletResponse response, HttpServletRequest request, HttpSession session,
-                            Model Model, String p) {
-
+    public String callback(HttpServletResponse response, HttpServletRequest request, HttpSession session, Model Model, String p) {
         if (p != null && p != "") {
             Model.addAttribute("centerPic", p);
         }
         return "index/callback";
     }
 
-
     /**
      * 微信申请url，请勿访问
      */
     @GetMapping("/sell/test")
     @ResponseBody
-    public String test(@RequestParam("signature") String signature,
-                       @RequestParam("timestamp") String timestamp,
-                       @RequestParam("nonce") String nonce,
-                       @RequestParam("echostr") String echostr) {
-
+    public String test(@RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("echostr") String echostr) {
         //排序
         String sortString = sort(TOKEN, timestamp, nonce);
         //加密
@@ -72,7 +64,6 @@ public class TestController {
         for (String str : strArray) {
             sb.append(str);
         }
-
         return sb.toString();
     }
 
@@ -95,7 +86,6 @@ public class TestController {
                 hexString.append(shaHex);
             }
             return hexString.toString();
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

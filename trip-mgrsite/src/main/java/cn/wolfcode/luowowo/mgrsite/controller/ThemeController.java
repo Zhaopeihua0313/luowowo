@@ -21,8 +21,10 @@ public class ThemeController {
 
     @Value("${file.dir}")
     private String parth;
+
     @Reference
     private IThemeService themeService;
+
     @Reference
     private IThemeCatalogService themeCatalogService;
 
@@ -52,5 +54,6 @@ public class ThemeController {
         AjaxResult ajaxResult = themeService.saveOrUpdate(theme);
         return ajaxResult;
     }
+
 }
 

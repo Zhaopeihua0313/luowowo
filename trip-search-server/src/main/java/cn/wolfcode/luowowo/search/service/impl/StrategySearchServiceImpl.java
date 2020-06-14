@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-
 import java.util.*;
 
 @Service
@@ -69,11 +68,9 @@ public class StrategySearchServiceImpl implements IStrategySearchService {
         String groupType = "groupType";
         String idField = "id";
         String nameField = "name";
-
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         //忽略主体数据，只拿桶聚合的数据
         builder.withPageable(PageRequest.of(0, 1));
-
         //根据条件决定桶聚合分组的依据
         switch (condition) {
             case SearchQueryObject.CONDITION_UNABROAD:
@@ -82,15 +79,9 @@ public class StrategySearchServiceImpl implements IStrategySearchService {
                 break;
             case SearchQueryObject.CONDITION_ABROAD:
                 //CONDITION_ABROAD->排除中国数据
-                builder.withQuery(
-                        QueryBuilders.boolQuery()
-                                .mustNot(
-                                        QueryBuilders.termQuery("countryId", StatsResult.CHINA_ID)
-                                )
-                );
+                builder.withQuery(QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery("countryId", StatsResult.CHINA_ID)));
                 break;
         }
-
         //多维度桶聚合条件
         List<CompositeValuesSourceBuilder<?>> sources = new ArrayList<>();
         sources.add(new TermsValuesSourceBuilder(idField).field(id));
@@ -100,10 +91,8 @@ public class StrategySearchServiceImpl implements IStrategySearchService {
         //build 获取分组数据
         builder.addAggregation(group);
         AggregatedPage<StrategyTemplate> page = (AggregatedPage<StrategyTemplate>) repository.search(builder.build());
-
         //通过别名拿到分组结果
         CompositeAggregation aggs = (CompositeAggregation) page.getAggregation(groupType);
-
         //遍历分组数组封装结果返回
         List<StatsResult> list = new ArrayList<>();
         for (CompositeAggregation.Bucket bucket : aggs.getBuckets()) {
@@ -138,7 +127,6 @@ public class StrategySearchServiceImpl implements IStrategySearchService {
             default:
                 page = repository.findAll(qo.getPageable());
         }
-
         return page;
     }
 
@@ -154,7 +142,6 @@ public class StrategySearchServiceImpl implements IStrategySearchService {
         if (themeList.size() > count) {
             themeList.subList(0, count);
         }
-
         //遍历主题，根据主题 id 去查该主题下的攻略，攻略里有目的地 id 和 name
         for (StatsResult theme : themeList) {
             List<StrategyTemplate> strategies = repository.findByThemeId(theme.getId(), null).getContent();
@@ -171,8 +158,6 @@ public class StrategySearchServiceImpl implements IStrategySearchService {
             }
             list.add(map);
         }
-
-
         return list;
     }
 
@@ -182,6 +167,5 @@ public class StrategySearchServiceImpl implements IStrategySearchService {
     public List<StrategyTemplate> findByDestName(String destName) {
         return repository.findByDestName(destName);
     }
-
 
 }

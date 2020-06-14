@@ -2,7 +2,6 @@ package cn.wolfcode.luowowo.search.service;
 
 import cn.wolfcode.luowowo.search.template.ThemeTemplate;
 import cn.wolfcode.luowowo.search.vo.StatsResult;
-
 import java.util.List;
 
 public interface IThemeSearchService {
@@ -13,6 +12,6 @@ public interface IThemeSearchService {
      */
     List<StatsResult> listCondition(int condition);
 
-
     void save(ThemeTemplate template);
+
 }

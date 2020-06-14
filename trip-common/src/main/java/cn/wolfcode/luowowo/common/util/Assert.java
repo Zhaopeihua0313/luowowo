@@ -4,6 +4,7 @@ package cn.wolfcode.luowowo.common.util;
  * 断言工具类
  */
 public abstract class Assert {
+
     public static void hasLength(String info, String msg) {
         if (info == null || info.trim().length() == 0) {
             //throw new LogicException(msg);
@@ -24,4 +25,5 @@ public abstract class Assert {
             throw new RuntimeException(msg);
         }
     }
+
 }

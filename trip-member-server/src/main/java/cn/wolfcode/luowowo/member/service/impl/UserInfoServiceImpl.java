@@ -13,19 +13,20 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
-
 
 @Service
 public class UserInfoServiceImpl implements IUserInfoService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
     @Autowired
     private UserInfoElseMapper userInfoElseMapper;
+
     @Reference
     private IVerifyCodeCacheService verifyCodeCacheService;
+
     @Reference
     private IUserRankStatsCacheService userRankStatsCacheService;
 
@@ -44,21 +45,17 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public AjaxResult userRegist(String nickname, String phone, String password, String rpassword, String verifyCode) {
         AjaxResult ajaxResult = new AjaxResult();
         try {
-
             //参数非空
             Assert.hasLength(nickname, "昵称不可为空");
             Assert.hasLength(phone, "手机不可为空");
             Assert.hasLength(password, "密码不可为空");
             Assert.hasLength(rpassword, "确认密码不可为空");
             Assert.hasLength(verifyCode, "验证码不可为空");
-
             //密码确认
             Assert.equals(password, rpassword, "密码和确认密码不一致");
-
             //判断验证码对错
             String verifyCode1True = verifyCodeCacheService.getVerifyCode(phone);
             Assert.equalsIgnoreCase(verifyCode, verifyCode1True, "验证码不正确");
-
             //封装对象入库
             UserInfo userInfo = new UserInfo();
             userInfo.setNickname(nickname);
@@ -67,11 +64,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
             userInfo.setPassword(password);
             userInfo.setPhone(phone);
             userInfoMapper.insert(userInfo);
-
             //用户注册成功后生成一个对应的用户统计对象
             userRankStatsCacheService.creatNewUserStats(userInfo);
-
-
         } catch (Exception e) {
             e.printStackTrace();
             ajaxResult.mark(e.getMessage());
@@ -89,16 +83,13 @@ public class UserInfoServiceImpl implements IUserInfoService {
             //非空判断
             Assert.hasLength(phone, "手机不可为空");
             Assert.hasLength(password, "密码不可为空");
-
             //验证账号
             UserInfo userInfo = userInfoMapper.selectByInfo(phone, password);
             if (userInfo == null) {
                 throw new RuntimeException("手机号和密码不匹配");
             }
-
             //登录操作，登录成功，返回给 website
             ajaxResult.setData(userInfo);
-
         } catch (Exception e) {
             e.printStackTrace();
             ajaxResult.mark(e.getMessage());
@@ -112,17 +103,14 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public AjaxResult userLoginByQQ(JSONObject userInfoJson, String openId) {
         AjaxResult result = new AjaxResult();
         try {
-
             //QQ用户信息
             String nickname = userInfoJson.get("nickname").toString();
             String gender = userInfoJson.get("gender_type").toString();
             String city = userInfoJson.get("province").toString() + userInfoJson.get("city").toString();
             String headImgUrl = userInfoJson.get("figureurl_2").toString().replace("\\/", "/");
-
             //已经登录过的会存放在数据库，这里判断有没有该用户
             UserInfoElse userInfoElse = userInfoElseMapper.selectByOpenId(openId, UserInfoElse.QQ_TYPE);
             if (userInfoElse == null) {
-
                 //没有用户，为其做记录
                 //维护用户表
                 UserInfo userInfo = new UserInfo();
@@ -134,14 +122,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 //密码先不做考虑
                 userInfo.setPassword("qq");
                 userInfoMapper.insert(userInfo);
-
                 //维护中间表
                 UserInfoElse userInfoElseSQL = new UserInfoElse();
                 userInfoElseSQL.setOpenid(openId);
                 userInfoElseSQL.setUserinfoId(userInfo.getId());
                 userInfoElseSQL.setType(UserInfoElse.QQ_TYPE);
                 userInfoElseMapper.insert(userInfoElseSQL);
-
                 result.setData(userInfo);
             } else {
                 //用户已经有登录过了，信息会储存在数据库，那就直接去查就行
@@ -149,8 +135,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 UserInfo userInfo = userInfoMapper.selectById(userinfoId);
                 result.setData(userInfo);
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -164,17 +148,14 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public AjaxResult userLoginByWechat(JSONObject userInfoJson, String openId) {
         AjaxResult result = new AjaxResult();
         try {
-
             //QQ用户信息
             String nickname = userInfoJson.get("nickname").toString();
             String gender = userInfoJson.get("sex") != null ? userInfoJson.get("sex").toString() : "";
             String city = userInfoJson.get("province").toString() + userInfoJson.get("city").toString();
             String headImgUrl = userInfoJson.get("headimgurl").toString().replace("\\/", "/");
-
             //已经登录过的会存放在数据库，这里判断有没有该用户
             UserInfoElse userInfoElse = userInfoElseMapper.selectByOpenId(openId, UserInfoElse.WECHAT_TYPE);
             if (userInfoElse == null) {
-
                 //没有用户，为其做记录
                 //维护用户表
                 UserInfo userInfo = new UserInfo();
@@ -186,14 +167,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 //密码先不做考虑
                 userInfo.setPassword("wx");
                 userInfoMapper.insert(userInfo);
-
                 //维护中间表
                 UserInfoElse userInfoElseSQL = new UserInfoElse();
                 userInfoElseSQL.setOpenid(openId);
                 userInfoElseSQL.setUserinfoId(userInfo.getId());
                 userInfoElseSQL.setType(UserInfoElse.WECHAT_TYPE);
                 userInfoElseMapper.insert(userInfoElseSQL);
-
                 result.setData(userInfo);
             } else {
                 //用户已经有登录过了，信息会储存在数据库，那就直接去查就行
@@ -201,7 +180,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 UserInfo userInfo = userInfoMapper.selectById(userinfoId);
                 result.setData(userInfo);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
@@ -233,7 +211,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
             result.mark(e.getMessage());
         }
         return result;
-
     }
 
     @Override
@@ -262,13 +239,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public AjaxResult updatePassword(UserInfo user, String password, String rpassword, String smscode) {
         AjaxResult result = new AjaxResult();
-
         try {
             //参数非空
             Assert.hasLength(smscode, "验证码不可为空");
             Assert.hasLength(password, "密码不可为空");
             Assert.hasLength(rpassword, "确认密码不可为空");
-
             //验证码校验
             Assert.equalsIgnoreCase(smscode, verifyCodeCacheService.getVerifyCode(user.getPhone()), "验证码错误");
             //密码校验

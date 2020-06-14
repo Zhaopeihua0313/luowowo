@@ -10,7 +10,6 @@ import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.List;
 
 @Controller
@@ -18,20 +17,28 @@ public class TicketController {
 
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private ITicketService ticketService;
+
     @Reference
     private ITicketTagService ticketTagService;
+
     @Reference
     private ITicketContentService ticketContentService;
+
     @Reference
     private IScenicService scenicService;
+
     @Reference
     private IScenicCatalogService scenicCatalogService;
+
     @Reference
     private IScenicStatsCacheService scenicStatsCacheService;
+
     @Reference
     private IScenicContentService scenicContentService;
+
     @Reference
     private IScenicCommentService scenicCommentService;
 
@@ -41,7 +48,6 @@ public class TicketController {
         model.addAttribute("order",order);
         return "ticket/payOrder";
     }*/
-
 
     /**
      * 显示 门票下单的订单页面
@@ -55,7 +61,6 @@ public class TicketController {
         return "ticket/addOrder";
     }
 
-
     /**
      * 显示 景点的门票想起页
      * @param tid 该景点最售价便宜的门票id
@@ -64,7 +69,6 @@ public class TicketController {
     public String ticketInfo(Long tid, Model model, @LoginUser UserInfo user) {
         Ticket ticket = ticketService.get(tid);     //景点里售价最便宜的门票
         Long scenicId = ticket.getScenicId();       //该景点的id
-
         //原景点页数据
         Destination destination = destinationService.selectByScenicId(scenicId);
         model.addAttribute("dest", destination);                //景点的目的地
@@ -85,7 +89,6 @@ public class TicketController {
         String photos = scenic.getPhotos();
         String[] photosArr = photos.split(",");
         model.addAttribute("photosArr", photosArr);
-
         //该景点的最便宜的门票
         model.addAttribute("mixTicket", ticket);
         //该景点的门票S：分类成人票等
@@ -99,22 +102,18 @@ public class TicketController {
         if(elderlyTickets.size() > 0) model.addAttribute("elderlyTickets", elderlyTickets);
         if(generalTickets.size() > 0) model.addAttribute("generalTickets", generalTickets);
         if(adultTickets.size() > 0) model.addAttribute("allTickets", allTickets);
-
         //获取某大景点下受欢迎的子景点门票
         List<Ticket> popularTickets = ticketService.listPopularScenic(scenic.getParent().getId());
         model.addAttribute("popularTickets", popularTickets);
         List<Ticket> favorTickets = ticketService.listFavorScenic(scenic.getParent().getId());
         //favorTickets = favorTickets.subList(0, 10);
         model.addAttribute("favorTickets", favorTickets);
-
         //相关景点推荐
         //该大景点(广州)的 所有子景点最便宜的门票(********)
         List<Ticket> aboutTickets = ticketService.listScenicMixSalePriceCountByBigScenicId(5, scenic.getParent().getId());
         model.addAttribute("aboutTickets", aboutTickets);
-
         return "ticket/detail";
     }
-
 
     /**
      * 显示 门票主页内嵌页 鼠标经过景点分类时，渲染的景点分类的对应下的景点的门票
@@ -132,7 +131,6 @@ public class TicketController {
             List<Ticket> tickets = ticketService.listScenicMixSalePriceCountByScenicCata(8, scenicCataId);
             model.addAttribute("tickets", tickets);
         }
-
         return "ticket/index2Tpl";
     }
 
@@ -146,13 +144,11 @@ public class TicketController {
         //该景点的所有分类
         List<ScenicCatalog> catalogs = scenicCatalogService.listByScenicId(scenicId);
         model.addAttribute("catalogs", catalogs);
-
         //第一个分类里的所有景点 景点对应着的价格最低的门票
         //List<Ticket> tickets = ticketService.listScenicMixSalePriceCountByScenicCata(8, catalogs.get(0).getId);
         //该大景点(广州)的 所有子景点最便宜的门票(********)
         List<Ticket> tickets = ticketService.listScenicMixSalePriceCountByBigScenicId(8, scenicId);
         model.addAttribute("tickets", tickets);
-
         return "ticket/indexTpl";
     }
 
@@ -164,26 +160,21 @@ public class TicketController {
         //打响周末4门票，标签id6，连景点取景点封面
         List<Ticket> weekTickets = ticketService.selectByTagCount(6, 4);
         model.addAttribute("weekTickets", weekTickets);
-
         //顶级景点 scenic
         List<Scenic> scenics = scenicService.listNoParentCount(8);
         model.addAttribute("scenics", scenics);
-
         if (scenics != null) {
             Long firstScenicId = scenics.get(0).getId();
             //该景点的所有分类
             List<ScenicCatalog> catalogs = scenicCatalogService.listByScenicId(firstScenicId);
             model.addAttribute("catalogs", catalogs);
-
             //第一个分类里的所有景点 景点对应着的价格最低的门票
             //List<Ticket> tickets = ticketService.listScenicMixSalePriceCountByScenicCata(8, catalogs.get(0).getId());
             //model.addAttribute("tickets", tickets);
-
             //该大景点(广州)的 所有子景点最便宜的门票(********)
             List<Ticket> tickets = ticketService.listScenicMixSalePriceCountByBigScenicId(8, firstScenicId);
             model.addAttribute("tickets", tickets);
         }
-
         return "ticket/index";
     }
 

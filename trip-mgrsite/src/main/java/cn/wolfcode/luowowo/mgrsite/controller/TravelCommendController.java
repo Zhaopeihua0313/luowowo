@@ -21,6 +21,7 @@ public class TravelCommendController {
 
     @Value("${file.dir}")
     private String parth;
+
     @Reference
     private ITravelCommendService travelCommendService;
 
@@ -50,7 +51,6 @@ public class TravelCommendController {
     @RequestMapping("/saveOrUpdate")
     @ResponseBody
     public AjaxResult saveOrUpdate(MultipartFile pic, TravelCommend travelCommend){
-
         AjaxResult ajaxResult = travelCommendService.saveOrUpdate(travelCommend);
         return ajaxResult;
     }

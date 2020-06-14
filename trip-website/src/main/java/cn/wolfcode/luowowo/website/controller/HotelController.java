@@ -13,23 +13,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/hotel")
 public class HotelController {
+
     @Value("${hotel.hotelCity}")
     private String cities;
+
     @Reference
     private IHotelService hotelService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private IHotelTagService hotelTagService;
+
     @Reference
     private IRegionService regionService;
+
     /**
      * 显示 热门目的地列表页面
      */
@@ -60,6 +65,7 @@ public class HotelController {
         model.addAttribute("hotelCity",destinationService.listByIdInJiangQi(ids));
         return "hotel/hotel";
     }
+
     /**
      * 根据标签查询结果---主题酒店
      */
@@ -68,6 +74,7 @@ public class HotelController {
         model.addAttribute("list",hotelService.listByTagId(tagId));
         return "hotel/hotelTpl";
     }
+
     /**
      * 根据城市分类---特价酒店
      */
@@ -76,6 +83,7 @@ public class HotelController {
         model.addAttribute("hotelScore",hotelService.listByDestId(destId));
         return "hotel/hotelTpl1";
     }
+
     /**
      * 根据关键字查询
      */
@@ -96,6 +104,7 @@ public class HotelController {
             return "hotel/dingjiudian1";
         }
     }
+
 }
 
 

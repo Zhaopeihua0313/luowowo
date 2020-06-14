@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.List;
 
 @Controller
@@ -26,20 +25,28 @@ public class DestinationController {
 
     @Reference
     private IRegionService regionService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private IStrategyCatalogService catalogService;
+
     @Reference
     private IStrategyDetailService detailService;
+
     @Reference
     private ITravelService travelService;
+
     @Reference
     private IStrategySearchService strategySearchService;
+
     @Reference
     private IDestinationSearchService destinationSearchService;
+
     @Reference
     private IThemeSearchService themeSearchService;
+
     @Reference
     private IThemeService themeService;
 
@@ -66,7 +73,6 @@ public class DestinationController {
         model.addAttribute("destd",destinationService.listDestByRegionId(5L));
         //澳洲 非洲目的地
         model.addAttribute("deste",destinationService.listDestByRegionId(6L));
-
         return "destination/index";
     }
 
@@ -77,13 +83,11 @@ public class DestinationController {
     public String listHotDestByRegionId(@ModelAttribute("regionId")Long regionId, Model model) {
         //获取某个区域的热门目的地
         List<Destination> list = regionService.listHotDestByRegionId(regionId);
-
         //构建左右模块
         List<Destination> leftDests = list.subList(0, list.size() / 2);
         List<Destination> rightDests = list.subList(list.size() / 2, list.size());
         model.addAttribute("leftDests", leftDests);
         model.addAttribute("rightDests", rightDests);
-
         return "destination/hotdestTpl";
     }
 
@@ -94,17 +98,15 @@ public class DestinationController {
     public String guide(Model model,@ModelAttribute("id")Long id) {
         //toasts1 吐司
         model.addAttribute("toasts1", destinationService.getToastsAndChilds(id));
-
         //dest 目的地
         model.addAttribute("dest", destinationService.selectById(id));
-
         //catalogs 该目的地下的分类
         model.addAttribute("catalogs", catalogService.listByDestId(id));
         //点击量前三的文章
         model.addAttribute("strategyDetails", detailService.listViewnumTop3(id));
-
         return "destination/guide";
     }
+
     /**
      * 显示 某目的地概览页 里的 概览模块页面
      */
@@ -117,7 +119,6 @@ public class DestinationController {
             if (catalog.getId().equals(qo.getCatalogId())) {
                 //页面当前选中的分类
                 model.addAttribute("catalog", catalog);
-
                 //从当前分类中选出第一篇文章，并且获取文章内容，然后渲染去页面
                 StrategyDetail detail = catalog.getDetails().get(0);
                 StrategyContent content = detailService.getContent(detail.getId());
@@ -128,6 +129,7 @@ public class DestinationController {
         }
         return "destination/surveyTpl";
     }
+
     /**
      * 显示 某目的地概览页 里的 游记模块页面
      */
@@ -214,6 +216,7 @@ public class DestinationController {
         destinationService.save(dest);
         return "redirect:/";
     }
+
 }
 
 

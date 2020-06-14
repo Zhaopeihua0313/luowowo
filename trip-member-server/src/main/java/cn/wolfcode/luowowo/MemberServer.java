@@ -9,7 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableDubbo
 @MapperScan("cn.wolfcode.luowowo.member.mapper")
 public class MemberServer {
+
     public static void main(String[] args) {
         SpringApplication.run(MemberServer.class, args);
     }
+
 }

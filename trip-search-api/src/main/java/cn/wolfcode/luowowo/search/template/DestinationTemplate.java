@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
 import java.io.Serializable;
 
 /**
@@ -16,6 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class DestinationTemplate implements Serializable {
+
     public static final String INDEX_TYPE_NAME = "luowowo_destination";
 
     @Id
@@ -23,6 +23,7 @@ public class DestinationTemplate implements Serializable {
     private Long id;  //目的地的id
 
     @Field(index = true, store = true, type = FieldType.Keyword)
+
     private String name;    //目的地名称 分词
 
     private Long timeId;     // 旅游时间id
@@ -40,4 +41,5 @@ public class DestinationTemplate implements Serializable {
 
     @Field(index = true, store = true, type = FieldType.Keyword)
     private String coverUrl; //目的地封面图
+
 }

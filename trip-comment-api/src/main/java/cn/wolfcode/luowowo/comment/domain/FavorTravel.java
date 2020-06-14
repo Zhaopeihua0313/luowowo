@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.article.domain.Travel;
 import cn.wolfcode.luowowo.member.domain.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 
 /**
@@ -17,4 +16,5 @@ public class FavorTravel implements Serializable {
     private Travel travel;
     private TravelComment travelComment;
     private UserInfo user;
+
 }

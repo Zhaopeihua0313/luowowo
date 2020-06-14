@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.common.util.AjaxResult;
 import com.alibaba.fastjson.JSON;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -22,4 +21,5 @@ public class CommonExceptionAdvice {
         resp.getWriter().println(JSON.toJSONString(new AjaxResult().mark("系统正在升级,请稍后再试")));
         e.printStackTrace();
     }
+
 }

@@ -1,7 +1,6 @@
 package cn.wolfcode.luowowo.search.service;
 
 import cn.wolfcode.luowowo.search.template.TravelTemplate;
-
 import java.util.List;
 
 public interface ITravelSearchService {
@@ -15,4 +14,5 @@ public interface ITravelSearchService {
      * 获取 某些目的地的游记
      */
     List<TravelTemplate> findByDestName(String destName);
+
 }

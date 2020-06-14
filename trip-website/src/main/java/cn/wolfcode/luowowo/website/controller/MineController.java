@@ -26,7 +26,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -75,7 +74,6 @@ public class MineController {
     @Reference
     private IScenicCommentService scenicCommentService;
 
-
     @Value("${file.dir}")
     private String dir;
 
@@ -98,20 +96,15 @@ public class MineController {
         model.addAttribute("user", user);
         //所有游记
         model.addAttribute("travels", travelService.listTravelByUserId(user.getId()));
-
         //游记总数
         model.addAttribute("total", travelService.listTravelTotal(user.getId()));
-
         //回复总数
         model.addAttribute("replyNum", travelCommentService.getReplyNumById(user.getId()));
-
         //阅读总数
         model.addAttribute("readNum", travelStatsCacheService.getReadNumById(user.getId()));
-
         //最近访问数
         int todayNum = travelStatsCacheService.getTodayNum();
         model.addAttribute("todayNum", todayNum);
-
         //访问总量
         int sum = travelStatsCacheService.addAccess();
         model.addAttribute("sum", sum);
@@ -122,34 +115,25 @@ public class MineController {
     @RequiredLogin
     @RequestMapping("/homepage")
     public String homepage(Model model, @LoginUser UserInfo userInfo) {
-
-
         //用户个人信息
         UserInfo user = userInfoService.getUpload(userInfo.getId());
         model.addAttribute("user", user);
-
         //我的关注
         List<UserInfo> cares = userInfoService.listCareByUserId(user.getId());
         model.addAttribute("cares", cares);
-
         //关注人数
         model.addAttribute("caresNum", cares.size());
-
         //收藏总数
         List<Long> travelIds = travelStatsCacheService.listTravelsByUserId(user.getId()); //攻略
         List<Long> ids = strategyStatsCacheService.listStrategiesByUserId(user.getId());  //游记
         model.addAttribute("sum", travelIds.size() + ids.size());
-
         //所有游记
         model.addAttribute("travels", travelService.listTravelByUserId(user.getId()));
-
         //游记总数
         model.addAttribute("total", travelService.listTravelTotal(user.getId()));
-
         //游记点评
         List<ScenicComment> comments = scenicCommentService.findByUserId(userInfo.getId());
         model.addAttribute("comments", comments);
-
         //点评总数
         model.addAttribute("replyNum", comments.size());
         return "mine/homepage";
@@ -163,10 +147,8 @@ public class MineController {
     @ResponseBody
     public AjaxResult travelThumbup(Long travelId, @LoginUser UserInfo userInfo) {
         AjaxResult result = new AjaxResult();
-
         //进行顶(点赞)操作，用户没点赞就在攻略点赞者里添加该用户，并且点赞数+1，redis 缓存设有效期1天，有效期内无法再点赞
         result = travelStatsCacheService.thumbup(travelId, userInfo.getId());
-
         if (result.isSuccess()) {
             //点赞后热门榜数值要变化 +1
             travelStatsCacheService.addInRand(RedisKey.STRATEGY_STATS_HOT_SORT, 1, travelId);
@@ -181,17 +163,12 @@ public class MineController {
         //用户个人信息
         UserInfo user = userInfoService.getUpload(userInfo.getId());
         model.addAttribute("user", user);
-
         //点评数据
         List<ScenicComment> comments = scenicCommentService.findByUserId(userInfo.getId());
         model.addAttribute("comments", comments);
-
         //点评数量
         model.addAttribute("commentsNum", comments.size());
-
         //点赞数量
-
-
         return "mine/review";
     }
 
@@ -201,7 +178,6 @@ public class MineController {
     public String travelcollection(Model model, @LoginUser UserInfo user) {
         //用户个人信息
         model.addAttribute("user", user);
-
         //地点收藏
         List<Long> scenicIds = scenicStatsCacheService.listScenicsByUserId(user.getId());
         List<Scenic> scenics = new ArrayList<>();
@@ -212,7 +188,6 @@ public class MineController {
             }
         }
         model.addAttribute("scenics", scenics);
-
         //游记收藏
         List<Long> travelIds = travelStatsCacheService.listTravelsByUserId(user.getId());
         List<Travel> travels = new ArrayList<>();
@@ -223,9 +198,7 @@ public class MineController {
                 travels.add(travel);
             }
         }
-
         model.addAttribute("travels", travels);
-
         //攻略收藏
         List<Long> ids = strategyStatsCacheService.listStrategiesByUserId(user.getId());
         List<StrategyDetail> details = new ArrayList<>();
@@ -237,7 +210,6 @@ public class MineController {
             }
         }
         model.addAttribute("details", details);
-
         return "mine/travelcollection";
     }
 
@@ -249,14 +221,11 @@ public class MineController {
     public String myorder(Model model, @LoginUser UserInfo user) {
         //用户个人信息
         model.addAttribute("user", user);
-
         //查询用户的订单数据
         List<OrderDetail> list = orderDetailService.listByUserId(user.getId());
         model.addAttribute("travels", list);
-
         return "mine/myorder";
     }
-
 
     //设置
     @RequiredLogin
@@ -272,7 +241,6 @@ public class MineController {
     @RequestMapping("/update")
     @ResponseBody
     public Object update(UserInfo user) {
-
         AjaxResult result = userInfoService.updateUser(user);
         return result;
     }
@@ -288,7 +256,6 @@ public class MineController {
             e.printStackTrace();
             result.setMsg("保存失败");
         }
-
         //更新数据
         UserInfo user = userInfoService.getUpload(userInfo.getId());
         model.addAttribute("user", user);
@@ -348,7 +315,6 @@ public class MineController {
     @ResponseBody
     public Object code(@LoginUser UserInfo user, String phone, String code) {
         AjaxResult result = new AjaxResult();
-
         String verifyCode = verifyCodeCacheService.getVerifyCode(user.getPhone());
         if (verifyCode.equals(code) && phone.equals(user.getPhone())) {
             return result;

@@ -10,7 +10,6 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +39,7 @@ public class UserRankStatsCacheServiceImpl implements IUserRankStatsCacheService
         }
         return aBoolean && bBoolean;
     }
+
     //判断缓存是否有缓存的用户数据
     public boolean hasStatsKeyOfUser(Long authorId) {
         String cacheKey = RedisKey.USER_SCORE_STATS.getCacheKey(authorId);
@@ -93,7 +93,7 @@ public class UserRankStatsCacheServiceImpl implements IUserRankStatsCacheService
     //在redis生成排行数据
     public void addInRand(RedisKey key, int num, Long value) {
         //incrementScore(zset名, zset里的元素名, 分数) ：增加zset里某元素的排序值
-        redisTemplate.opsForZSet().incrementScore(key.getPrefix(),RedisKey.USER_SCORE_STATS.getCacheKey(value),num);
+        redisTemplate.opsForZSet().incrementScore(key.getPrefix(),RedisKey.USER_SCORE_STATS.getCacheKey(value), num);
     }
 
     //查询排行榜前几名
@@ -127,7 +127,6 @@ public class UserRankStatsCacheServiceImpl implements IUserRankStatsCacheService
                 vo.setThumbsupnum(vo.getThumbsupnum()+num);
                 break;
         }
-
         //在redies缓存中跟新vo对象
         setUserRankStats(vo);
     }

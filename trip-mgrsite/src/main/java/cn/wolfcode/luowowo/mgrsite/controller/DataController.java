@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.Date;
 import java.util.List;
 
@@ -27,31 +26,42 @@ public class DataController {
 
     @Reference
     private IStrategyDetailService strategyDetailService;
+
     @Reference
     private IStrategyStatsCacheService strategyStatsCacheService;
+
     @Reference
     private ITravelService travelService;
+
     @Reference
     private ITravelStatsCacheService travelStatsCacheService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private IScenicService scenicService;
+
     @Reference
     private IScenicStatsCacheService statsCacheService;
+
     @Reference
     private IQuestionService questionService;
+
     @Reference
     private IQuestionStatsCacheService questionStatsCacheService;
+
     @Reference
     private IAnswerService answerService;
+
     @Reference
     private IAnswerStatsCacheService answerStatsCacheService;
+
     @Reference
     private IUserRankStatsCacheService userRankStatsCacheService;
+
     @Reference
     private IUserInfoService userInfoService;
-
 
     /**
      * 处理 攻略统计数据的缓存数据落地，把 redis 持久化到 mysql 中
@@ -61,20 +71,17 @@ public class DataController {
     public AjaxResult dataDown() {
         AjaxResult result = new AjaxResult();
         try {
-
             //调用方法做 redis 数据落地
             strategyStatsDataDown();
             travelStatsDataDown();
             scenicStatsDataDown();
             questionStatsDataDown();
             System.out.println("----> 手动执行 攻略统计数据落地 完毕" + "【" + new Date() + "】");
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
         }
         return result;
-
     }
 
     /**
@@ -85,7 +92,6 @@ public class DataController {
     public AjaxResult putRedis() {
         AjaxResult result = new AjaxResult();
         try {
-
             //调用方法做 redis 缓存，强制执行，覆盖原有的缓存
             strategyStatsToRedis(true);
             travelStatsToRedis(true);
@@ -94,13 +100,11 @@ public class DataController {
             answerStatsToRedis(true);
             userRankStatsToRedis(true);
             System.out.println("----> 手动强制执行 攻略统计数据的缓存到redis 完毕" + "【" + new Date() + "】");
-
         } catch (Exception e) {
             e.printStackTrace();
             result.mark(e.getMessage());
         }
         return result;
-
     }
 
     /**
@@ -118,7 +122,6 @@ public class DataController {
             detail.setViewnum(vo.getViewnum());
             detail.setThumbsupnum(vo.getThumbsupnum());
             detail.setSharenum(vo.getSharenum());
-
             //更新到mysql
             strategyDetailService.updateStats(detail);
         }
@@ -139,11 +142,11 @@ public class DataController {
             travel.setViewnum(vo.getViewnum());
             travel.setThumbsupnum(vo.getThumbsupnum());
             travel.setSharenum(vo.getSharenum());
-
             //更新到mysql
             travelService.updateStats(travel);
         }
     }
+
     /**
      * 方法 景点统计数据的缓存数据落地，把 redis 持久化到 mysql 中景点统计数据的缓存数据落地，把 redis 持久化到 mysql 中
      */
@@ -169,13 +172,11 @@ public class DataController {
     public void strategyStatsToRedis(boolean forse) {
         //查询所有攻略数据，准备给 redis 做缓存
         List<StrategyDetail> list = strategyDetailService.selectAll();
-
         //如果是强制执行，就删除排行榜数据，让其再生成
         if (forse) {
             strategyStatsCacheService.deleteStrategySort(RedisKey.STRATEGY_STATS_UP_SORT.getPrefix());
             strategyStatsCacheService.deleteStrategySort(RedisKey.STRATEGY_STATS_HOT_SORT.getPrefix());
         }
-
         for (StrategyDetail strategyDetail : list) {
             //缓存中没有数据才缓存数据，或者强制执行
             if ( !strategyStatsCacheService.hasStatsKey(strategyDetail.getId()) || forse) {
@@ -185,19 +186,15 @@ public class DataController {
                 vo.setDestName(strategyDetail.getDest().getName());     //目的地名称
                 vo.setTitle(strategyDetail.getTitle());                 //攻略标题
                 vo.setStrategyId(strategyDetail.getId());               //攻略id
-
                 vo.setViewnum(strategyDetail.getViewnum());             //阅读数
                 vo.setReplynum(strategyDetail.getReplynum());           //评论数
                 vo.setFavornum(strategyDetail.getFavornum());           //收藏数
                 vo.setSharenum(strategyDetail.getSharenum());           //分享数
                 vo.setThumbsupnum(strategyDetail.getThumbsupnum());     //点赞数
-
                 System.out.println(vo);
-
                 //缓存到redies中，替换存储
                 strategyStatsCacheService.setStrategyStats(vo);
             }
-
             //飙升排行榜数据存入缓存，没有才执行
             if ( !strategyStatsCacheService.existInRank(RedisKey.STRATEGY_STATS_UP_SORT, strategyDetail.getId()) ) {
                 //飙升排行值=阅读数+评论数
@@ -212,6 +209,7 @@ public class DataController {
             }
         }
     }
+
     /**
      * 方法 景点统计数据 缓存起来，把 mysql 的景点数据缓存到 redis 中
      * @param forse 是否强制执行
@@ -242,13 +240,11 @@ public class DataController {
     public void travelStatsToRedis(boolean forse) {
         //查询所有游记数据，准备给 redis 做缓存
         List<Travel> list = travelService.list();
-
         //如果是强制执行，就删除排行榜数据，让其再生成
         if (forse) {
             travelStatsCacheService.deleteTravelSort(RedisKey.TRAVEL_STATS_UP_SORT.getPrefix());
             travelStatsCacheService.deleteTravelSort(RedisKey.TRAVEL_STATS_HOT_SORT.getPrefix());
         }
-
         for (Travel travel : list) {
             //缓存中没有数据才缓存数据，或者强制执行
             if ( !travelStatsCacheService.hasStatsKey(travel.getId()) || forse) {
@@ -260,19 +256,15 @@ public class DataController {
                 vo.setAuthorName(travel.getAuthor().getNickname());     //作者昵称
                 vo.setTitle(travel.getTitle());                         //游记标题
                 vo.setTravelId(travel.getId());                         //游记id
-
                 vo.setViewnum(travel.getViewnum());             //阅读数
                 vo.setReplynum(travel.getReplynum());           //评论数
                 vo.setFavornum(travel.getFavornum());           //收藏数
                 vo.setSharenum(travel.getSharenum());           //分享数
                 vo.setThumbsupnum(travel.getThumbsupnum());     //点赞数
-
                 System.out.println(vo);
-
                 //缓存到redies中，替换存储
                 travelStatsCacheService.setTravelStats(vo);
             }
-
             //飙升排行榜数据存入缓存，没有才执行
             if ( !travelStatsCacheService.existInRank(RedisKey.TRAVEL_STATS_UP_SORT, travel.getId()) ) {
                 //飙升排行值=阅读数+评论数
@@ -293,7 +285,6 @@ public class DataController {
      */
     @RequestMapping("/")
     public String index(@ModelAttribute("qo")DestinationQueryObject qo, Model model) {
-
         //列表数据
         model.addAttribute("pageInfo", destinationService.query(qo));
         //吐司
@@ -308,7 +299,6 @@ public class DataController {
     public void questionStatsToRedis(boolean forse) {
         //查询所有问题数据，准备给 redis 做缓存
         List<Question> questions = questionService.listAll();
-
         for (Question question : questions) {
             //缓存中没有数据才缓存数据，或者强制执行
             if ( !questionStatsCacheService.hasStatsKey(question.getId()) || forse) {
@@ -319,14 +309,11 @@ public class DataController {
                 vo.setHeadImgUrl(question.getAuthor().getHeadImgUrl());//提问者头像
                 vo.setLevel(question.getAuthor().getLevel());//提问者等级
                 vo.setQuestionId(question.getId());//问题id
-
                 vo.setViewNum(question.getViewNum());//阅读数
                 vo.setAnswerNum(question.getAnswerNum());//该问题的回答数
                 vo.setFocusMemberNum(question.getFocusMemberNum());//被关注数
                 vo.setShareNum(question.getShareNum());//共享数
-
                 System.out.println(vo);
-
                 //缓存到redies中，替换存储
                 questionStatsCacheService.setQuestionStats(vo);
             }
@@ -359,7 +346,6 @@ public class DataController {
     public void answerStatsToRedis(boolean forse) {
         //查询所有回答数据，准备给 redis 做缓存
         List<Answer> answers = answerService.listAll();
-
         for (Answer answer : answers) {
             //缓存中没有数据才缓存数据，或者强制执行
             if ( !answerStatsCacheService.hasStatsKey(answer.getId()) || forse) {
@@ -374,9 +360,7 @@ public class DataController {
                 vo.setSharenum(answer.getShareNum());
                 vo.setThumbsupnum(answer.getThumbupNum());
                 vo.setGolden(answer.getGolden());
-
                 System.out.println(vo);
-
                 //缓存到redies中，替换存储
                 answerStatsCacheService.setAnswerStats(vo);
             }
@@ -390,20 +374,17 @@ public class DataController {
     public void userRankStatsToRedis(boolean forse) {
         //查询所有回答数据，准备给 redis 做缓存
         List<Answer> answers = answerService.listAll();
-
         //如果是强制执行，就删除排行榜数据，让其再生成
         if (forse) {
             userRankStatsCacheService.deleteUserSort(RedisKey.USER_ANSWER_GOLDEN_SORT.getPrefix());
             userRankStatsCacheService.deleteUserSort(RedisKey.USER_ANSWER_ANSWERSNUM_SORT.getPrefix());
             userRankStatsCacheService.deleteUserSort(RedisKey.USER_ANSWER_THUMBUP_SORT.getPrefix());
         }
-
         for (Answer answer : answers) {
             //缓存中没有数据才缓存数据，或者强制执行
             if ( !userRankStatsCacheService.hasStatsKey(answer.getAuthorId(),answer.getId()) || forse) {
                 //封装vo对象
                 String cacheKey = RedisKey.USER_SCORE_STATS.getCacheKey(answer.getAuthorId());
-
                 if(userRankStatsCacheService.hasStatsKeyOfUser(answer.getAuthorId())){//如果缓存中有了该用户,只是还没有该回答的数据
                     //调用方法把该回答的数据加到该用户统计数据中
                     UserRankStats userRankStats = userRankStatsCacheService.addAnswerData(cacheKey,answer);
@@ -450,6 +431,6 @@ public class DataController {
                 userRankStatsCacheService.addInRand(RedisKey.USER_ANSWER_THUMBUP_SORT,num,vo.getUser().getId());
             }
         }
-
     }
+
 }

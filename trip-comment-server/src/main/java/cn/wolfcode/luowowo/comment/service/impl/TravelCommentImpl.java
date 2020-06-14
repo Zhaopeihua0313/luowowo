@@ -8,7 +8,6 @@ import cn.wolfcode.luowowo.comment.service.ITravelCommentService;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Date;
 import java.util.List;
 
@@ -66,10 +65,8 @@ public class TravelCommentImpl implements ITravelCommentService {
             TravelComment refFravelComment = repository.findById(id).get();
             travelComment.setRefComment(refFravelComment);
         }
-
         //保存
         repository.save(travelComment);
-
         return travelComment;
     }
 

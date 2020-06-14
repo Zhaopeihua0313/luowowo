@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 @SpringBootApplication
 @EnableDubbo
 public class CommentServer {
+
     public static void main(String[] args) {
         SpringApplication.run(CommentServer.class, args);
     }
@@ -25,10 +26,9 @@ public class CommentServer {
     public MappingMongoConverter mappingMongoConverter(MongoDbFactory factory, MongoMappingContext context, BeanFactory beanFactory) {
         DbRefResolver dbRefResolver = new DefaultDbRefResolver(factory);
         MappingMongoConverter mappingConverter = new MappingMongoConverter(dbRefResolver, context);
-
         mappingConverter.setCustomConversions(beanFactory.getBean(CustomConversions.class));
-
         mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
         return mappingConverter;
     }
+
 }

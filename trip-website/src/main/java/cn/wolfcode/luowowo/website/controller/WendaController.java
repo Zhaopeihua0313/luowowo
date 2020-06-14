@@ -25,7 +25,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -34,18 +33,25 @@ public class WendaController {
 
     @Reference
     private IQuestionService questionService;
+
     @Reference
     private IAnswerService answerService;
+
     @Reference
     private IQuestionContentService questionContentService;
+
     @Reference
     private IAnswerStatsCacheService answerStatsCacheService;
+
     @Reference
     private IQuestionStatsCacheService questionStatsCacheService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private IUserRankStatsCacheService userRankStatsCacheService;
+
     @Value("${file.dir}")
     private String dir;
 
@@ -61,7 +67,7 @@ public class WendaController {
 
     //根据问题id查到该问题详情以及该问题下的所有回答
     @RequestMapping("/detail")
-    public String answer(Long questionId,Model model,@LoginUser UserInfo user,String goldenId){//goldenId,金牌回答的id
+    public String answer(Long questionId,Model model,@LoginUser UserInfo user,String goldenId){ //goldenId,金牌回答的id
         //每访问一次问题详情页,该问题的浏览数+1
         questionStatsCacheService.incr(questionId,1,questionStatsCacheService.QUESTION_STATS_VIEWNUM);
         //vo,提问统计信息
@@ -108,14 +114,11 @@ public class WendaController {
                 vo.setHeadImgUrl(savedQuestion.getAuthor().getHeadImgUrl());//提问者头像
                 vo.setLevel(savedQuestion.getAuthor().getLevel());//提问者等级
                 vo.setQuestionId(savedQuestion.getId());//问题id
-
                 vo.setViewNum(savedQuestion.getViewNum());//阅读数
                 vo.setAnswerNum(savedQuestion.getAnswerNum());//该问题的回答数
                 vo.setFocusMemberNum(savedQuestion.getFocusMemberNum());//被关注数
                 vo.setShareNum(savedQuestion.getShareNum());//共享数
-
                 System.out.println(vo);
-
                 //缓存到redies中，替换存储
                 questionStatsCacheService.setQuestionStats(vo);
             }
@@ -128,17 +131,14 @@ public class WendaController {
      */
     @RequestMapping("/contentImage")
     @ResponseBody
-    public String uploadUEImage(MultipartFile upfile, HttpServletRequest request)
-            throws Exception{
+    public String uploadUEImage(MultipartFile upfile, HttpServletRequest request) throws Exception{
         UMEditorUploader up = new UMEditorUploader(request);
         java.lang.String[] fileType = {".gif" , ".png" , ".jpg" , ".jpeg" , ".bmp"};
         up.setAllowFiles(fileType);
         up.setMaxSize(10000); //单位KB
         up.upload(upfile, dir);
-
         String callback = request.getParameter("callback");
-        String result = "{\"name\":\""+ up.getFileName() +"\", \"originalName\": \""+ up.getOriginalName() +"\", \"size\": "+ up.getSize()
-                +", \"state\": \""+ up.getState() +"\", \"type\": \""+ up.getType() +"\", \"url\": \""+ up.getUrl() +"\"}";
+        String result = "{\"name\":\""+ up.getFileName() +"\", \"originalName\": \""+ up.getOriginalName() +"\", \"size\": "+ up.getSize() +", \"state\": \""+ up.getState() +"\", \"type\": \""+ up.getType() +"\", \"url\": \""+ up.getUrl() +"\"}";
         result = result.replaceAll( "\\\\", "\\\\" );
         if(callback == null ){
             return result ;
@@ -187,15 +187,11 @@ public class WendaController {
         if(ajaxResult.isSuccess()){
             //每成功点一次赞,该回答的回答者的被点赞数统计数据+1
             Answer answer = answerService.get(answerId);
-
             answer.setThumbupNum(answer.getThumbupNum()+1);//更新到answer  MongoDB库
             answerService.save(answer);
-
             AnswerStats answerStats = answerStatsCacheService.getAnswerStats(answerId);//更新到answerStats
             answerStats.setThumbsupnum(answerStats.getThumbsupnum()+1);
             answerStatsCacheService.setAnswerStats(answerStats);
-
-
             String cacheKey = RedisKey.USER_SCORE_STATS.getCacheKey(answer.getAuthorId());
             userRankStatsCacheService.incr(user.getId(),1,IUserRankStatsCacheService.USER_STSTS_THUM);
             //每成功点一次赞,排行榜的被点赞数统计数据+1
@@ -235,4 +231,5 @@ public class WendaController {
         }
         return "community/rankTpl";
     }
+
 }

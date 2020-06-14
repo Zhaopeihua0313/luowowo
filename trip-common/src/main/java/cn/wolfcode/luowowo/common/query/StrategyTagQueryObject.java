@@ -8,4 +8,5 @@ import lombok.Setter;
 public class StrategyTagQueryObject extends QueryObject {
 
     private int pageSize = 10;
+
 }

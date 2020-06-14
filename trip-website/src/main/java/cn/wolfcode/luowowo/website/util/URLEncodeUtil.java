@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
  * url转码工具类
  */
 public class URLEncodeUtil {
+
     private final static String ENCODE = "UTF-8";
     /**
      * URL 解码
@@ -22,6 +23,7 @@ public class URLEncodeUtil {
         }
         return result;
     }
+
     /**
      * URL 转码
      */
@@ -37,4 +39,5 @@ public class URLEncodeUtil {
         }
         return result;
     }
+
 }

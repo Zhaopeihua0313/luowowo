@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
 import java.io.Serializable;
 
 /**
@@ -16,6 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserInfoTemplate implements Serializable {
+
     public static final String INDEX_TYPE_NAME = "luowowo_userinfo";
 
     @Id
@@ -38,4 +38,5 @@ public class UserInfoTemplate implements Serializable {
 
     @Field(index = true, store = true, type = FieldType.Keyword)
     private String headUrl; //头像
+
 }

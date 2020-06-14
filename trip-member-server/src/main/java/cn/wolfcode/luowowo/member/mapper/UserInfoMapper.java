@@ -2,7 +2,6 @@ package cn.wolfcode.luowowo.member.mapper;
 
 import cn.wolfcode.luowowo.member.domain.UserInfo;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 public interface UserInfoMapper {
@@ -30,4 +29,5 @@ public interface UserInfoMapper {
     void updatePhone(@Param("userId") Long userId, @Param("phone") String phone);
 
     List<UserInfo> selectAllFriendByUserId(Long userId);
+
 }

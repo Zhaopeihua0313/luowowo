@@ -3,8 +3,10 @@ package cn.wolfcode.luowowo.common.query;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter@Setter
+@Getter
+@Setter
 public class ScenicCommentQueryObject extends QueryObject {
+
     public static final Integer TYPE_ALL = -1; //全部
     public static final Integer TYPE_PIC = 0; //有图
     public static final Integer TYPE_GRADE = 1; //好中差评

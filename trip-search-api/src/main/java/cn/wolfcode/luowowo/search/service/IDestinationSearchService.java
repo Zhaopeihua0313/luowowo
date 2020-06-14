@@ -4,7 +4,6 @@ import cn.wolfcode.luowowo.search.query.SearchQueryObject;
 import cn.wolfcode.luowowo.search.template.DestinationTemplate;
 import cn.wolfcode.luowowo.search.vo.StatsResult;
 import org.springframework.data.domain.Page;
-
 import javax.print.attribute.standard.Destination;
 import java.util.List;
 
@@ -31,4 +30,5 @@ public interface IDestinationSearchService {
     List<Destination> queryForDests(SearchQueryObject qo);
 
     Page query(SearchQueryObject qo);
+
 }

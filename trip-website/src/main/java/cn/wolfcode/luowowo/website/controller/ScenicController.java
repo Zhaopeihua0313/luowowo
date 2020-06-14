@@ -30,26 +30,33 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @Controller
 @RequestMapping("/scenic")
 public class ScenicController {
+
     @Value("${file.dir}")
     private String dir;
+
     @Reference
     private IScenicService scenicService;
+
     @Reference
     private IScenicContentService contentService;
+
     @Reference
     private IScenicCatalogService catalogService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private IScenicStatsCacheService cacheService;
+
     @Reference
     private IScenicCommentService scenicCommentService;
+
     @Reference
     private IScenicCommentReplyService replyService;
 
@@ -104,12 +111,14 @@ public class ScenicController {
         model.addAttribute("vo", scenicCommentService.getSumData(scenicId));
         return "scenic/detail";
     }
+
     @RequestMapping("/scenicPage")
     public String scenicPage(@ModelAttribute("qo") ScenicQueryObject qo, Model model){
         PageInfo<Scenic> pageInfo = scenicService.query(qo);
         model.addAttribute("page",pageInfo);
         return "scenic/scenicPage";
     }
+
     @RequestMapping("/comment")
     public String listComment(@LoginUser UserInfo user,  Model model, @ModelAttribute("qo") ScenicCommentQueryObject qo) {
         Page<ScenicComment> page = scenicCommentService.query(qo);
@@ -137,12 +146,14 @@ public class ScenicController {
         cacheService.incrbyNum(comment.getScenicId(), 1, IScenicStatsCacheService.SCENIC_STATS_REPLYNUM);
         return result;
     }
+
     @RequestMapping("files")
     @ResponseBody
     public String files(MultipartFile pic) {
         String picUrl = UploadUtil.upload(pic, dir);
         return "/" + picUrl;
     }
+
     @RequiredLogin
     @RequestMapping("commentReply")
     @ResponseBody
@@ -202,6 +213,7 @@ public class ScenicController {
         result.setSuccess(flag);
         return result;
     }
+
 }
 
 

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 /**
@@ -30,17 +29,22 @@ public class TicketController {
 
     @Reference
     private IScenicService scenicService;
+
     @Reference
     private IDestinationService destinationService;
+
     @Reference
     private ITicketService ticketService;
+
     @Reference
     private ITicketContentService ticketContentService;
+
     @Reference
     private ITicketTagService ticketTagService;
 
     @Reference
     private IScenicCatalogService scenicCatalogService;
+
     @Reference
     private IScenicContentService scenicContentService;
 
@@ -78,10 +82,8 @@ public class TicketController {
      */
     @RequestMapping("/input")
     public String input(Long id, Model model) {
-
         //景点
         model.addAttribute("scenics", scenicService.listAll());
-
         if (id != null) {
             //门票详情
             Ticket ticket = ticketService.get(id);

@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.List;
 
 @Controller
@@ -28,7 +27,6 @@ public class RegionController {
      */
     @RequestMapping("/list")
     public String list(@ModelAttribute("qo")RegionQueryObject qo, Model model) {
-
         //列表数据
         model.addAttribute("pageInfo", regionService.query(qo));
         return "region/list";
@@ -61,9 +59,5 @@ public class RegionController {
     public AjaxResult saveOrUpdate(Region region) {
         return regionService.saveOrUpdate(region);
     }
-
-
-
-
 
 }

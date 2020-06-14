@@ -17,7 +17,6 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -43,17 +42,12 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doGet(String host, String path, String method,
-                                     Map<String, String> headers,
-                                     Map<String, String> querys)
-            throws Exception {
+    public static HttpResponse doGet(String host, String path, String method, Map<String, String> headers, Map<String, String> querys) throws Exception {
         HttpClient httpClient = wrapClient(host);
-
         HttpGet request = new HttpGet(buildUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-
         return httpClient.execute(request);
     }
 
@@ -69,21 +63,14 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPost(String host, String path, String method,
-                                      Map<String, String> headers,
-                                      Map<String, String> querys,
-                                      Map<String, String> bodys)
-            throws Exception {
+    public static HttpResponse doPost(String host, String path, String method, Map<String, String> headers, Map<String, String> querys, Map<String, String> bodys) throws Exception {
         HttpClient httpClient = wrapClient(host);
-
         HttpPost request = new HttpPost(buildUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-
         if (bodys != null) {
             List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
-
             for (String key : bodys.keySet()) {
                 nameValuePairList.add(new BasicNameValuePair(key, bodys.get(key)));
             }
@@ -91,7 +78,6 @@ public class HttpUtils {
             formEntity.setContentType("application/x-www-form-urlencoded; charset=UTF-8");
             request.setEntity(formEntity);
         }
-
         return httpClient.execute(request);
     }
 
@@ -107,22 +93,15 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPost(String host, String path, String method,
-                                      Map<String, String> headers,
-                                      Map<String, String> querys,
-                                      String body)
-            throws Exception {
+    public static HttpResponse doPost(String host, String path, String method, Map<String, String> headers, Map<String, String> querys, String body) throws Exception {
         HttpClient httpClient = wrapClient(host);
-
         HttpPost request = new HttpPost(buildUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-
         if (StringUtils.isNotBlank(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
         }
-
         return httpClient.execute(request);
     }
 
@@ -138,22 +117,15 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPost(String host, String path, String method,
-                                      Map<String, String> headers,
-                                      Map<String, String> querys,
-                                      byte[] body)
-            throws Exception {
+    public static HttpResponse doPost(String host, String path, String method, Map<String, String> headers, Map<String, String> querys, byte[] body) throws Exception {
         HttpClient httpClient = wrapClient(host);
-
         HttpPost request = new HttpPost(buildUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-
         if (body != null) {
             request.setEntity(new ByteArrayEntity(body));
         }
-
         return httpClient.execute(request);
     }
 
@@ -169,22 +141,15 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPut(String host, String path, String method,
-                                     Map<String, String> headers,
-                                     Map<String, String> querys,
-                                     String body)
-            throws Exception {
+    public static HttpResponse doPut(String host, String path, String method, Map<String, String> headers, Map<String, String> querys, String body) throws Exception {
         HttpClient httpClient = wrapClient(host);
-
         HttpPut request = new HttpPut(buildUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-
         if (StringUtils.isNotBlank(body)) {
             request.setEntity(new StringEntity(body, "utf-8"));
         }
-
         return httpClient.execute(request);
     }
 
@@ -200,22 +165,15 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doPut(String host, String path, String method,
-                                     Map<String, String> headers,
-                                     Map<String, String> querys,
-                                     byte[] body)
-            throws Exception {
+    public static HttpResponse doPut(String host, String path, String method, Map<String, String> headers, Map<String, String> querys, byte[] body) throws Exception {
         HttpClient httpClient = wrapClient(host);
-
         HttpPut request = new HttpPut(buildUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-
         if (body != null) {
             request.setEntity(new ByteArrayEntity(body));
         }
-
         return httpClient.execute(request);
     }
 
@@ -230,17 +188,12 @@ public class HttpUtils {
      * @return
      * @throws Exception
      */
-    public static HttpResponse doDelete(String host, String path, String method,
-                                        Map<String, String> headers,
-                                        Map<String, String> querys)
-            throws Exception {
+    public static HttpResponse doDelete(String host, String path, String method, Map<String, String> headers, Map<String, String> querys) throws Exception {
         HttpClient httpClient = wrapClient(host);
-
         HttpDelete request = new HttpDelete(buildUrl(host, path, querys));
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
-
         return httpClient.execute(request);
     }
 
@@ -271,7 +224,6 @@ public class HttpUtils {
                 sbUrl.append("?").append(sbQuery);
             }
         }
-
         return sbUrl.toString();
     }
 
@@ -280,7 +232,6 @@ public class HttpUtils {
         if (host.startsWith("https://")) {
             sslClient(httpClient);
         }
-
         return httpClient;
     }
 
@@ -291,14 +242,8 @@ public class HttpUtils {
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }
-
-                public void checkClientTrusted(X509Certificate[] xcs, String str) {
-
-                }
-
-                public void checkServerTrusted(X509Certificate[] xcs, String str) {
-
-                }
+                public void checkClientTrusted(X509Certificate[] xcs, String str) { }
+                public void checkServerTrusted(X509Certificate[] xcs, String str) { }
             };
             ctx.init(null, new TrustManager[]{tm}, null);
             SSLSocketFactory ssf = new SSLSocketFactory(ctx);
@@ -312,4 +257,5 @@ public class HttpUtils {
             throw new RuntimeException(ex);
         }
     }
+
 }

@@ -5,7 +5,6 @@ import cn.wolfcode.luowowo.search.service.IUserInfoSearchService;
 import cn.wolfcode.luowowo.search.template.UserInfoTemplate;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service

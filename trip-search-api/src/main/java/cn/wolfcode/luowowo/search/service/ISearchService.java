@@ -14,4 +14,5 @@ public interface ISearchService {
      * @param <T> 封装返回的数据类型
      */
     <T> Page<T> hightLightSearch(String indexAndType, Class<T> clz, SearchQueryObject qo, String... fields);
+
 }

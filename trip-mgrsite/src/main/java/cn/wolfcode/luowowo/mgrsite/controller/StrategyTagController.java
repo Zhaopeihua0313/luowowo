@@ -37,4 +37,5 @@ public class StrategyTagController {
     public AjaxResult saveOrUpdate(Model model, StrategyTag tag) {
         return strategyTagService.updateById(tag);
     }
+
 }

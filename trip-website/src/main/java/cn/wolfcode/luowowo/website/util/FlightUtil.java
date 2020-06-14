@@ -2,7 +2,6 @@ package cn.wolfcode.luowowo.website.util;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +9,7 @@ import java.util.Map;
  * 机票的工具类
  */
 public class FlightUtil {
+
     public static String getFlightInfo(String arrive_code, String leave_code, String query_date) {
         String host = "http://airinfo.market.alicloudapi.com";
         String path = "/airInfos";
@@ -25,7 +25,6 @@ public class FlightUtil {
         bodys.put("arrive_code", arrive_code);
         bodys.put("leave_code", leave_code);
         bodys.put("query_date", query_date);
-
         String result = null;
         try {
             /**
@@ -42,11 +41,11 @@ public class FlightUtil {
             //获取response的body
             result = EntityUtils.toString(response.getEntity());
             System.out.println(result);
-
             System.out.println("hahahahh");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
+
 }
