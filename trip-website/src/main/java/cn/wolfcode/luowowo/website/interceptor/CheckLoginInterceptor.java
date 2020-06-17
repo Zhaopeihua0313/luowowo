@@ -32,6 +32,7 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter{
     @Value("${projectSwitch.CheckLoginInterceptorConsolePrint}")
     private boolean openPrint;
 
+    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //判断动态资源
         if (handler instanceof HandlerMethod) {
@@ -75,7 +76,7 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter{
                 if (openPrint) System.out.println("  -↑ 该方法不需要登录验证，放行");
                 return true;
             }
-            //判断是否异步请求
+            //判断是否异步请求, 根据请求类型执行相应操作提示
             if (handlerMethod.hasMethodAnnotation(ResponseBody.class)) {    //异步请求
                 if (openPrint) System.out.println("  - 异步请求来啦");
                 if (openPrint) System.out.println("  -|↑");

@@ -49,18 +49,13 @@
             </#if>
 
         });
-
     </script>
-
 </head>
-
 
 <body>
     <div style="width: 100%;text-align: center;padding-top: 4%;">
         <img src="/images/${centerPic!"waiaaaaa.gif"}">
     </div>
-
-
     <#--提示框-->
     <#--<div class="dialog dialog-open  dialog-modal" data-style="android">
         <div class="dialog-overlay"></div>
@@ -73,7 +68,6 @@
             </div>
         </div>
     </div>-->
-
 </body>
 
 </html>

@@ -10,7 +10,7 @@ import lombok.Getter;
 public enum RedisKey {
 
     VERIFY_CODE("verify_code", Consts.VERIFY_CODE_TIMEOUT),         //验证码
-    USER_INFO(Consts.USER_INFO_TOKEN, Consts.USER_INFO_TIMEOUT),    //用户
+    USER_INFO(Consts.USER_INFO_TOKEN, Consts.USER_INFO_TIMEOUT),           //用户
 
     STRATEGY_STATS("strategy_stats", -1L),                          //攻略统计
     STRATEGY_STATS_THUMBUP("strategy_stats_thumbup", -1L),          //攻略点赞统计
