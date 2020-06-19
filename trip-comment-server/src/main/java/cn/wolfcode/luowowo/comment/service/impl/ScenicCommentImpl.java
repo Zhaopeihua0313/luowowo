@@ -65,7 +65,7 @@ public class ScenicCommentImpl implements IScenicCommentService {
         int fromIndex = pageable.getPageSize()*pageable.getPageNumber();
         int toIndex = pageable.getPageSize()*(pageable.getPageNumber()+1);
         int totalElements = list.size();
-        if(toIndex> totalElements) toIndex = totalElements;
+        if(toIndex > totalElements) toIndex = totalElements;
         list = list.subList(fromIndex,toIndex);
         return list;
     }
