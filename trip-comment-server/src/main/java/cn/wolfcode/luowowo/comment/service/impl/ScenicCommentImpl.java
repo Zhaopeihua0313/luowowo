@@ -85,24 +85,24 @@ public class ScenicCommentImpl implements IScenicCommentService {
             case 0:
                 List<ScenicComment> plist = picture(scenicId);
                 List resultList = solvePage(pageable, plist);
-                page = new PageImpl<>(resultList,pageable, plist.size()); break;
+                page = new PageImpl<>(resultList, pageable, plist.size()); break;
             //好中差评
             case 1:
                 int[] score = qo.getScore();
                 List<ScenicComment> slist = byScore(score[0], score[1],scenicId);
                 List rsList = solvePage(pageable, slist);
-                page = new PageImpl<>(rsList,pageable,slist.size()); break;
+                page = new PageImpl<>(rsList, pageable, slist.size()); break;
             //内容提及
             case 2:
                 String keyword = qo.getKeyword();
                 List<ScenicComment> clist = bykeyword(keyword,scenicId);
                 List rcList = solvePage(pageable, clist);
-                page = new PageImpl<>(rcList,pageable,clist.size()); break;
+                page = new PageImpl<>(rcList, pageable, clist.size()); break;
             //金牌点评
             case 3:
                 List<ScenicComment> tlist = bythumbupnum(scenicId);
                 List rtList = solvePage(pageable, tlist);
-                page = new PageImpl<>(rtList,pageable,tlist.size()); break;
+                page = new PageImpl<>(rtList, pageable, tlist.size()); break;
             default:
                 page = repository.findByScenicId(scenicId, pageable);
                 break;
@@ -151,8 +151,8 @@ public class ScenicCommentImpl implements IScenicCommentService {
 
     /**
      * 查询综合分数区间集合
-     * @param scenicId
-     * @return
+     *      * @param scenicId
+     *      * @return
      */
     private List<ScenicComment> byScore(int min, int max, Long scenicId) {
         Query query = new Query();
