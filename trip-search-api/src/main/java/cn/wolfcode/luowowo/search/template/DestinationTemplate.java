@@ -23,7 +23,6 @@ public class DestinationTemplate implements Serializable {
     private Long id;  //目的地的id
 
     @Field(index = true, store = true, type = FieldType.Keyword)
-
     private String name;    //目的地名称 分词
 
     private Long timeId;     // 旅游时间id
@@ -33,7 +32,7 @@ public class DestinationTemplate implements Serializable {
 
     private Long destThemeId;     // 主题id
 
-    @Field(index = true, store = true,type = FieldType.Keyword)
+    @Field(index = true, store = true, type = FieldType.Keyword)
     private String destTthemeName;    // 主题名称
 
     @Field(index = true, analyzer = "ik_max_word", store = true, searchAnalyzer = "ik_max_word", type = FieldType.Text)
